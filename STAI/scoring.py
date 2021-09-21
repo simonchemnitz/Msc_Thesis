@@ -97,8 +97,8 @@ def STAI_score(file_name, csv_file):
     #Note: add  <header = [0,1] , index_col=[0]> 
     #when reading compact file: pd.read_csv(compact_file, <...>)
     comp_df = new_state_csv[["pers_id" , "comment", "score"]]
-    comp_df = comp_df.pivot(index = ["pers_id"], columns = ["comment"])
-    comp_df.to_csv("comp_"+csv_file)
+    comp_df = comp_df.pivot(index = "pers_id", columns = "comment")
+    comp_df.to_csv(csv_file[:-4] + "_compact.csv")
 
 
 
@@ -107,6 +107,14 @@ for file in files:
 
 
 
+print()
+print()
+print()
+print("PRINTING SCORES")
+print("---------------------------------------------------------------------------------------------------------")
 
+df = pd.read_csv("STAI_scores.csv")
+print(df)
 
-
+df = pd.read_csv("STAI_scores_compact.csv" , header = [0,1] , index_col=[0])
+print(df)

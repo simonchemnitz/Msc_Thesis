@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 import pandas as pd
 import glob
 import os
@@ -95,35 +92,20 @@ def STAI_score(file_name, csv_file):
 
     # Save file
     new_state_csv.to_csv(csv_file, index = False)
+    
+    # Save a compact file as well
+    #Note: add  <header = [0,1] , index_col=[0]> 
+    #when pandas loading the compact scores
+    comp_df = new_state_csv[["pers_id" , "comment", "score"]]
+    comp_df = comp_df.pivot(index = ["pers_id"], columns = ["comment"])
+    comp_df.to_csv("comp_"+csv_file)
 
-
-# In[2]:
-
-
-try:
-  score_df = pd.read_csv("STAI_scores.csv")
-except:
-  print("File does not exist")
-
-
-# In[3]:
 
 
 for file in files:
     STAI_score(file_name = file, csv_file = "STAI_scores.csv")
 
 
-# In[4]:
-
-
-try:
-  score_df = pd.read_csv("STAI_scores.csv")
-except:
-  print("File does not exist")
-score_df
-
-
-# In[ ]:
 
 
 

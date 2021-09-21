@@ -95,7 +95,7 @@ def STAI_score(file_name, csv_file):
     
     # Save a compact file as well
     #Note: add  <header = [0,1] , index_col=[0]> 
-    #when pandas loading the compact scores
+    #when reading compact file: pd.read_csv(compact_file, <...>)
     comp_df = new_state_csv[["pers_id" , "comment", "score"]]
     comp_df = comp_df.pivot(index = ["pers_id"], columns = ["comment"])
     comp_df.to_csv("comp_"+csv_file)

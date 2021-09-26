@@ -19,6 +19,10 @@ def coent(img, levels = 256):
         Co-Occurrence Entropy measure of the input image.
     '''
 
+    #Convert image to int
+    #as greycomatrix only takes int input
+    img = img.astype(int)
+
     #Shape of the image/volume
     vol_shape = np.shape(img)
 
@@ -74,13 +78,3 @@ def coent(img, levels = 256):
     log_matrix = np.log2(co_ent_matrix)
     #Return the entropy
     return -np.nansum(co_ent_matrix*log_matrix)
-
-
-
-img_dir = "C:/Users/simon/OneDrive/Skrivebord/UNI/MASTER_THESIS/recon/subj04/mri/"
-bm_img = nib.load(img_dir + "brainmask.mgz")
-bm_img = np.asarray(bm_img.dataobj)
-bm_img = bm_img.astype(float)
-
-
-print(coent(bm_img))

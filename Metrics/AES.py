@@ -13,13 +13,14 @@ img = np.asarray(img.dataobj)
 img = img.astype(float)
 
 
-def aes(img):
+def aes(img, sigma=1):
     '''
     Parameters
     ----------
     img : numpy array
-        image for which the metrics should be calculated.
-
+        Image for which the metrics should be calculated.
+    sigma : float
+        Standard deviation of the Gaussian filter
     Returns
     -------
     AES : float
@@ -27,8 +28,8 @@ def aes(img):
     '''
     #Centered Gradient kernel in the x-direction
     x_kern = np.array([[-1,-1,-1],
-                   [0,0,0],
-                   [1,1,1]])
+                       [0,0,0],
+                       [1,1,1]])
     #Centered Gradient kernel in the y-direction
     y_kern = x_kern.T
 
@@ -45,7 +46,7 @@ def aes(img):
         x_conv = convolve(img[slice,:,:], x_kern)
         y_conv = convolve(img[slice,:,:], y_kern)
         #Canne edge detector
-        canny_img = canny(img[slice,:,:])
+        canny_img = canny(img[slice,:,:], sigma = sigma)
         #Numerator and denominator, to be divided
         #defining the edge strength of the slice
         numerator = np.sum(canny_img*( x_conv**2 + y_conv**2 ))

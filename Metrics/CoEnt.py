@@ -1,5 +1,5 @@
 import numpy as np
-import nibabel 
+import nibabel as nib
 import glob
 from skimage.feature.texture import greycomatrix
 
@@ -30,7 +30,7 @@ def coent(img, levels = 256):
         #temporary co-ent matrix
         tmp_comat = greycomatrix(img[i,:,:],
                                  levels = levels,
-                                 distance = [1],
+                                 distances = [1],
                                  angles = [np.pi,-np.pi, 
                                            np.pi/2,-np.pi/2])
         #greycomatrix will generate 4d array
@@ -52,7 +52,7 @@ def coent(img, levels = 256):
         #note only pi,-pi as angles
         tmp_comat = greycomatrix(img[:,j,:],
                                  levels = levels, 
-                                 distance = [1], 
+                                 distances = [1], 
                                  angles = [np.pi, -np.pi])
         #greycomatrix will generate 4d array
         #The value P[i,j,d,theta] is the number of times 
@@ -62,7 +62,7 @@ def coent(img, levels = 256):
         #tmp_comat[:,:,0,:]
         #As we want the total occurence not split on angles
         #we sum over axis 2.
-        tmp_comat = np.sum(tmp_comat[:,:,0,:]. axis = 2)
+        tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
         #add the occurrences to the co-entropy matrix
         co_ent_matrix = co_ent_matrix + tmp_comat
 
@@ -74,3 +74,13 @@ def coent(img, levels = 256):
     log_matrix = np.log2(co_ent_matrix)
     #Return the entropy
     return -np.nansum(co_ent_matrix*log_matrix)
+
+
+
+img_dir = "C:/Users/simon/OneDrive/Skrivebord/UNI/MASTER_THESIS/recon/subj04/mri/"
+bm_img = nib.load(img_dir + "brainmask.mgz")
+bm_img = np.asarray(bm_img.dataobj)
+bm_img = bm_img.astype(float)
+
+
+print(coent(bm_img))

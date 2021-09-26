@@ -20,4 +20,14 @@ def coent(img, levels = 256):
         co_ent_matrix = co_ent_matrix+tmp_comat
     for j in range(vol_shape[1]):
         tmp_comat = greycomatrix(img[:,j,:],
-        levels = levels, distance = [1])
+        levels = levels, distance = [1], angles = [np.pi, -np.pi])
+        
+        tmp_comat = np.sum(tmp_comat[:,:,0,:]. axis = 2)
+        co_ent_matrix = co_ent_matrix + tmp_comat
+
+    co_ent_matrix = (1/6)*co_ent_matrix
+    co_ent_matrix = co_ent_matrix/np.sum(co_ent_matrix)
+
+    log_matrix = np.log2(co_ent_matrix)
+
+    return -np.nansum(co_ent_matrix*log_matrix)

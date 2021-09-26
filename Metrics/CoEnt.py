@@ -1,3 +1,7 @@
+#Code is based on the article:
+#Quantitative framework for prospective motion correction evaluation
+#Nicolas Pannetier, Theano Stavrinos, Peter Ng, Michael Herbst, 
+#Maxim Zaitsev, Karl Young, Gerald Matson, and Norbert Schuff
 import numpy as np
 import nibabel as nib
 import glob

@@ -19,13 +19,13 @@ def coent(img, levels = 256):
         Co-Occurrence Entropy measure of the input image.
     '''
 
-    #shape of the image/volume
+    #Shape of the image/volume
     vol_shape = np.shape(img)
 
-    #empty matrix that will be the co-entropy matrix
+    #Empty matrix that will be the co-entropy matrix
     co_ent_matrix = np.zeros((levels,levels))
 
-    #generate 2d co-ent matrix for each slice
+    #Generate 2d co-ent matrix for each slice
     for i in range(vol_shape[0]):
         #temporary co-ent matrix
         tmp_comat = greycomatrix(img[i,:,:],
@@ -34,12 +34,12 @@ def coent(img, levels = 256):
                                  angles = [np.pi,-np.pi, 
                                            np.pi/2,-np.pi/2])
         #greycomatrix will generate 4d array
-        # The value P[i,j,d,theta] is the number of times 
+        #The value P[i,j,d,theta] is the number of times 
         #that grey-level j occurs at a distance d and 
         #at an angle theta from grey-level i
         #as we only have one distance we just use 
         #tmp_comat[:,:,0,:]
-        #as we want the total occurence not split on angles
+        #As we want the total occurence not split on angles
         #we sum over axis 2.
         tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
         #add the occurrences to the co-entropy matrix
@@ -55,12 +55,12 @@ def coent(img, levels = 256):
                                  distance = [1], 
                                  angles = [np.pi, -np.pi])
         #greycomatrix will generate 4d array
-        # The value P[i,j,d,theta] is the number of times 
+        #The value P[i,j,d,theta] is the number of times 
         #that grey-level j occurs at a distance d and 
         #at an angle theta from grey-level i
         #as we only have one distance we just use 
         #tmp_comat[:,:,0,:]
-        #as we want the total occurence not split on angles
+        #As we want the total occurence not split on angles
         #we sum over axis 2.
         tmp_comat = np.sum(tmp_comat[:,:,0,:]. axis = 2)
         #add the occurrences to the co-entropy matrix

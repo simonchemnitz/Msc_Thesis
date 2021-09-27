@@ -10,11 +10,7 @@ from scipy.ndimage import convolve
 import matplotlib.pyplot as plt
 
 
-#load img
-img_dir = "C:/Users/simon/OneDrive/Skrivebord/UNI/MASTER_THESIS/recon/subj04/mri/"
-img = nib.load(img_dir + "brainmask.mgz")
-img = np.asarray(img.dataobj)
-img = img.astype(float)
+
 
 
 def aes(img, sigma=1):
@@ -68,4 +64,3 @@ def aes(img, sigma=1):
     #Return the average edge strength
     return np.nanmean(es)
 
-print(aes(img))

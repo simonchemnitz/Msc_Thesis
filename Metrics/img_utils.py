@@ -158,7 +158,7 @@ def convert_all(dicom_directory, nifti_directory):
     will take each dicom image for both John and Jane 
     convert to nifti and save the nifti to the folder nifti_fold
     with the same name as the dicom filename + name, 
-    eg TCLMOCO_ON_MPRAGE_John.nii
+    eg T1_MPR_3D_SAG_P2_john.nii
 
     '''
     for patient in glob.glob(dicom_directory+"*/"):

@@ -9,7 +9,48 @@ import os
 response_dir = "responses/"
 files = glob.glob(response_dir+"*")
 
-def STAI_score(file_name, csv_file):
+def weighted_scoring(df):
+     '''
+    Change scoring acording to scoring key
+    ----------
+    df : pandas.DataFrame
+        Dataframe to change from answers index to score.
+    Returns
+    -------
+    tmp_df : pandas.DataFrame
+        pandas dataframe same as df but where entries of Qi 
+        contains score of question i.
+    '''
+    #Create copy of the dataframe   
+    tmp_df = pd.DataFrame.copy(df)
+    #Two ways of scoring
+    w0 = [0,1,2,3]
+    w1 = [0,3,2,1]
+    weights = [w0,w1]
+    #Which weight to use
+    #on which question.
+    weight_val = [0,1,0,1,1,0,1,0,1,0,1,0,0,0,1,1,0,1,1,0]
+    #Dictionairy containing weights, keys are the difference answers
+    #Q1,...,Q20 and values are 0 or 1 based on wheter to used w0 or w1.
+    weight_dict = {"Q"+str(i+1) : weights[weight_val[i]] for i in range(20)}
+    
+
+    #Column names, Q1,Q2,...,Q20
+    answers = ["Q"+str(i) for i in range(1,21)]
+    
+    #For each column (question)
+    #update entry to contain score
+    for col in answers:
+        #Weight to use
+        w = weight_dict[col]
+        #Update weight
+        tmp_df[col] = np.array(w)[tmp_df[col]]
+
+    #Return updated dataframe
+    return tmp_df
+
+
+def STAI_score(file_name, csv_file, weighted = False):
     '''
     Calculate the STAI score and append results to csv file
     containing all scores. If file does not exists it will create it
@@ -27,12 +68,12 @@ def STAI_score(file_name, csv_file):
         In addition it saves the pandas dataframe to the file csv_file.csv
     '''
     #    Column names for dataframes
-    #Column names for trait quiestionnaire
-    # of the form Q1[1],Q1[2],Q1[3],...,Q1[20]
+    #Column names for State quiestionnaire
+    #of the form Q1,Q2,Q3,...,Q20  
     answers = ["Q"+str(i) for i in range(1,21)]
     
-    #Column names for trait quiestionnaire
-    # of the form Q1,Q2,Q3,...,Q20    
+    #Column names for Trait quiestionnaire
+    #of the form Q1[1],Q1[2],Q1[3],...,Q1[20] 
     answers_trait = ["Q1[" +str(i) + "]" for i in range(1,21) ]
     
     #Column names to keep in the final csv file
@@ -67,7 +108,10 @@ def STAI_score(file_name, csv_file):
     # renamed to Q1,Q2,Q3,...,Q20    
     if com == "Trait":
         df.columns = list(df.columns.drop(answers_trait))+answers
-        
+    
+    if weighted:
+        df = weighted_scoring(df)
+
     # Check if state or trait results
     #if com != "Trait":
     # Calculate score
@@ -99,7 +143,6 @@ def STAI_score(file_name, csv_file):
     comp_df = new_state_csv[["pers_id" , "comment", "score"]]
     comp_df = comp_df.pivot(index = "pers_id", columns = "comment")
     comp_df.to_csv(csv_file[:-4] + "_compact.csv")
-
 
 
 for file in files:

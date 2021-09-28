@@ -2,6 +2,9 @@
 Code for various image utility functions
 """
 import numpy as np
+import subprocess
+import os
+import glob
 
 def crop_img(img):
     '''
@@ -59,4 +62,4 @@ def bin_img(img, n_levels):
     return binned_img
 
 
-def convert_to_nifti():
+def is_dicom(filepath):

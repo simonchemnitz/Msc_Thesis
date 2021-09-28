@@ -57,3 +57,6 @@ def bin_img(img, n_levels):
     
     #Return binned image
     return binned_img
+
+
+def convert_to_nifti():

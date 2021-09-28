@@ -19,7 +19,8 @@ def weighted_scoring(df):
     -------
     tmp_df : pandas.DataFrame
         pandas dataframe same as df but where entries of Qi 
-        contains score of question i.
+        contains score of question i
+        rather than the answer option for question i.
     '''
     #Create copy of the dataframe   
     tmp_df = pd.DataFrame.copy(df)

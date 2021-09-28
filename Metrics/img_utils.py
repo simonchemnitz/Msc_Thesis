@@ -1,7 +1,6 @@
 """
 Code for various image utility functions
 """
-
 import numpy as np
 
 def crop_img(img):
@@ -34,16 +33,26 @@ def crop_img(img):
     return img[xmin:xmax, ymin:ymax , zmin:zmax]
 
 
-def bin_img(img, levels):
+def bin_img(img, n_levels):
     '''
     Parameters
     ----------
     img : numpy array
         Image to bin.
+    n_levels : int
+        Number of levels to bin the intensities in
     
     Returns
     -------
-    crop_img : numpy array
-        Cropped image such that all slices 
-        contain at least one non-zero entry
+    binned_img : numpy array
+        Binned image, which has n_levels different 
+        intensity values
     '''
+    
+    #Intensity values to map to
+    vals, bins = np.histogram(img, bins = n_levels)
+
+    #Bin image
+    binned_img = np.digitize(img, bins, right = True)
+    
+    return binned_img

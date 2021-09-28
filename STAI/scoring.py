@@ -109,7 +109,8 @@ def STAI_score(file_name, csv_file, weighted = False):
     if com == "Trait":
         df.columns = list(df.columns.drop(answers_trait))+answers
     
-    if weighted:
+    if weighted and com != "Trait":
+        print("Updated entries")
         df = weighted_scoring(df)
 
     # Check if state or trait results

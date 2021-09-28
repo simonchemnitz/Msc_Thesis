@@ -53,7 +53,7 @@ def bin_img(img, n_levels):
     vals, bins = np.histogram(img, bins = n_levels)
 
     #Bin image
-    binned_img = np.digitize(img, bins, right = True)
+    binned_img = bins[np.digitize(img, bins, right = True)]
     
     #Return binned image
     return binned_img

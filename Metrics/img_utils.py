@@ -143,6 +143,23 @@ def convert_all(dicom_directory, nifti_directory):
         Filepath to the first dicom file
     out_volume : str
         Filepath to the nifti file
+    
+    
+    Example
+    Consider two folders
+    DICOMS and nifti_fold
+    where DICOMS has folders, [John, Jane]
+    each containing a folder for each dicom scan
+
+    let dicom_dir be the path to the folder DICOMS 
+    and nifti_dir the path to the folder nifti
+    
+    convert_all(dicom_directory, nifti_directory)
+    will take each dicom image for both John and Jane 
+    convert to nifti and save the nifti to the folder nifti_fold
+    with the same name as the dicom filename + name, 
+    eg TCLMOCO_ON_MPRAGE_John.nii
+
     '''
     for patient in glob.glob(dicom_directory+"*/"):
         dicom2nifti(patient, dicom_directory, nifti_directory)

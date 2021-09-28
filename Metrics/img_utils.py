@@ -90,8 +90,8 @@ def dicom2nifti(patient_id, dicom_directory, nifti_directory):
     
     Parameters
     ----------
-    dicom_folder : str
-        Filepath for the folder containing the .IMA or .dcm files.
+    patient_id : str
+        Name of folder containing the patients dicom files
     dicom_directory : str
         Filepath for the folder containing all dicom folders
     nifti_directory : str
@@ -112,7 +112,7 @@ def dicom2nifti(patient_id, dicom_directory, nifti_directory):
         #Check if the file is dicom format
         if is_dicom(in_volume):
             #Output volume
-            out_volume = nifti_directory+patient_id[len(dicom_directory):]+ dicom_fold[len(patient):-1]+".nii"
+            out_volume = nifti_directory+patient_id[len(dicom_directory):]+ dicom_fold[len(patient_id):-1]+".nii"
             
             print(in_volume)
             print(out_volume)
@@ -124,5 +124,25 @@ def dicom2nifti(patient_id, dicom_directory, nifti_directory):
 
             
 def convert_all(dicom_directory, nifti_directory):
+    '''
+    Converts all dicom images in a folder to nifti using
+    FreeSurfers mri_convert
+    
+    
+    Parameters
+    ----------
+    dicom_directory : str
+        Filepath for the folder containing all dicom folders
+    nifti_directory : str
+        Filepath for the nifti directory
+        where niftis will be saved to
+        
+    Returns
+    -------
+    in_volume : str
+        Filepath to the first dicom file
+    out_volume : str
+        Filepath to the nifti file
+    '''
     for patient in glob.glob(dicom_directory+"*/"):
         dicom2nifti(patient, dicom_directory, nifti_directory)

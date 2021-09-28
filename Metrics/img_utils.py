@@ -55,4 +55,5 @@ def bin_img(img, n_levels):
     #Bin image
     binned_img = np.digitize(img, bins, right = True)
     
+    #Return binned image
     return binned_img

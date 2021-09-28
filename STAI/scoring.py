@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-
+import numpy as np
 import pandas as pd
 import glob
 import os
@@ -10,7 +10,7 @@ response_dir = "responses/"
 files = glob.glob(response_dir+"*")
 
 def weighted_scoring(df):
-     '''
+    '''
     Change scoring acording to scoring key
     ----------
     df : pandas.DataFrame

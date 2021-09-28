@@ -45,12 +45,11 @@ def weighted_scoring(df):
         w = weight_dict[col]
         #Update weight
         tmp_df[col] = np.array(w)[tmp_df[col]]
-
     #Return updated dataframe
     return tmp_df
 
 
-def STAI_score(file_name, csv_file, weighted = False):
+def STAI_score(file_name, csv_file, weighted = True):
     '''
     Calculate the STAI score and append results to csv file
     containing all scores. If file does not exists it will create it
@@ -109,8 +108,9 @@ def STAI_score(file_name, csv_file, weighted = False):
     if com == "Trait":
         df.columns = list(df.columns.drop(answers_trait))+answers
     
+    #If not trait (ie if state)
+    #and weighted is on, change scoring weights
     if weighted and com != "Trait":
-        print("Updated entries")
         df = weighted_scoring(df)
 
     # Check if state or trait results
@@ -128,7 +128,6 @@ def STAI_score(file_name, csv_file, weighted = False):
 
     # Subset to only contain certain columns
     df = df[["pers_id","comment", "date", "score", "time_to_complete(sec)"]+ answers]
-
     # Merge files
     new_state_csv = pd.concat([csv, df])
 
@@ -147,7 +146,9 @@ def STAI_score(file_name, csv_file, weighted = False):
 
 
 for file in files:
-    STAI_score(file_name = file, csv_file = "STAI_scores.csv")
+    STAI_score(file_name = file, csv_file = "STAI_scores.csv", weighted=True)
+
+
 
 
 

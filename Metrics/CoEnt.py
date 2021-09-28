@@ -3,8 +3,6 @@
 #Nicolas Pannetier, Theano Stavrinos, Peter Ng, Michael Herbst, 
 #Maxim Zaitsev, Karl Young, Gerald Matson, and Norbert Schuff
 import numpy as np
-import nibabel as nib
-import glob
 from skimage.feature.texture import greycomatrix
 
 

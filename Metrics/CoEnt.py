@@ -11,9 +11,9 @@ def coent(img, levels = 256):
     Parameters
     ----------
     img : numpy array
-        image for which the metrics should be calculated.
+        Image for which the metrics should be calculated.
     levels : int
-        levels of intensities to bin by
+        Levels of intensities to bin by
     
     Returns
     -------

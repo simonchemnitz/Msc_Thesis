@@ -1,3 +1,7 @@
+"""
+Code for various image utility functions
+"""
+
 import numpy as np
 
 def crop_img(img):
@@ -5,7 +9,7 @@ def crop_img(img):
     Parameters
     ----------
     img : numpy array
-        image for which the metrics should be calculated.
+        Image to be cropped.
     
     Returns
     -------
@@ -28,3 +32,18 @@ def crop_img(img):
     
     #Return cropped img
     return img[xmin:xmax, ymin:ymax , zmin:zmax]
+
+
+def bin_img(img, levels):
+    '''
+    Parameters
+    ----------
+    img : numpy array
+        Image to bin.
+    
+    Returns
+    -------
+    crop_img : numpy array
+        Cropped image such that all slices 
+        contain at least one non-zero entry
+    '''

@@ -63,3 +63,66 @@ def bin_img(img, n_levels):
 
 
 def is_dicom(filepath):
+    """
+    Given a file check if it is of dicom format
+    
+    Parameters
+    ----------
+    filepath : str
+        filepath for the file that should be checked
+    
+    Returns
+    -------
+        True if it is a dicom False if not
+    """
+    #Split the filepath
+    lst = filepath.split(".")
+    #If the file ends with IMA r DCM return True
+    if lst[-1].lower() == "ima" or lst[-1].lower() == "dcm":
+        return True
+    else: return False
+
+def dicom2nifti(patient_id, dicom_directory, nifti_directory):
+    '''
+    Converts dicom image to nifti using
+    FreeSurfers mri_convert
+    
+    
+    Parameters
+    ----------
+    dicom_folder : str
+        Filepath for the folder containing the .IMA or .dcm files.
+    dicom_directory : str
+        Filepath for the folder containing all dicom folders
+    nifti_directory : str
+        Filepath for the nifti directory
+        
+    Returns
+    -------
+    in_volume : str
+        Filepath to the first dicom file
+    out_volume : str
+        Filepath to the nifti file
+    '''
+    
+    #List of all dicom folders for the patient
+    for dicom_fold in glob.glob(patient_id+"*/"):
+        #First file in the dicom folder
+        in_volume = glob.glob(dicom_fold+"*")[0]
+        #Check if the file is dicom format
+        if is_dicom(in_volume):
+            #Output volume
+            out_volume = nifti_directory+patient_id[len(dicom_directory):]+ dicom_fold[len(patient):-1]+".nii"
+            
+            print(in_volume)
+            print(out_volume)
+            print("----------")
+            print()
+            #Convert to nifti with mri_convert
+            subprocess.run('mri_convert ' + in_volume + ' ' + out_volume+' --no-dwi', shell=True)
+            
+
+            
+def convert_all(dicom_directory, nifti_directory):
+    for patient in glob.glob(dicom_directory+"*/"):
+        dicom2nifti(patient, dicom_directory, nifti_directory)

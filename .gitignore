@@ -8,3 +8,5 @@ __pycache__/
 *responses/
 */responses/
 *.xlsx
+*STAI_scores.csv
+*STAI_scores_compact.csv

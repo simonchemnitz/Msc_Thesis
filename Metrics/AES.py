@@ -17,7 +17,8 @@ def aes(img, sigma=1):
     img : numpy array
         Image for which the metrics should be calculated.
     sigma : float
-        Standard deviation of the Gaussian filter
+        Standard deviation of the Gaussian filter used 
+        during canny edge detection.
     Returns
     -------
     AES : float

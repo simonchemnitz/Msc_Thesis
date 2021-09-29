@@ -50,7 +50,7 @@ def weighted_scoring(df):
     return tmp_df
 
 
-def STAI_score(file_name, csv_file, weighted = True):
+def STAI_score(file_name, csv_file, weighted = False):
     '''
     Calculate the STAI score and append results to csv file
     containing all scores. If file does not exists it will create it

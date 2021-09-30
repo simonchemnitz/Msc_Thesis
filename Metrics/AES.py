@@ -18,7 +18,7 @@ def aes(img, brainmask = None, sigma=1, n_levels = 128, bin = False, crop = True
         Standard deviation of the Gaussian filter used 
         during canny edge detection.
     n_levels : int
-        Levels of intensities to bin by
+        Levels of intensities to bin image by
     bin : bool
         Whether or not to bin the image
     crop : bool 

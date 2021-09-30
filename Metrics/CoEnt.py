@@ -13,7 +13,7 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
     img : numpy array
         Image for which the metrics should be calculated.
     n_levels : int
-        Levels of intensities to bin by
+        Levels of intensities to bin image by
     bin : bool
         Whether or not to bin the image
     crop : bool 

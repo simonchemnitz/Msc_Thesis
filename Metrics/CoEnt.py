@@ -4,9 +4,9 @@
 #Maxim Zaitsev, Karl Young, Gerald Matson, and Norbert Schuff
 import numpy as np
 from skimage.feature.texture import greycomatrix
+from img_utils import bin_img, crop_img
 
-
-def coent(img, brainmask = None, levels = 256):
+def coent(img, brainmask = None, levels = 256, bin = True, crop = True):
     '''
     Parameters
     ----------
@@ -23,7 +23,10 @@ def coent(img, brainmask = None, levels = 256):
 
     if brainmask != None:
         img = img*brainmask
-
+    if crop:
+        img = crop_img(img)
+    if bin:
+        img = bin_img(img)
     #Convert image to int
     #as greycomatrix only takes int input
     img = img.astype(int)

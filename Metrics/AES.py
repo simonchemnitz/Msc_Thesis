@@ -5,12 +5,12 @@
 import numpy as np
 from skimage.feature import canny
 from scipy.ndimage import convolve
+from img_utils import crop_img, bin_img
 
 
 
 
-
-def aes(img, brainmask = None, sigma=1):
+def aes(img, brainmask = None, sigma=1, bin = True, crop = True):
     '''
     Parameters
     ----------
@@ -27,6 +27,11 @@ def aes(img, brainmask = None, sigma=1):
 
     if brainmask != None:
         img = img*brainmask
+
+    if crop:
+        img = crop_img(img)
+    if bin:
+        img = bin_img(img)
     #Centered Gradient kernel in the x-direction
     x_kern = np.array([[-1,-1,-1],
                        [0,0,0],

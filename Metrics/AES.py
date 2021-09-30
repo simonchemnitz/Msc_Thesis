@@ -10,7 +10,7 @@ from scipy.ndimage import convolve
 
 
 
-def aes(img, sigma=1):
+def aes(img, brainmask = None sigma=1):
     '''
     Parameters
     ----------
@@ -24,6 +24,9 @@ def aes(img, sigma=1):
     AES : float
         Average Edge Strength measure of the input image.
     '''
+
+    if brainmask != None:
+        img = img*brainmask
     #Centered Gradient kernel in the x-direction
     x_kern = np.array([[-1,-1,-1],
                        [0,0,0],

@@ -34,7 +34,7 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
         img = bin_img(img, n_levels=n_levels)
 
     #Convert image to uint8
-    #as greycomatrix prefers uint8 as input
+    #   as greycomatrix prefers uint8 as input
     img = img.astype(np.uint8)
 
     #Shape of the image/volume
@@ -45,7 +45,7 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
 
     #Generate 2d co-ent matrix for each slice
     for i in range(vol_shape[0]):
-        #temporary co-ent matrix
+        #Temporary co-ent matrix
         tmp_comat = greycomatrix(img[i,:,:],
                                  distances = [1],
                                  angles = [np.pi,-np.pi, 
@@ -62,8 +62,8 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
         #add the occurrences to the co-entropy matrix
         co_ent_matrix = co_ent_matrix+tmp_comat
     
-    #generate 2d co-ent matrix for each slice 
-    #to capture co-occurrence in the direction we sliced before
+    #Generate 2d co-ent matrix for each slice 
+    #   to capture co-occurrence in the direction we sliced before
     for j in range(vol_shape[1]):
         #temporary co-ent matrix
         #note only pi,-pi as angles

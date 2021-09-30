@@ -64,8 +64,8 @@ def aes(img, brainmask = None, sigma=1, n_levels = 128, bin = False, crop = True
         denominator = np.sum(canny_img)
 
         #Note different result if we divide by zero then take nanmean
-        #compared to replacing frac value by zero then nanmean
-        #if we dont check we can remove if statement and just use 
+        #   compared to replacing frac value by zero then nanmean
+        #   if we dont check we can remove if statement and just use 
         #np.nanmean
         if denominator>0:
             frac = np.sqrt(numerator)/denominator

@@ -29,7 +29,7 @@ def aes(img, brainmask = None, sigma=1, n_levels = 128, bin = False, crop = True
         Average Edge Strength measure of the input image.
     '''
 
-    if brainmask != None:
+    if brainmask is not None: #alternative type(brainmask) != type(None)
         img = img*brainmask
 
     if crop:

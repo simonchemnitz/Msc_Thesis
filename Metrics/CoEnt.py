@@ -24,7 +24,7 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
         Co-Occurrence Entropy measure of the input image.
     '''
 
-    if brainmask != None:
+    if brainmask is not None: #alternative type(brainmask) != type(None)
         img = img*brainmask
     if crop:
         img = crop_img(img)

@@ -23,15 +23,18 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
     CoEnt : float
         Co-Occurrence Entropy measure of the input image.
     '''
-
+    #Apply brainmask if given one
     if brainmask is not None: #alternative type(brainmask) != type(None)
         img = img*brainmask
+    #Crop image if crop is True
     if crop:
         img = crop_img(img)
+    #Bin image if bin is True
     if bin:
         img = bin_img(img, n_levels=n_levels)
-    #Convert image to int
-    #as greycomatrix only takes int input
+
+    #Convert image to uint8
+    #as greycomatrix prefers uint8 as input
     img = img.astype(np.uint8)
 
     #Shape of the image/volume

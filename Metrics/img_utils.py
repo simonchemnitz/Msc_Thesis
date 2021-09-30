@@ -43,7 +43,8 @@ def bin_img(img, n_levels = 128):
     img : numpy array
         Image to bin.
     n_levels : int
-        Number of levels to bin the intensities in
+        Number of levels to bin the intensities in.
+        Default value is 128.
     
     Returns
     -------

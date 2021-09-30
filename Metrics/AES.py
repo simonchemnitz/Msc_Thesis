@@ -28,12 +28,13 @@ def aes(img, brainmask = None, sigma=1, n_levels = 128, bin = False, crop = True
     AES : float
         Average Edge Strength measure of the input image.
     '''
-
+    #Apply brainmask if given one
     if brainmask is not None: #alternative type(brainmask) != type(None)
         img = img*brainmask
-
+    #Crop image if crop is True
     if crop:
         img = crop_img(img)
+    #Bin image if bin is True
     if bin:
         img = bin_img(img, n_levels = n_levels)
     #Centered Gradient kernel in the x-direction

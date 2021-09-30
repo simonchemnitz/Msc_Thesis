@@ -10,7 +10,7 @@ from img_utils import crop_img, bin_img
 
 
 
-def aes(img, brainmask = None, sigma=1, bin = True, crop = True):
+def aes(img, brainmask = None, sigma=1, bin = False, crop = True):
     '''
     Parameters
     ----------

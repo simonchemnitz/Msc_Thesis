@@ -36,7 +36,7 @@ def crop_img(img):
     return img[xmin:xmax, ymin:ymax , zmin:zmax]
 
 
-def bin_img(img, n_levels):
+def bin_img(img, n_levels = 128):
     '''
     Parameters
     ----------

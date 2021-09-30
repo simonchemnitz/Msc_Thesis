@@ -6,7 +6,7 @@ import numpy as np
 from skimage.feature.texture import greycomatrix
 
 
-def coent(img, brainmask = None levels = 256):
+def coent(img, brainmask = None, levels = 256):
     '''
     Parameters
     ----------

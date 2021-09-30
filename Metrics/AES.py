@@ -10,7 +10,7 @@ from scipy.ndimage import convolve
 
 
 
-def aes(img, brainmask = None sigma=1):
+def aes(img, brainmask = None, sigma=1):
     '''
     Parameters
     ----------

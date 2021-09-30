@@ -39,26 +39,26 @@ def aes(img, brainmask = None, sigma=1, bin = False, crop = True):
     #Centered Gradient kernel in the y-direction
     y_kern = x_kern.T
 
-    #shape of volume/img
+    #Shape of volume/img
     vol_shape = np.shape(img)
 
     #Empty array to contain edge strenghts
     #Function returns the mean of this list
     es = []
 
-    #for each slice calcule the edge strength
+    #For each slice calcule the edge strength
     for slice in range(vol_shape[0]):
         #Convolve slice
         x_conv = convolve(img[slice,:,:], x_kern)
         y_conv = convolve(img[slice,:,:], y_kern)
-        #Canne edge detector
+        #Canny edge detector
         canny_img = canny(img[slice,:,:], sigma = sigma)
         #Numerator and denominator, to be divided
         #defining the edge strength of the slice
         numerator = np.sum(canny_img*( x_conv**2 + y_conv**2 ))
         denominator = np.sum(canny_img)
 
-        #note different result if we divide by zero then take nanmean
+        #Note different result if we divide by zero then take nanmean
         #compared to replacing frac value by zero then nanmean
         #if we dont check we can remove if statement and just use 
         #np.nanmean

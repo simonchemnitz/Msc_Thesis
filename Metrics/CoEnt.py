@@ -14,7 +14,10 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
         Image for which the metrics should be calculated.
     n_levels : int
         Levels of intensities to bin by
-    
+    bin : bool
+        Whether or not to bin the image
+    crop : bool 
+        Whether or not to crop image/ delete empty slices 
     Returns
     -------
     CoEnt : float

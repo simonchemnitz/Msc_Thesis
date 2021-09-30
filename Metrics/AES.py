@@ -8,7 +8,7 @@ from scipy.ndimage import convolve
 from img_utils import crop_img, bin_img
 
 
-def aes(img, brainmask = None, sigma=1, bin = False, crop = True):
+def aes(img, brainmask = None, sigma=1, n_levels = 128, bin = False, crop = True):
     '''
     Parameters
     ----------
@@ -17,6 +17,12 @@ def aes(img, brainmask = None, sigma=1, bin = False, crop = True):
     sigma : float
         Standard deviation of the Gaussian filter used 
         during canny edge detection.
+    n_levels : int
+        Levels of intensities to bin by
+    bin : bool
+        Whether or not to bin the image
+    crop : bool 
+        Whether or not to crop image/ delete empty slices 
     Returns
     -------
     AES : float
@@ -29,7 +35,7 @@ def aes(img, brainmask = None, sigma=1, bin = False, crop = True):
     if crop:
         img = crop_img(img)
     if bin:
-        img = bin_img(img)
+        img = bin_img(img, n_levels = n_levels)
     #Centered Gradient kernel in the x-direction
     x_kern = np.array([[-1,-1,-1],
                        [0,0,0],

@@ -8,8 +8,6 @@ from scipy.ndimage import convolve
 from img_utils import crop_img, bin_img
 
 
-
-
 def aes(img, brainmask = None, sigma=1, bin = False, crop = True):
     '''
     Parameters

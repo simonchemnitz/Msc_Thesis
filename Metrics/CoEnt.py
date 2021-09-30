@@ -6,13 +6,13 @@ import numpy as np
 from skimage.feature.texture import greycomatrix
 from img_utils import bin_img, crop_img
 
-def coent(img, brainmask = None, levels = 256, bin = True, crop = True):
+def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
     '''
     Parameters
     ----------
     img : numpy array
         Image for which the metrics should be calculated.
-    levels : int
+    n_levels : int
         Levels of intensities to bin by
     
     Returns
@@ -26,22 +26,21 @@ def coent(img, brainmask = None, levels = 256, bin = True, crop = True):
     if crop:
         img = crop_img(img)
     if bin:
-        img = bin_img(img)
+        img = bin_img(img, n_levels=n_levels)
     #Convert image to int
     #as greycomatrix only takes int input
-    img = img.astype(int)
+    img = img.astype(np.uint8)
 
     #Shape of the image/volume
     vol_shape = np.shape(img)
 
     #Empty matrix that will be the co-entropy matrix
-    co_ent_matrix = np.zeros((levels,levels))
+    co_ent_matrix = np.zeros((256,256))
 
     #Generate 2d co-ent matrix for each slice
     for i in range(vol_shape[0]):
         #temporary co-ent matrix
         tmp_comat = greycomatrix(img[i,:,:],
-                                 levels = levels,
                                  distances = [1],
                                  angles = [np.pi,-np.pi, 
                                            np.pi/2,-np.pi/2])
@@ -63,7 +62,6 @@ def coent(img, brainmask = None, levels = 256, bin = True, crop = True):
         #temporary co-ent matrix
         #note only pi,-pi as angles
         tmp_comat = greycomatrix(img[:,j,:],
-                                 levels = levels, 
                                  distances = [1], 
                                  angles = [np.pi, -np.pi])
         #greycomatrix will generate 4d array

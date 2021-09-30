@@ -10,4 +10,4 @@ __pycache__/
 *.xlsx
 *STAI_scores.csv
 *STAI_scores_compact.csv
-*metric_eval
+*metric_eval.py

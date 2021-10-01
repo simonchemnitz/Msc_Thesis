@@ -32,6 +32,7 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
     #Bin image if bin is True
     if bin:
         img = bin_img(img, n_levels=n_levels)
+    #Scale imgage to have intensity values in [0,255]
     img = 255*(img/np.max(img))
     #Convert image to uint8
     #   as greycomatrix prefers uint8 as input

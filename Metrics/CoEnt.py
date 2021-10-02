@@ -6,7 +6,7 @@ import numpy as np
 from skimage.feature.texture import greycomatrix
 from img_utils import bin_img, crop_img
 
-def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
+def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supress_zero = False):
     '''
     Parameters
     ----------
@@ -84,6 +84,8 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True):
 
     #Divide by 6 to get average occurance
     co_ent_matrix = (1/6)*co_ent_matrix
+    if supress_zero:
+        co_ent_matrix[0,0] = 0
     #Normalise
     co_ent_matrix = co_ent_matrix/np.sum(co_ent_matrix)
     #Take log2 to get entropy

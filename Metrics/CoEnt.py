@@ -50,8 +50,10 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
         #Temporary co-ent matrix
         tmp_comat = greycomatrix(img[i,:,:],
                                  distances = [1],
-                                 angles = [np.pi,-np.pi, 
-                                           np.pi/2,-np.pi/2])
+                                 angles = [0*(np.pi/2),
+                                           1*(np.pi/2),
+                                           2*(np.pi/2),
+                                           3*(np.pi/2)])
         #greycomatrix will generate 4d array
         #The value P[i,j,d,theta] is the number of times 
         #that grey-level j occurs at a distance d and 
@@ -71,7 +73,8 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
         #note only pi,-pi as angles
         tmp_comat = greycomatrix(img[:,j,:],
                                  distances = [1], 
-                                 angles = [np.pi, -np.pi])
+                                 angles = [0*np.pi, 
+                                           1*np.pi])
         #greycomatrix will generate 4d array
         #The value P[i,j,d,theta] is the number of times 
         #that grey-level j occurs at a distance d and 
@@ -83,7 +86,13 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
         tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
         #add the occurrences to the co-entropy matrix
         co_ent_matrix = co_ent_matrix + tmp_comat
-
+    print()
+    print()
+    print("UNIQUE VALUES")
+    print(len(np.unique(co_ent_matrix)))
+    print(np.unique(co_ent_matrix))
+    print()
+    print()
     #Divide by 6 to get average occurance
     co_ent_matrix = (1/6)*co_ent_matrix
     if supress_zero:

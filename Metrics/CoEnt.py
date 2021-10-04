@@ -7,7 +7,7 @@ import numpy as np
 from skimage.feature import greycomatrix
 from img_utils import bin_img, crop_img
 
-def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supress_zero = False):
+def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supress_zero = True):
     '''
     Parameters
     ----------
@@ -86,13 +86,6 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
         tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
         #add the occurrences to the co-entropy matrix
         co_ent_matrix = co_ent_matrix + tmp_comat
-    print()
-    print()
-    print("UNIQUE VALUES")
-    print(len(np.unique(co_ent_matrix)))
-    print(np.unique(co_ent_matrix))
-    print()
-    print()
     #Divide by 6 to get average occurance
     co_ent_matrix = (1/6)*co_ent_matrix
     if supress_zero:

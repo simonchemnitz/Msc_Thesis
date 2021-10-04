@@ -8,7 +8,7 @@ from scipy.ndimage import convolve
 from img_utils import crop_img, bin_img
 
 
-def aes(img, brainmask = None, sigma=1, n_levels = 128, bin = False, crop = True):
+def aes(img, brainmask = None, sigma=5, n_levels = 128, bin = False, crop = True):
     '''
     Parameters
     ----------
@@ -51,13 +51,18 @@ def aes(img, brainmask = None, sigma=1, n_levels = 128, bin = False, crop = True
     #Function returns the mean of this list
     es = []
 
+
+    #Convert to float image
+    img = img.astype(float)
+
     #For each slice calcule the edge strength
     for slice in range(vol_shape[0]):
+        im_slice = img[slice,:,:]
         #Convolve slice
-        x_conv = convolve(img[slice,:,:], x_kern)
-        y_conv = convolve(img[slice,:,:], y_kern)
+        x_conv = convolve(im_slice, x_kern)
+        y_conv = convolve(im_slice, y_kern)
         #Canny edge detector
-        canny_img = canny(img[slice,:,:], sigma = sigma)
+        canny_img = canny(im_slice.astype(float), sigma = sigma)
         #Numerator and denominator, to be divided
         #defining the edge strength of the slice
         numerator = np.sum(canny_img*( x_conv**2 + y_conv**2 ))
@@ -69,7 +74,9 @@ def aes(img, brainmask = None, sigma=1, n_levels = 128, bin = False, crop = True
         #np.nanmean
         if denominator>0:
             frac = np.sqrt(numerator)/denominator
-        else: frac = 0
+        else: 
+            frac = 0
+            print("zero denom")
         #Append the edge strength
         es.append(frac)
     #Return the average edge strength

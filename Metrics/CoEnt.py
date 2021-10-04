@@ -3,7 +3,8 @@
 #Nicolas Pannetier, Theano Stavrinos, Peter Ng, Michael Herbst, 
 #Maxim Zaitsev, Karl Young, Gerald Matson, and Norbert Schuff
 import numpy as np
-from skimage.feature.texture import greycomatrix
+#from skimage.feature.texture import greycomatrix   # this function is a Deprecated function
+from skimage.feature import greycomatrix
 from img_utils import bin_img, crop_img
 
 def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supress_zero = False):

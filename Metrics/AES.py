@@ -8,7 +8,7 @@ from scipy.ndimage import convolve
 from img_utils import crop_img, bin_img
 
 
-def aes(img, brainmask = None, sigma=5, n_levels = 128, bin = False, crop = True):
+def aes(img, brainmask = None, sigma=2, n_levels = 128, bin = False, crop = True):
     '''
     Parameters
     ----------
@@ -76,7 +76,6 @@ def aes(img, brainmask = None, sigma=5, n_levels = 128, bin = False, crop = True
             frac = np.sqrt(numerator)/denominator
         else: 
             frac = 0
-            print("zero denom")
         #Append the edge strength
         es.append(frac)
     #Return the average edge strength

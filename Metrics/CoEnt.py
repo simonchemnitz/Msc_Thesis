@@ -73,8 +73,8 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
         #note only pi,-pi as angles
         tmp_comat = greycomatrix(img[:,j,:],
                                  distances = [1], 
-                                 angles = [0*np.pi, 
-                                           1*np.pi])
+                                 angles = [1*(np.pi/2), 
+                                           3*(np.pi/2)])
         #greycomatrix will generate 4d array
         #The value P[i,j,d,theta] is the number of times 
         #that grey-level j occurs at a distance d and 

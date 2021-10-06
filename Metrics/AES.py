@@ -53,7 +53,7 @@ def aes(img, brainmask = None, sigma=2, n_levels = 128, bin = False, crop = True
 
 
     #Convert to float image
-    img = img.astype(float)
+    img = img.astype(np.float)
 
     #For each slice calcule the edge strength
     for slice in range(vol_shape[0]):
@@ -62,7 +62,7 @@ def aes(img, brainmask = None, sigma=2, n_levels = 128, bin = False, crop = True
         x_conv = convolve(im_slice, x_kern)
         y_conv = convolve(im_slice, y_kern)
         #Canny edge detector
-        canny_img = canny(im_slice.astype(float), sigma = sigma)
+        canny_img = canny(im_slice, sigma = sigma)
         #Numerator and denominator, to be divided
         #defining the edge strength of the slice
         numerator = np.sum(canny_img*( x_conv**2 + y_conv**2 ))

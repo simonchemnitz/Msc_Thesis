@@ -96,4 +96,3 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
     log_matrix = np.log2(co_ent_matrix)
     #Return the entropy
     return -np.nansum(co_ent_matrix*log_matrix)
-

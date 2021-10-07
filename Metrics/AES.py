@@ -91,4 +91,3 @@ def aes(img, brainmask = None, sigma=2, n_levels = 128, bin = False, crop = True
     if weigt_avg:
         return np.average(es, weights = weights)
     else: return np.mean(es)
-

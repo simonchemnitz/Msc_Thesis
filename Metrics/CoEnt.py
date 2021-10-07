@@ -64,7 +64,7 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
         #we sum over axis 2.
         tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
         #add the occurrences to the co-entropy matrix
-        co_ent_matrix = co_ent_matrix+tmp_comat
+        co_ent_matrix = co_ent_matrix + tmp_comat
     
     #Generate 2d co-ent matrix for each slice 
     #   to capture co-occurrence in the direction we sliced before
@@ -96,3 +96,4 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
     log_matrix = np.log2(co_ent_matrix)
     #Return the entropy
     return -np.nansum(co_ent_matrix*log_matrix)
+

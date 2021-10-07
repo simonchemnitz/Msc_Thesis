@@ -7,8 +7,7 @@ from skimage.feature import canny
 from scipy.ndimage import convolve
 from img_utils import crop_img, bin_img
 
-
-def aes(img, brainmask = None, sigma=2, n_levels = 128, bin = False, crop = True):
+def aes(img, brainmask = None, sigma=2, n_levels = 128, bin = False, crop = True, weigt_avg = True):
     '''
     Parameters
     ----------
@@ -51,6 +50,9 @@ def aes(img, brainmask = None, sigma=2, n_levels = 128, bin = False, crop = True
     #Function returns the mean of this list
     es = []
 
+    #weights for each slice
+    #proportion of non zero pixels
+    weights = []
 
     #Convert to float image
     img = img.astype(np.float)
@@ -59,6 +61,10 @@ def aes(img, brainmask = None, sigma=2, n_levels = 128, bin = False, crop = True
     for slice in range(vol_shape[0]):
         #Slice to do operations on
         im_slice = img[slice,:,:]
+
+        #weight
+        weights.append(np.mean(im_slice>0))
+
         #Convolve slice
         x_conv = convolve(im_slice, x_kern)
         y_conv = convolve(im_slice, y_kern)
@@ -79,6 +85,10 @@ def aes(img, brainmask = None, sigma=2, n_levels = 128, bin = False, crop = True
             frac = 0
         #Append the edge strength
         es.append(frac)
+    es = np.array(es)
+    es  = es[~np.isnan(es)]
     #Return the average edge strength
-    return np.nanmean(es)
+    if weigt_avg:
+        return np.average(es, weights = weights)
+    else: return np.mean(es)
 

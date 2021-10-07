@@ -57,6 +57,7 @@ def aes(img, brainmask = None, sigma=2, n_levels = 128, bin = False, crop = True
 
     #For each slice calcule the edge strength
     for slice in range(vol_shape[0]):
+        #Slice to do operations on
         im_slice = img[slice,:,:]
         #Convolve slice
         x_conv = convolve(im_slice, x_kern)

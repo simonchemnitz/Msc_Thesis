@@ -33,7 +33,7 @@ def format_dataframe_metric(file_path):
         Data frame with columns such as
         ['aes', 'coent', 'moco', 'nod', 'RR', 
         'shake', 'still', 'pers_id', 'img_type']
-    Saves the dataframe in csv format in metric out directory
+    Saves the dataframe in csv format in metric-out-directory
     with subject id as filename
     """
     #Name of the subject
@@ -90,6 +90,19 @@ def format_dataframe_metric(file_path):
 
     
 def format_observer_dataframe(file):
+    """
+    Parameters
+    ----------
+    file_path : str
+        File path containing observer scores 
+        of a single subject
+    Returns: pandas.DataFrame
+        Data frame with columns such as
+        ["w_avg", 'moco', 'nod', 'RR', 
+        'shake', 'still', 'pers_id', 'img_type']
+    Saves the dataframe in csv format in observer-out-directory
+    with subject id as filename
+    """
     #type of image
     image_type = file[len(observer_in):-9]
     

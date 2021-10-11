@@ -22,7 +22,7 @@ relevant_date = "10_06"
 #Filename reference
 file_reference = "Values_AES_CoEnt_10_06_"
 
-
+# Metrics
 
 #Create empty metric dataframes for each subject
 
@@ -65,3 +65,22 @@ merged_df.to_csv(metric_out+"merged_metric.csv", index = False)
 
 
 
+#Observer scores
+
+
+#Format all ovserver files
+for file in glob.glob(observer_in+"*"):
+    format_observer_dataframe(file)
+
+
+#Merge all observer scores
+#DataFrame template
+merged_df = pd.DataFrame(columns = ["w_avg","nod","RR","moco",
+                                    "pers_id","shake","still","img_type"])
+
+for file in glob.glob(observer_out+"*"):
+    #Load file
+    file_df = pd.read_csv(file)
+    #Merge dataframe
+    merged_df = pd.concat([merged_df, file_df])
+merged_df.to_csv(observer_out+"merged_observer.csv", index = False)

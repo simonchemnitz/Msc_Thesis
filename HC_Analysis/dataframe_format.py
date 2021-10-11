@@ -32,9 +32,9 @@ base_csv = pd.DataFrame(columns = ['aes', 'coent', 'moco', 'nod', 'RR',
                                    'shake', 'still', 'pers_id', 'img_type'])
 
 #Create base dataframes
-subjects = glob.glob(mainhc_in+"*")
+subjects = glob.glob(metric_in+"*")
 
 #for each subject create a dataframe
 for sub in subjects:
-    subject = sub[len(mainhc_in):]
+    subject = sub[len(metric_in):]
     base_csv.to_csv(hc_out+subject+".csv", index = False)

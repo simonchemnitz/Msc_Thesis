@@ -87,14 +87,11 @@ merged_df.to_csv(observer_out+"merged_observer.csv", index = False)
 
 
 
-
-
-
 #Merge metrics and observer scores
 
 
 #Load dataframes
-metric_dataframe = pd.read_csv(hc_out+"merged_metric.csv")
+metric_dataframe = pd.read_csv(metric_out+"merged_metric.csv")
 observer_dataframe = pd.read_csv(observer_out+"merged_observer.csv")
 #List of image types that were scored
 #by observers
@@ -118,4 +115,4 @@ merged_dataframe = merged_dataframe.dropna()
 
 
 
-merged_dataframe.to_csv("observer_merged_metric.csv", index = False)
+merged_dataframe.to_csv(main_dir+"observer_merged_metric.csv", index = False)

@@ -32,7 +32,6 @@ file_reference = "Values_AES_CoEnt_10_06_"
 
 #Create empty metric dataframes for each subject
 
-
 #DataFrame template
 base_csv = pd.DataFrame(columns = ['aes', 'coent', 'moco', 'nod', 'RR', 
                                    'shake', 'still', 'pers_id', 'img_type'])
@@ -89,7 +88,8 @@ for file in glob.glob(observer_in+"*"):
 #DataFrame template
 merged_df = pd.DataFrame(columns = ["w_avg","nod","RR","moco",
                                     "pers_id","shake","still","img_type"])
-
+                                    
+merged_df.to_csv(observer_out+"merged_observer.csv", index = False)
 for file in glob.glob(observer_out+"*"):
     #Load file
     file_df = pd.read_csv(file)

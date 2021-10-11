@@ -12,3 +12,4 @@ __pycache__/
 *STAI_scores_compact.csv
 *metric_eval.py
 *.DS_Store
+*example.py

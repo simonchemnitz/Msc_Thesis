@@ -22,7 +22,13 @@ relevant_date = "10_06"
 #Filename reference
 file_reference = "Values_AES_CoEnt_10_06_"
 
-# Metrics
+"""
+'//////////////////////////////////////////////////////'
+'//                                                  //'
+'//               Metrics scores                     //'
+'//                                                  //'
+'//////////////////////////////////////////////////////'
+"""
 
 #Create empty metric dataframes for each subject
 
@@ -65,7 +71,13 @@ merged_df.to_csv(metric_out+"merged_metric.csv", index = False)
 
 
 
-#Observer scores
+"""
+'//////////////////////////////////////////////////////'
+'//                                                  //'
+'//                Observer scores                   //'
+'//                                                  //'
+'//////////////////////////////////////////////////////'
+"""
 
 
 #Format all ovserver files
@@ -87,9 +99,14 @@ merged_df.to_csv(observer_out+"merged_observer.csv", index = False)
 
 
 
-#Merge metrics and observer scores
 
-
+"""
+'//////////////////////////////////////////////////////'
+'//                                                  //'
+'//      Merge Metrics and Observer scores           //'
+'//                                                  //'
+'//////////////////////////////////////////////////////'
+"""
 #Load dataframes
 metric_dataframe = pd.read_csv(metric_out+"merged_metric.csv")
 observer_dataframe = pd.read_csv(observer_out+"merged_observer.csv")

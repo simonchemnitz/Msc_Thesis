@@ -152,15 +152,14 @@ for file in files:
 
 
 
-
 print()
+print("-----------------------------------------------")
 print()
-print()
-print("PRINTING SCORES")
-print("---------------------------------------------------------------------------------------------------------")
-
 df = pd.read_csv("STAI_scores.csv")
 print(df)
 
+print()
+print("-----------------------------------------------")
+print()
 df = pd.read_csv("STAI_scores_compact.csv" , header = [0,1] , index_col=[0])
 print(df)

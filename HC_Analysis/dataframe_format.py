@@ -22,13 +22,10 @@ relevant_date = "10_06"
 #Filename reference
 file_reference = "Values_AES_CoEnt_10_06_"
 
-"""
-'//////////////////////////////////////////////////////'
-'//                                                  //'
-'//               Metrics scores                     //'
-'//                                                  //'
-'//////////////////////////////////////////////////////'
-"""
+### ###                                                                ### ### 
+### ###                          Metrics  Scores                       ### ###
+### ###                          Metrics  Scores                       ### ###
+### ###                                                                ### ### 
 
 #Create empty metric dataframes for each subject
 
@@ -70,13 +67,10 @@ merged_df.to_csv(metric_out+"merged_metric.csv", index = False)
 
 
 
-"""
-'//////////////////////////////////////////////////////'
-'//                                                  //'
-'//                Observer scores                   //'
-'//                                                  //'
-'//////////////////////////////////////////////////////'
-"""
+### ###                                                                ### ### 
+### ###                         Observer scores                        ### ###
+### ###                         Observer scores                        ### ###
+### ###                                                                ### ### 
 
 
 #Format all ovserver files
@@ -88,7 +82,7 @@ for file in glob.glob(observer_in+"*"):
 #DataFrame template
 merged_df = pd.DataFrame(columns = ["w_avg","nod","RR","moco",
                                     "pers_id","shake","still","img_type"])
-                                    
+
 merged_df.to_csv(observer_out+"merged_observer.csv", index = False)
 for file in glob.glob(observer_out+"*"):
     #Load file
@@ -100,13 +94,13 @@ merged_df.to_csv(observer_out+"merged_observer.csv", index = False)
 
 
 
-"""
-'//////////////////////////////////////////////////////'
-'//                                                  //'
-'//      Merge Metrics and Observer scores           //'
-'//                                                  //'
-'//////////////////////////////////////////////////////'
-"""
+
+### ###                                                                ### ### 
+### ###                   Merge Metrics and Observer scores            ### ###
+### ###                   Merge Metrics and Observer scores            ### ###
+### ###                                                                ### ### 
+
+
 #Load dataframes
 metric_dataframe = pd.read_csv(metric_out+"merged_metric.csv")
 observer_dataframe = pd.read_csv(observer_out+"merged_observer.csv")

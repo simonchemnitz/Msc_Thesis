@@ -7,11 +7,12 @@ import os
 #File directories
 
 #Metric directories
-metric_in = "Results/"
-metric_out = "HC_metric_csv/"
+metric_in = "Metric_results/"
+metric_out = "Metric_csv/"
+
 #Observer directories
-observer_in = "observer_scores/"
-observer_out = "HC_obs_csv/"
+observer_in = "Observer_Results/"
+observer_out = "Observer_csv/"
 
 #Date of the latets evalution
 relevant_date = "10_06"

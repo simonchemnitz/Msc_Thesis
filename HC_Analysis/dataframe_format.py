@@ -19,6 +19,7 @@ observer_out = main_dir+"Observer_csv/"
 
 #Date of the latets evalution
 relevant_date = "10_06"
+
 #Filename reference
 file_reference = "Values_AES_CoEnt_10_06_"
 
@@ -62,7 +63,8 @@ for file in glob.glob(metric_out+"*"):
         #load file 
         file_df = pd.read_csv(file)
         merged_df = pd.concat([merged_df, file_df])
-#save the merged dataframe
+
+#Save the merged dataframe
 merged_df.to_csv(metric_out+"merged_metric.csv", index = False)
 
 
@@ -93,8 +95,6 @@ merged_df.to_csv(observer_out+"merged_observer.csv", index = False)
 
 
 
-
-
 ### ###                                                                ### ### 
 ### ###                   Merge Metrics and Observer scores            ### ###
 ### ###                   Merge Metrics and Observer scores            ### ###
@@ -105,11 +105,11 @@ merged_df.to_csv(observer_out+"merged_observer.csv", index = False)
 metric_dataframe = pd.read_csv(metric_out+"merged_metric.csv")
 observer_dataframe = pd.read_csv(observer_out+"merged_observer.csv")
 #List of image types that were scored
-#by observers
+#   by observers
 im_types = observer_dataframe["img_type"].unique()
 
 #Subset metrics to only contain data on image types
-#that were scored by observers
+#   that were scored by observers
 metric_dataframe = metric_dataframe.loc[metric_dataframe["img_type"].isin(im_types)]
 
 #Set joint index
@@ -120,10 +120,10 @@ observer_dataframe = observer_dataframe.set_index(["pers_id", "img_type", "moco"
 merged_dataframe =  metric_dataframe.join(observer_dataframe).reset_index()
 merged_dataframe = merged_dataframe.dropna()
 
-
+#Reset index and drop nans
 merged_dataframe =  metric_dataframe.join(observer_dataframe).reset_index()
 merged_dataframe = merged_dataframe.dropna()
 
 
-
+#Save dataframe
 merged_dataframe.to_csv(main_dir+"observer_merged_metric.csv", index = False)

@@ -5,14 +5,14 @@ import os
 
 
 #File directories
-
+main_dir = "Files_ig/"
 #Metric directories
-metric_in = "Metric_results/"
-metric_out = "Metric_csv/"
+metric_in = main_dir+"Metric_results/"
+metric_out = main_dir+"Metric_csv/"
 
 #Observer directories
-observer_in = "Observer_Results/"
-observer_out = "Observer_csv/"
+observer_in = main_dir+"Observer_Results/"
+observer_out = main_dir+"Observer_csv/"
 
 #Date of the latets evalution
 relevant_date = "10_06"

@@ -87,3 +87,35 @@ merged_df.to_csv(observer_out+"merged_observer.csv", index = False)
 
 
 
+
+
+
+#Merge metrics and observer scores
+
+
+#Load dataframes
+metric_dataframe = pd.read_csv(hc_out+"merged_metric.csv")
+observer_dataframe = pd.read_csv(observer_out+"merged_observer.csv")
+#List of image types that were scored
+#by observers
+im_types = observer_dataframe["img_type"].unique()
+
+#Subset metrics to only contain data on image types
+#that were scored by observers
+metric_dataframe = metric_dataframe.loc[metric_dataframe["img_type"].isin(im_types)]
+
+#Set joint index
+metric_dataframe = metric_dataframe.set_index(["pers_id", "img_type", "moco", "still", "nod", "shake", "RR"])
+observer_dataframe = observer_dataframe.set_index(["pers_id", "img_type", "moco", "still", "nod", "shake", "RR"])
+
+#Merge the two dataframes
+merged_dataframe =  metric_dataframe.join(observer_dataframe).reset_index()
+merged_dataframe = merged_dataframe.dropna()
+
+
+merged_dataframe =  metric_dataframe.join(observer_dataframe).reset_index()
+merged_dataframe = merged_dataframe.dropna()
+
+
+
+merged_dataframe.to_csv("observer_merged_metric.csv", index = False)

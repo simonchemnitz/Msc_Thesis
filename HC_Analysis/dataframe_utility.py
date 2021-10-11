@@ -24,9 +24,17 @@ file_reference = "Values_AES_CoEnt_10_06_"
 
 def format_dataframe_metric(file_path):
     """
-    given a file path format a dataframe with the columns
-    ['aes', 'coent', 'moco', 'nod', 'RR', 
-    'shake', 'still', 'pers_id', 'img_type']
+    Parameters
+    ----------
+    file_path : str
+        File path containing metric evaluations 
+        of a single subject
+    Returns: pandas.DataFrame
+        Data frame with columns such as
+        ['aes', 'coent', 'moco', 'nod', 'RR', 
+        'shake', 'still', 'pers_id', 'img_type']
+    Saves the dataframe in csv format in metric out directory
+    with subject id as filename
     """
     #Name of the subject
     subject_name = file_path[len(metric_in):][:5]

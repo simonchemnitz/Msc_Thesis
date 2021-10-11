@@ -13,3 +13,4 @@ __pycache__/
 *metric_eval.py
 *.DS_Store
 *example.py
+*example

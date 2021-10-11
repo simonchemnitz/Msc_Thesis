@@ -54,11 +54,14 @@ for subject in subjects:
 merged_df = pd.DataFrame(columns = ['aes', 'coent', 'moco', 'nod', 'RR', 
                                    'shake', 'still', 'pers_id', 'img_type'])
 
-
-for file in glob.glob(hc_out+"*"):
+#For each subject-csv file merge
+for file in glob.glob(metric_out+"*"):
     if "merged" not in file:
         #load file 
         file_df = pd.read_csv(file)
         merged_df = pd.concat([merged_df, file_df])
+#save the merged dataframe
+merged_df.to_csv(metric_out+"merged_metric.csv", index = False)
 
-merged_df.to_csv(hc_out+"merged_metric.csv", index = False)
+
+

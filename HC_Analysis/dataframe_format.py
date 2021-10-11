@@ -84,3 +84,6 @@ for file in glob.glob(observer_out+"*"):
     #Merge dataframe
     merged_df = pd.concat([merged_df, file_df])
 merged_df.to_csv(observer_out+"merged_observer.csv", index = False)
+
+
+

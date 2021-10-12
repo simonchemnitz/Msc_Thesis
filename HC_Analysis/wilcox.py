@@ -6,13 +6,50 @@ import os
 from scipy.stats import wilcoxon as cox
 
 
-
+#Directory with the apropriate files
 main_dir = "Files_ig/"
 
-df = pd.read_csv(main_dir + "observer_merged_metric.csv")
+#Load dataframe of results
+df = pd.read_csv(main_dir +"Metric_csv/"+"merged_metric.csv")
 
-def wilcox_test(df, nod, RR,shake, img_type, metric):
+#Exclude observations with the following sequences
+excl = ["ADC", "TRACEW_B0", "TRACEW_B1000"]
+df = df.loc[~df["img_type"].isin(excl) ]
 
+#Image sequnces to split on
+img_types = df["img_type"].unique()
+
+def wilcox_test(df, nod, RR, shake, img_type, metric):
+    """
+    Parameters
+    ----------
+    df : pandas DataFrame
+        DataFrame containing data from 
+        different sequences with respective
+        metric scores.
+    nod : Bool
+        0/1, whether or not to calculate
+        the cox statistic for a nodding sequnce.
+        1 if nodding, 0 if still.
+    RR : Bool
+        0/1, whether or not to calculate
+        the cox statistic for a reacquisition sequnce.
+        1 if with reacquisition, 0 if not.
+    shake : Bool
+        0/1, whether or not to calculate
+        the cox statistic for a shaking sequnce.
+        1 if shaking, 0 if not shaking.
+    img_type : str
+        Type of image sequence to look at
+        when calculating the statistic.
+        Example: T1_MPR_, T1_TIRM_, T2_TSE_
+    metric : str
+        Which metric to test significance for.
+        Example: "coent", "aes"
+    Returns: stat, pval
+        The test statistic
+        and the corresponding pvalue
+    """
 
     #create a copy of the DataFrame
     cox_df = df.copy()
@@ -28,15 +65,14 @@ def wilcox_test(df, nod, RR,shake, img_type, metric):
     #Subset for only relevant columnds
     cox_df = cox_df[["pers_id", "moco", metric]]
 
+    cox_df = cox_df.drop_duplicates()
     cox_df = cox_df.set_index(['pers_id', 'moco'])[metric].unstack().reset_index()
 
     #calculate the cox
-    print( cox( x = cox_df[0] , y = cox_df[1] ) )
+    stat, pval =  cox( x = cox_df[0] , y = cox_df[1] )
+    print( cox( x = cox_df[0] , y = cox_df[1] ))
 
-
-
-
-img_types = df["img_type"].unique()
+    return stat, pval
 
 
 print()

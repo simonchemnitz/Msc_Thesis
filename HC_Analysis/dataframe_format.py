@@ -23,10 +23,11 @@ relevant_date = "10_06"
 #Filename reference
 file_reference = "Values_AES_CoEnt_10_06_"
 
-### ###                                                                ### ### 
-### ###                          Metrics  Scores                       ### ###
-### ###                          Metrics  Scores                       ### ###
-### ###                                                                ### ### 
+print("+------------------------------------------------------------------+")
+print("|                                                                  |")
+print("|                          Metric Scores                           |")
+print("|                                                                  |")
+print("+------------------------------------------------------------------+")
 
 #Create empty metric dataframes for each subject
 
@@ -69,10 +70,11 @@ merged_df.to_csv(metric_out+"merged_metric.csv", index = False)
 
 
 
-### ###                                                                ### ### 
-### ###                         Observer scores                        ### ###
-### ###                         Observer scores                        ### ###
-### ###                                                                ### ### 
+print("+------------------------------------------------------------------+")
+print("|                                                                  |")
+print("|                        Observer Scores                           |")
+print("|                                                                  |")
+print("+------------------------------------------------------------------+")
 
 
 #Format all ovserver files
@@ -95,10 +97,11 @@ merged_df.to_csv(observer_out+"merged_observer.csv", index = False)
 
 
 
-### ###                                                                ### ### 
-### ###                   Merge Metrics and Observer scores            ### ###
-### ###                   Merge Metrics and Observer scores            ### ###
-### ###                                                                ### ### 
+print("+------------------------------------------------------------------+")
+print("|                                                                  |")
+print("|                Merge Metric & Observer Scores                    |")
+print("|                                                                  |")
+print("+------------------------------------------------------------------+")
 
 
 #Load dataframes

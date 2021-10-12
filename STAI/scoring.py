@@ -12,9 +12,11 @@ files = glob.glob(response_dir+"*")
 def weighted_scoring(df):
     '''
     Change scoring acording to scoring key
+    Parameters
     ----------
     df : pandas.DataFrame
         Dataframe to change from answers index to score.
+
     Returns
     -------
     tmp_df : pandas.DataFrame
@@ -54,12 +56,14 @@ def STAI_score(file_name, csv_file, weighted = False):
     '''
     Calculate the STAI score and append results to csv file
     containing all scores. If file does not exists it will create it
+
     Parameters
     ----------
     file_name : str
         file name of the excel file of survey results.
     csv_file : str
         file name of the csv file which keeps track of all relevant resulst.
+
     Returns
     -------
     new_state_csv : pandas dataframe

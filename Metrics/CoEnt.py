@@ -19,6 +19,7 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
         Whether or not to bin the image
     crop : bool 
         Whether or not to crop image/ delete empty slices 
+
     Returns
     -------
     CoEnt : float
@@ -110,6 +111,7 @@ def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
         Whether or not to bin the image
     crop : bool 
         Whether or not to crop image/ delete empty slices 
+
     Returns
     -------
     CoEnt : float
@@ -182,6 +184,7 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
     crop : bool 
         Whether or not to crop image/ delete empty slices 
     Returns
+    
     -------
     CoEnt : float
         Co-Occurrence Entropy measure of the input image.

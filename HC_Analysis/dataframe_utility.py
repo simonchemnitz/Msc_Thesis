@@ -18,6 +18,7 @@ def format_dataframe_metric(file_path, metric_in, metric_out, file_reference, re
     relevant_date : str
         Date of which the dataframes should be formatted around.
         For the lates data use the latest date, eg "10_06"
+        
     Returns
     -------
     subject_DataFrame : pandas.DataFrame

@@ -44,6 +44,7 @@ def wilcox_test(df, nod, RR, shake, img_type, metric):
     metric : str
         Which metric to test significance for.
         Example: "coent", "aes"
+        
     Returns
     -------
     stat, pval : float, float

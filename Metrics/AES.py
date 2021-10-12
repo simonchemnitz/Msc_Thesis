@@ -22,6 +22,7 @@ def aes(img, brainmask = None, sigma=1, n_levels = 128, bin = False, crop = True
         Whether or not to bin the image
     crop : bool 
         Whether or not to crop image/ delete empty slices 
+        
     Returns
     -------
     AES : float

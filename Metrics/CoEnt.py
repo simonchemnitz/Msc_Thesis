@@ -195,6 +195,8 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
     #eg a 2d encoded image
     #would have shape (256,256,k)
     #where k is the slice number
+    #additional assumption: 2d encoded seq does not have more than 100 slices
+    #and 3d encoded does not have less than 100 slices.
     if img_vol[2]<100:
         return coent2d(img, brainmask, n_levels, bin, crop, supress_zero)
     else: return coent3d(img, brainmask, n_levels, bin, crop, supress_zero)

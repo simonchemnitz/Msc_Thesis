@@ -49,7 +49,7 @@ subjects = glob.glob(metric_in+"*")
 #Format all metric files
 for subject in subjects:
     for file in glob.glob(subject+"/*"):
-        format_dataframe_metric(file)
+        format_dataframe_metric(file, metric_in, metric_out, file_reference, relevant_date)
 
 
 #Merge all metric scores
@@ -77,7 +77,7 @@ merged_df.to_csv(metric_out+"merged_metric.csv", index = False)
 
 #Format all ovserver files
 for file in glob.glob(observer_in+"*"):
-    format_observer_dataframe(file)
+    format_observer_dataframe(file, observer_in, observer_out)
 
 
 #Merge all observer scores

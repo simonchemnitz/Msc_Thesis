@@ -5,24 +5,24 @@ import os
 
 
 #File directories
-main_dir = "Files_ig/"
+#main_dir = "Files_ig/"
 
 #Metric directories
-metric_in = main_dir+"Metric_results/"
-metric_out = main_dir+"Metric_csv/"
+#metric_in = main_dir+"Metric_results/"
+#metric_out = main_dir+"Metric_csv/"
 
 #Observer directories
-observer_in = main_dir+"Observer_Results/"
-observer_out = main_dir+"Observer_csv/"
+#observer_in = main_dir+"Observer_Results/"
+#observer_out = main_dir+"Observer_csv/"
 
 #Date of the latets evalution
-relevant_date = "10_06"
-#Filename reference
-file_reference = "Values_AES_CoEnt_10_06_"
+#relevant_date = "10_06"
+##Filename reference
+#file_reference = "Values_AES_CoEnt_10_06_"
 
 
 
-def format_dataframe_metric(file_path):
+def format_dataframe_metric(file_path, metric_in, metric_out, file_reference, relevant_date):
     """
     Parameters
     ----------
@@ -39,7 +39,7 @@ def format_dataframe_metric(file_path):
     #Name of the subject
     subject_name = file_path[len(metric_in):][:5]
     #Name of the file
-    file_name = file_path[len(metric_in+subject_name)+1:]
+    #file_name = file_path[len(metric_in+subject_name)+1:]
     
     image_type = file_path[len(metric_in+subject_name+file_reference)+1:-4]
     
@@ -89,7 +89,7 @@ def format_dataframe_metric(file_path):
     subject_DataFrame.to_csv(metric_out+subject_name+".csv", index = False)
 
     
-def format_observer_dataframe(file):
+def format_observer_dataframe(file, observer_in, observer_out):
     """
     Parameters
     ----------

@@ -41,9 +41,12 @@ def wilcox_test(df, nod, RR,shake, img_type, metric):
 img_types = df["img_type"].unique()
 
 print("Wilcoxon rank test")
-print("Nod")
 for img_type in img_types:
     print()
     print(img_type)
     print("Wilcoxon rank test:")
+    print("Nod")
     wilcox_test(df, nod = 1, RR = 0,shake = 0, img_type = img_type ,metric = "coent")
+    print("Still")
+    wilcox_test(df, nod = 0, RR = 0,shake = 0, img_type = img_type ,metric = "coent")
+

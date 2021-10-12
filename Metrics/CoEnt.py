@@ -76,10 +76,10 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
                                  angles = [1*(np.pi/2), 
                                            3*(np.pi/2)])
         #greycomatrix will generate 4d array
-        #The value P[i,j,d,theta] is the number of times 
-        #that grey-level j occurs at a distance d and 
+        #The value P[i,j,d,theta] is the number of times
+        #that grey-level j occurs at a distance d and
         #at an angle theta from grey-level i
-        #as we only have one distance we just use 
+        #as we only have one distance we just use
         #tmp_comat[:,:,0,:]
         #As we want the total occurence not split on angles
         #we sum over axis 2.

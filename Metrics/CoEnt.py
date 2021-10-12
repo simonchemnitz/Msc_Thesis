@@ -98,7 +98,6 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
     return -np.nansum(co_ent_matrix*log_matrix)
 
 
-
 def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supress_zero = True):
     '''
     Parameters

@@ -11,10 +11,8 @@ main_dir = "Files_ig/"
 
 df = pd.read_csv(main_dir + "observer_merged_metric.csv")
 
-
-
-
 def wilcox_test(df, nod, RR,shake, img_type, metric):
+
 
     #create a copy of the DataFrame
     cox_df = df.copy()
@@ -40,13 +38,37 @@ def wilcox_test(df, nod, RR,shake, img_type, metric):
 
 img_types = df["img_type"].unique()
 
-print("Wilcoxon rank test")
+
+print()
+print()
+print("                        Wilcoxon rank test:")
+print()
+print()
+
+
+print("+------------------------------------------------------------------+")
+print("|                                                                  |")
+print("|                            CoEnt                                 |")
+print("|                                                                  |")
+print("+------------------------------------------------------------------+")
 for img_type in img_types:
     print()
     print(img_type)
-    print("Wilcoxon rank test:")
-    print("Nod")
+    print("   Nod")
     wilcox_test(df, nod = 1, RR = 0,shake = 0, img_type = img_type ,metric = "coent")
-    print("Still")
+    print("   Still")
     wilcox_test(df, nod = 0, RR = 0,shake = 0, img_type = img_type ,metric = "coent")
+
+print("+------------------------------------------------------------------+")
+print("|                                                                  |")
+print("|                             AES                                  |")
+print("|                                                                  |")
+print("+------------------------------------------------------------------+")
+for img_type in img_types:
+    print()
+    print(img_type)
+    print("   Nod")
+    wilcox_test(df, nod = 1, RR = 0,shake = 0, img_type = img_type ,metric = "aes")
+    print("   Still")
+    wilcox_test(df, nod = 0, RR = 0,shake = 0, img_type = img_type ,metric = "aes")
 

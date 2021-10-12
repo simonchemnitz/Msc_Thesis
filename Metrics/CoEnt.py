@@ -150,6 +150,14 @@ def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
                                            1*(np.pi/2),
                                            2*(np.pi/2),
                                            3*(np.pi/2)])
+        #greycomatrix will generate 4d array
+        #The value P[i,j,d,theta] is the number of times
+        #that grey-level j occurs at a distance d and
+        #at an angle theta from grey-level i
+        #as we only have one distance we just use
+        #tmp_comat[:,:,0,:]
+        #As we want the total occurence not split on angles
+        #we sum over axis 2.
         tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
         comat = comat + tmp_comat
     
@@ -183,9 +191,14 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
         Co-Occurrence Entropy measure of the input image.
     '''
 
-    #check which function to use:
+    #Check which function to use:
     img_vol = np.shape(img)
-
+    
+    #Working under the assumption that the 
+    #third axis contains the slices, 
+    #eg a 2d encoded image
+    #would have shape (256,256,k)
+    #where k is the slice number
     if img_vol[2]<100:
         return coent2d(img, brainmask, n_levels, bin, crop, supress_zero)
     else: return coent3d(img, brainmask, n_levels, bin, crop, supress_zero)

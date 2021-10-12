@@ -72,7 +72,9 @@ def wilcox_test(df, nod, RR, shake, img_type, metric):
 
     return stat, pval
 
-#Print Results
+#Calculate Wilcoxon for 
+# CoEnt and AES for each image type 
+# with and without noding
 print()
 print()
 print("                        Wilcoxon rank test:")

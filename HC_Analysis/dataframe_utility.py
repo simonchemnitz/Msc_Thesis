@@ -1,34 +1,23 @@
 import numpy as np
 import pandas as pd
-import glob 
-import os
-
-
-#File directories
-#main_dir = "Files_ig/"
-
-#Metric directories
-#metric_in = main_dir+"Metric_results/"
-#metric_out = main_dir+"Metric_csv/"
-
-#Observer directories
-#observer_in = main_dir+"Observer_Results/"
-#observer_out = main_dir+"Observer_csv/"
-
-#Date of the latets evalution
-#relevant_date = "10_06"
-##Filename reference
-#file_reference = "Values_AES_CoEnt_10_06_"
-
-
 
 def format_dataframe_metric(file_path, metric_in, metric_out, file_reference, relevant_date):
     """
     Parameters
     ----------
     file_path : str
-        File path containing metric evaluations 
+        Filepath containing metric evaluations 
         of a single subject
+    metric_in : str
+        Filepath for the metric files to load
+    metric_out : str
+        Output filepath where the dataframes should be stored
+    file_reference : str
+        Reference of how the file name is formatted,
+        eg "Values_AES_CoEnt_10_06_"
+    relevant_date : str
+        Date of which the dataframes should be formatted around.
+        For the lates data use the latest date, eg "10_06"
     Returns: pandas.DataFrame
         Data frame with columns such as
         ['aes', 'coent', 'moco', 'nod', 'RR', 
@@ -94,8 +83,13 @@ def format_observer_dataframe(file, observer_in, observer_out):
     Parameters
     ----------
     file_path : str
-        File path containing observer scores 
+        Filepath containing observer scores 
         of a single subject
+    observer_in : str
+        Filepath for the observer scores file
+    observer_out : str
+        Filepath pointing to where
+        the formatted dataframes should be saved to
     Returns: pandas.DataFrame
         Data frame with columns such as
         ["w_avg", 'moco', 'nod', 'RR', 

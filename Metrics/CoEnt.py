@@ -47,8 +47,9 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
     co_oc_mat = np.zeros((256,256))
 
 
-    #Note: For 3D encoded images the slice axis does not matter.
-    
+    """
+    Note: For 3D encoded images the slice axis does not matter.
+    """
     #Generate 2d co-ent matrix for each slice
     for i in range(vol_shape[0]):
         #Temporary co-ent matrix
@@ -140,8 +141,12 @@ def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
 
     #Empty matrix that will be the Co-Occurence matrix
     co_oc_mat = np.zeros((256,256))
-
-
+    
+    """
+    Note that the slice axis matters now
+    as it does not make sense to compare
+    intensities between slices
+    """
     #Assuming volume is of the format
     # V(i,j,k) where k denotes the slice number
     for slice in range(vol_shape[2]):

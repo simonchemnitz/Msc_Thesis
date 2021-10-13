@@ -115,10 +115,10 @@ def dicom2nifti(patient_id, dicom_directory, nifti_directory):
             #Output volume
             out_volume = nifti_directory+patient_id[len(dicom_directory):]+ dicom_fold[len(patient_id):-1]+".nii"
             
-            print(in_volume)
-            print(out_volume)
-            print("----------")
-            print()
+            #print(in_volume)
+            #print(out_volume)
+            #print("----------")
+            #print()
             #Convert to nifti with mri_convert
             subprocess.run('mri_convert ' + in_volume + ' ' + out_volume+' --no-dwi', shell=True)
             

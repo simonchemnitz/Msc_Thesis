@@ -63,7 +63,7 @@ def aes(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False, cr
         #Slice to do operations on
         im_slice = img[:,:,slice]
 
-        #weight
+        #Weight, proportion of non zero pixels
         weights.append(np.mean(im_slice>0))
 
         #Convolve slice

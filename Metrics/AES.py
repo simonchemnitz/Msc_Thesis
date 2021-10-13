@@ -7,7 +7,7 @@ from skimage.feature import canny
 from scipy.ndimage import convolve
 from img_utils import crop_img, bin_img
 
-def aes(img, brainmask = None, sigma=1, n_levels = 128, bin = False, crop = True, weigt_avg = False):
+def aes(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False, crop = True, weigt_avg = False):
     '''
     Parameters
     ----------

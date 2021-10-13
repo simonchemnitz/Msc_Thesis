@@ -135,6 +135,7 @@ def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
     #Shape of the image/volume
     vol_shape = np.shape(img)
 
+    #Co-Occurence matrix
     comat = np.zeros((256,256))
 
 
@@ -191,7 +192,7 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
     '''
 
     #Check which function to use:
-    
+
     #Shape of the volume image
     img_vol = np.shape(img)
     

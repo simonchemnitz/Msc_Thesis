@@ -44,7 +44,7 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
     vol_shape = np.shape(img)
 
     #Empty matrix that will be the co-entropy matrix
-    co_ent_matrix = np.zeros((256,256))
+    co_oc_mat = np.zeros((256,256))
 
     #Generate 2d co-ent matrix for each slice
     for i in range(vol_shape[0]):
@@ -65,7 +65,7 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
         #we sum over axis 2.
         tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
         #add the occurrences to the co-entropy matrix
-        co_ent_matrix = co_ent_matrix + tmp_comat
+        co_oc_mat = co_oc_mat + tmp_comat
     
     #Generate 2d co-ent matrix for each slice 
     #   to capture co-occurrence in the direction we sliced before
@@ -86,17 +86,17 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
         #we sum over axis 2.
         tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
         #add the occurrences to the co-entropy matrix
-        co_ent_matrix = co_ent_matrix + tmp_comat
+        co_oc_mat = co_oc_mat + tmp_comat
     #Divide by 6 to get average occurance
-    co_ent_matrix = (1/6)*co_ent_matrix
+    co_oc_mat = (1/6)*co_oc_mat
     if supress_zero:
-        co_ent_matrix[0,0] = 0
+        co_oc_mat[0,0] = 0
     #Normalise
-    co_ent_matrix = co_ent_matrix/np.sum(co_ent_matrix)
+    co_oc_mat = co_oc_mat/np.sum(co_oc_mat)
     #Take log2 to get entropy
-    log_matrix = np.log2(co_ent_matrix)
+    log_matrix = np.log2(co_oc_mat)
     #Return the entropy
-    return -np.nansum(co_ent_matrix*log_matrix)
+    return -np.nansum(co_oc_mat*log_matrix)
 
 
 def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supress_zero = True):
@@ -136,14 +136,14 @@ def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
     vol_shape = np.shape(img)
 
     #Co-Occurence matrix
-    comat = np.zeros((256,256))
+    co_oc_mat = np.zeros((256,256))
 
 
     #Assuming volume is of the format
     # V(i,j,k) where k denotes the slice number
     for slice in range(vol_shape[2]):
         #Temporary co-occurrence matrix
-        tmp_comat = greycomatrix(img[:,:,slice],
+        tmp_co_oc_mat = greycomatrix(img[:,:,slice],
                                  distances = [1],
                                  angles = [0*(np.pi/2),
                                            1*(np.pi/2),
@@ -158,18 +158,18 @@ def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
         #As we want the total occurence not split on angles
         #we sum over axis 2.
         tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
-        comat = comat + tmp_comat
+        co_oc_mat = co_oc_mat + tmp_comat
     
     #normallise comat
-    comat =  comat/np.sum(comat)
+    co_oc_mat =  co_oc_mat/np.sum(co_oc_mat)
 
     if supress_zero:
-        comat[0,0] = 0
+        co_oc_mat[0,0] = 0
 
     #Take log2 to get entropy
-    log_matrix = np.log2(comat)
+    log_matrix = np.log2(co_oc_mat)
     #Return the entropy
-    return -np.nansum(comat*log_matrix)        
+    return -np.nansum(co_oc_mat*log_matrix)        
 
 
 def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supress_zero = True):

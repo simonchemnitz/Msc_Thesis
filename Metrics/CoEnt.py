@@ -43,13 +43,13 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
     #Shape of the image/volume
     vol_shape = np.shape(img)
 
-    #Empty matrix that will be the co-entropy matrix
+    #Empty matrix that will be the Co-Occurence matrix
     co_oc_mat = np.zeros((256,256))
 
     #Generate 2d co-ent matrix for each slice
     for i in range(vol_shape[0]):
         #Temporary co-ent matrix
-        tmp_comat = greycomatrix(img[i,:,:],
+        tmp_co_oc_mat = greycomatrix(img[i,:,:],
                                  distances = [1],
                                  angles = [0*(np.pi/2),
                                            1*(np.pi/2),
@@ -60,19 +60,19 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
         #that grey-level j occurs at a distance d and 
         #at an angle theta from grey-level i
         #as we only have one distance we just use 
-        #tmp_comat[:,:,0,:]
+        #tmp_co_oc_mat[:,:,0,:]
         #As we want the total occurence not split on angles
         #we sum over axis 2.
-        tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
+        tmp_co_oc_mat = np.sum(tmp_co_oc_mat[:,:,0,:], axis = 2)
         #add the occurrences to the co-entropy matrix
-        co_oc_mat = co_oc_mat + tmp_comat
+        co_oc_mat = co_oc_mat + tmp_co_oc_mat
     
     #Generate 2d co-ent matrix for each slice 
     #   to capture co-occurrence in the direction we sliced before
     for j in range(vol_shape[1]):
         #temporary co-ent matrix
         #note only pi,-pi as angles
-        tmp_comat = greycomatrix(img[:,j,:],
+        tmp_co_oc_mat = greycomatrix(img[:,j,:],
                                  distances = [1], 
                                  angles = [1*(np.pi/2), 
                                            3*(np.pi/2)])
@@ -81,12 +81,12 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
         #that grey-level j occurs at a distance d and
         #at an angle theta from grey-level i
         #as we only have one distance we just use
-        #tmp_comat[:,:,0,:]
+        #tmp_co_oc_mat[:,:,0,:]
         #As we want the total occurence not split on angles
         #we sum over axis 2.
-        tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
+        tmp_co_oc_mat = np.sum(tmp_co_oc_mat[:,:,0,:], axis = 2)
         #add the occurrences to the co-entropy matrix
-        co_oc_mat = co_oc_mat + tmp_comat
+        co_oc_mat = co_oc_mat + tmp_co_oc_mat
     #Divide by 6 to get average occurance
     co_oc_mat = (1/6)*co_oc_mat
     if supress_zero:
@@ -135,7 +135,7 @@ def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
     #Shape of the image/volume
     vol_shape = np.shape(img)
 
-    #Co-Occurence matrix
+    #Empty matrix that will be the Co-Occurence matrix
     co_oc_mat = np.zeros((256,256))
 
 
@@ -154,11 +154,11 @@ def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
         #that grey-level j occurs at a distance d and
         #at an angle theta from grey-level i
         #as we only have one distance we just use
-        #tmp_comat[:,:,0,:]
+        #tmp_co_oc_mat[:,:,0,:]
         #As we want the total occurence not split on angles
         #we sum over axis 2.
-        tmp_comat = np.sum(tmp_comat[:,:,0,:], axis = 2)
-        co_oc_mat = co_oc_mat + tmp_comat
+        tmp_co_oc_mat = np.sum(tmp_co_oc_mat[:,:,0,:], axis = 2)
+        co_oc_mat = co_oc_mat + tmp_co_oc_mat
     
     #normallise comat
     co_oc_mat =  co_oc_mat/np.sum(co_oc_mat)

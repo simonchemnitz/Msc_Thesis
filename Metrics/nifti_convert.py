@@ -1,6 +1,10 @@
 """
-Remember to run with python3, 
-ie: python3 nifti_convert.py
++------------------------------------------------------------------+
+|                                                                  |
+|                  Remember to run with python3,                   |
+|                  ie: python3 nifti_convert.py                    |
+|                                                                  |
++------------------------------------------------------------------+
 """
 from img_utils import convert_all
 

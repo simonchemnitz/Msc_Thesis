@@ -44,6 +44,9 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
     vol_shape = np.shape(img)
 
     #Empty matrix that will be the Co-Occurence matrix
+    #Note it is 256x256 as that is the shape of the 
+    #output of skimage.feature.greycomatrix
+    #even though the image is binned
     co_oc_mat = np.zeros((256,256))
 
 
@@ -140,8 +143,11 @@ def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
     vol_shape = np.shape(img)
 
     #Empty matrix that will be the Co-Occurence matrix
+    #Note it is 256x256 as that is the shape of the 
+    #output of skimage.feature.greycomatrix
+    #even though the image is binned
     co_oc_mat = np.zeros((256,256))
-    
+
     """
     Note that the slice axis matters now
     as it does not make sense to compare

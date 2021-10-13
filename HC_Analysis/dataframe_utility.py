@@ -41,7 +41,8 @@ def format_dataframe_metric(file_path, metric_in, metric_out, file_reference, re
     if not correct_date: 
         #print("Wrong date")
         return None
-    
+    if "sig" in file_path:
+        return None
     #Load the data
     file_df = pd.read_csv(file_path, sep = " ", names = ["type", "aes", "coent"],skiprows = [0],)
     

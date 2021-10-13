@@ -34,7 +34,7 @@ def format_dataframe_metric(file_path, metric_in, metric_out, file_reference, re
     #file_name = file_path[len(metric_in+subject_name)+1:]
     
     image_type = file_path[len(metric_in+subject_name+file_reference)+1:-4]
-    
+
     #Check if the file is from the correct date
     correct_date = relevant_date in file_path
     #if wrong date stop

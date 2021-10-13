@@ -6,7 +6,7 @@ from skimage.feature import canny
 from scipy.ndimage import convolve
 file = "/users/simon/desktop/metric/mri/"
 
-img = nib.load(file+"brainmask_e.mgz")
+img = nib.load(file+"brainmask.mgz")
 img = np.asarray(img.dataobj)
 
 img = crop_img(img)

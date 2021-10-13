@@ -142,4 +142,3 @@ def format_observer_dataframe(file, observer_in, observer_out):
 
     #Save dataframe
     file_df.to_csv(observer_out+image_type+".csv", index = False)
-    

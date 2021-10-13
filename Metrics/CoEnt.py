@@ -191,6 +191,8 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
     '''
 
     #Check which function to use:
+    
+    #Shape of the volume image
     img_vol = np.shape(img)
     
     #Working under the assumption that the 

@@ -18,10 +18,10 @@ observer_in = main_dir+"Observer_Results/"
 observer_out = main_dir+"Observer_csv/"
 
 #Date of the latets evalution
-relevant_date = "10_12"
+relevant_date = "10_14"
 
 #Filename reference
-file_reference = "Values_AES_CoEnt_10_06_"
+file_reference = "Values_AES_CoEnt_10_14_"
 
 print("+------------------------------------------------------------------+")
 print("|                                                                  |")

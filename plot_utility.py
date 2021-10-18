@@ -207,10 +207,10 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     #Add significance stars
     if pval <=0.05:
         signf = True
-        spval = str(pval)+"*"
+        str_pval = str(pval)+"*"
     elif pval <=0.001:
         signf = True
-        spval = str(pval)+"**"
+        str_pval = str(pval)+"**"
     else: 
 
 

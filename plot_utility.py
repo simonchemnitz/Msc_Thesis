@@ -46,11 +46,16 @@ def correlation_plot(df,img_seq, title,
         or turns off ticks.
         Array of type [locations, values] 
         to use custom ticks
-    marker_color : 
-    line_color : 
-    alpha : 
-    fit_line : 
-    conf_int : 
+    marker_color : tuple
+        rgb color tuple, can be in [0,1] or [0,255]
+    line_color : tuple
+        rgb color tuple, can be in [0,1] or [0,255]
+    alpha : float
+        alpha opacity for plot markers
+    fit_line : bool
+        Whether or not to fit regression line.
+    conf_int : bool
+        Whether or not to add confidence interval to reg line.
     
     Returns
     -------
@@ -100,6 +105,7 @@ def correlation_plot(df,img_seq, title,
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.title(title)
+    #Check ticks, and change acordingly
     if isinstance(x_ticks,(list,np.ndarray)):
         plt.xticks(x_ticks[0], x_ticks[1])
     elif not x_ticks:

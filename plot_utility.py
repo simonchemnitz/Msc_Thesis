@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import datetime
 import seaborn as sns
 sns.set()
@@ -171,9 +172,17 @@ def correlation_plot(df,img_seq, title,
 
 
 def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
-                 x_label, y_label, bp_kwargs = None, palette = None,
-                 save_dir = "", file_name = "", wilcox_file = "", wilcox_df = "", RR = 0, shake = 0, 
-                 id_color = "k", id_alpha = 0.7, linewidth = 3, box_cols = [dblue, lblue]):
+                 x_label, y_label, x_ticks = [],
+                 save_dir = None, file_name = None, wilcox_file = None, wilcox_df = None, RR = 0, shake = 0, 
+                 id_color = "k", id_alpha = 0.7, linewidth = 3, box_cols = [dblue, lblue], legend = False):
+    
+    
+    #Input verification
+    if wilcox_df is None and wilcox_file is None:
+        print("Error, both wilcox file path and dataframe is None")
+        print("Need a wilcox dataframe or file")
+    if (save_dir is None) ^ (file_name is None):
+        print("Error, save_dir and save_file should either both be None or specified")
     cols = []
     #Check colormaps
     for col in box_cols:
@@ -184,6 +193,9 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
             #Append to cols list
             cols.append(col)
     
+    #Load data
+    if wilcox_file is not None:
+        wilcox_df = pd.read_csv(wilcox_file)
     
     #Subset to relevant data
     rel_df = df.copy()
@@ -202,7 +214,7 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     
     #Check if the pvalue is significant
     if rel_cox.shape[0]>0:
-    pval = list(rel_cox["pval"])[0]
+        pval = list(rel_cox["pval"])[0]
     signf = False
     #Add significance stars
     if pval <=0.05:
@@ -212,7 +224,7 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
         signf = True
         str_pval = str(pval)+"**"
     else: str_pval = str(pval)
-    
+
 
     #Create the boxplot:
     fig = plt.figure()
@@ -229,5 +241,42 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     for i in range(5):
         ax.lines[i].set_color(cols[0])
         ax.lines[i+5].set_color(cols[1])
-        
-    return None
+
+
+    #if significant add stars and stripes
+    if signf:
+        #Add stars and significance level
+        y, h, col = rel_df[metric].max() + 0.1, 0.1, 'k'
+        x1,x2 = 0,1
+        plt.plot([x1, x1, x2, x2], [y, y+h, y+h, y], lw=1.5, c=col)
+        plt.text((x1+x2)*.5, y+h, str_pval, ha='center', va='bottom', color=col)
+        #Add idlines
+        plot_array = np.asarray( rel_df.pivot(id_var, columns =split_var) )
+        for val in plot_array:
+            plt.plot(val, c = id_color, alpha = id_alpha)
+    
+    #Set axis labels
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.title(plot_title + img_type)
+
+    ax.set_xticklabels(x_ticks)
+
+    moco_off = mpatches.Patch(color=cols[0], label="MoCo off")
+    moco_on = mpatches.Patch(color=cols[1], label="MoCo on")
+    if legend:
+        plt.legend(handles=[moco_on,moco_off])
+
+
+    #Save figure
+    if save_dir is not None:
+        if not os.path.exists(save_dir):
+            print("Folder did not exist")
+            print("Creating folder")
+            os.makedirs(save_dir)
+        #Current date, eg oct_18
+        dat = datetime.datetime.now()
+        dat = dat.strftime("%b")+"_"+dat.strftime("%d")
+        #Save figure to the savedir
+        fig.savefig(save_dir + file_name+dat+".png")
+    return fig

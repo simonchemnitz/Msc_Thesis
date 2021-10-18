@@ -181,6 +181,9 @@ def starbox_plot(df, img_seq, id_var, split_var, metric, plot_title, nod,
     img_seq : str
         Image sequence to plot x,y data from
         e.g. T1_MPR_
+    id_var : str
+        Column name for identifying which the observations
+        belong to
     title : str
         title of the plot
     save_dir : str

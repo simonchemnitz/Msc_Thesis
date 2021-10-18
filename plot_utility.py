@@ -135,7 +135,7 @@ def correlation_plot(df,img_seq, title,
     #Add significance stars
     if pval <=0.05:
         spval = str(pval)+"*"
-    elif pval <=0.01:
+    elif pval <=0.001:
         spval = str(pval)+"**"
     else: spval = str(pval)
         
@@ -162,6 +162,7 @@ def correlation_plot(df,img_seq, title,
         dat = dat.strftime("%b")+"_"+dat.strftime("%d")
         #Save figure to the savedir
         fig.savefig(save_dir + file_name+dat+".png")
+
     #Return the figure
     return fig
 
@@ -169,13 +170,30 @@ def correlation_plot(df,img_seq, title,
 
 
 
-def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, 
+def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nodding,
                  x_label, y_label, bp_kwargs = None, palette = None,
-                 save_dir = "", file_name = "", wilcox_file = ""):
+                 save_dir = "", file_name = "", wilcox_file = "", RR = 0, shake = 0, id_color = "k", id_alpha = 0.7):
 
 
 
+    #subset dataframe
+    rel_df = df.copy()
+    rel_df = rel_df.loc[rel_df["img_type"] == img_type]
+    rel_df = rel_df.loc[rel_df["nod"] == nodding]
+    rel_df = rel_df.loc[rel_df["RR"] == RR]
+    rel_df = rel_df.loc[rel_df["shake"] == shake]
+    #Remove redundant columns
+    rel_df = rel_df[[id_var, split_var, metric]]
 
+    fig = plt.figure()
+    #Add id lines
+    plot_array = np.asarray( rel_df.pivot(id_var, columns =split_var) )
+    for val in plot_array:
+        plt.plot(val, c = id_color, alpha = id_alpha)
+
+    #Create boxplot
+
+    sns.boxplot(data = rel_df, x = split_var, y = metric,palette = [dblue,lblue] )#, **{'boxprops':{'facecolor':'none'}})
 
     #Save the figure:
     if len(save_dir)>0:
@@ -188,5 +206,9 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title,
         dat = dat.strftime("%b")+"_"+dat.strftime("%d")
         #Save figure to the savedir
         fig.savefig(save_dir + file_name+dat+".png")
+    #Labels and title
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.title(plot_title)
     #Return the figure
     return fig

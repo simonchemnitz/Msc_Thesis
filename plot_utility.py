@@ -303,7 +303,7 @@ def starbox_plot(df, img_seq, id_var, split_var, metric, plot_title, nod,
         if pval <=0.05:
             signf = True
             str_pval = str(pval)+"*"
-        elif pval <=0.001:
+        if pval <=0.001:
             signf = True
             str_pval = str(pval)+"**"
         else: str_pval = str(pval)

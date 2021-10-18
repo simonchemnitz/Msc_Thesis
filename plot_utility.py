@@ -169,5 +169,24 @@ def correlation_plot(df,img_seq, title,
 
 
 
-def starbox_plot(df, ):
-    return None
+def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, 
+                 x_label, y_label, bp_kwargs = None, palette = None,
+                 save_dir = "", file_name = ""):
+
+
+
+
+
+    #Save the figure:
+    if len(save_dir)>0:
+        if not os.path.exists(save_dir):
+            print("Folder did not exist")
+            print("Creating folder")
+            os.makedirs(save_dir)
+        #Current date, eg oct_18
+        dat = datetime.datetime.now()
+        dat = dat.strftime("%b")+"_"+dat.strftime("%d")
+        #Save figure to the savedir
+        fig.savefig(save_dir + file_name+dat+".png")
+    #Return the figure
+    return fig

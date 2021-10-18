@@ -171,7 +171,56 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
                  x_label = "", y_label = "", x_ticks = [],
                  save_dir = None, file_name = None, wilcox_file = None, wilcox_df = None, RR = 0, shake = 0, 
                  id_color = "k", id_alpha = 0.7, linewidth = 3, box_cols = [dblue, lblue], legend = False):
+    '''
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame containing relevant data
+        such as the values to plot and identifier 
+        variables, eg image type or personal id
+    img_seq : str
+        Image sequence to plot x,y data from
+        e.g. T1_MPR_
+    title : str
+        title of the plot
+    save_dir : str
+        Where to save the figure
+    file_name : str
+        What to call the file
+    x : str
+        column string for the x-axis data
+    y : str
+        column string for the y-axis data
+    x_label : str
+        x-axis label
+    y_label : str
+        y-axis label
+    x_ticks : bool or array
+        True/False uses default ticks values
+        or turns off ticks.
+        Array of type [locations, values] 
+        to use custom ticks
+    y_ticks : bool or array
+        True/False uses default ticks values
+        or turns off ticks.
+        Array of type [locations, values] 
+        to use custom ticks
+    marker_color : tuple
+        rgb color tuple, can be in [0,1] or [0,255]
+    line_color : tuple
+        rgb color tuple, can be in [0,1] or [0,255]
+    alpha : float
+        alpha opacity for plot markers
+    fit_line : bool
+        Whether or not to fit regression line.
+    conf_int : bool
+        Whether or not to add confidence interval to reg line.
     
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
+        plot figure.
+    '''   
 
     #Input verification
     if wilcox_df is None and wilcox_file is None:

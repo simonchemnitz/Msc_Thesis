@@ -107,6 +107,8 @@ def correlation_plot(df,img_seq, title,
         
         
     #Annotate correlation
+    x_max = np.max( fig.axes[0].get_xlim() )
+    y_max = np.max( fig.axes[0].get_ylim() )
     fig.axes[0].annotate("Spearman Correlation: "+str(spearmann_corr)+"\n"+
                      "p-value:                         "+spval, xy = (x_max, y_max))
     

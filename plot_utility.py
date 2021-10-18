@@ -12,6 +12,10 @@ from scipy import stats
 
 from HC_Analysis import wilcox
 
+dblue = (47, 122, 154)
+lblue = (83, 201, 250)
+
+
 def correlation_plot(df,img_seq, title,
                          x, y,
                          save_dir ="", file_name = "",
@@ -162,3 +166,8 @@ def correlation_plot(df,img_seq, title,
     return fig
 
 
+
+
+
+def starbox_plot(df, ):
+    return None

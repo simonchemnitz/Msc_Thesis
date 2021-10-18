@@ -36,9 +36,16 @@ def correlation_plot(df,img_seq, title,
         x-axis label
     y_label : str
         y-axis label
-    x_ticks : bool
-        True 
-    y_ticks : 
+    x_ticks : bool or array
+        True/False uses default ticks values
+        or turns off ticks.
+        Array of type [locations, values] 
+        to use custom ticks
+    y_ticks : bool or array
+        True/False uses default ticks values
+        or turns off ticks.
+        Array of type [locations, values] 
+        to use custom ticks
     marker_color : 
     line_color : 
     alpha : 
@@ -93,7 +100,16 @@ def correlation_plot(df,img_seq, title,
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.title(title)
-    plt.xticks(x_ticks)
+    if isinstance(x_ticks,(list,np.ndarray)):
+        plt.xticks(x_ticks[0], x_ticks[1])
+    elif not x_ticks:
+        plt.xticks([])
+    
+    if isinstance(y_ticks,(list,np.ndarray)):
+        plt.xticks(y_ticks[0], y_ticks[1])
+    elif not y_ticks:
+        plt.xticks([])
+    
     
     #Spearman correlation
     
@@ -105,13 +121,16 @@ def correlation_plot(df,img_seq, title,
         spval = str(pval)+"**"
     else: spval = str(pval)
         
-        
+
     #Annotate correlation
     x_max = np.max( fig.axes[0].get_xlim() )
+    x_min = np.min( fig.axes[0].get_xlim() )
     y_max = np.max( fig.axes[0].get_ylim() )
+    y_min = np.min( fig.axes[0].get_ylim() )
     fig.axes[0].annotate("Spearman Correlation: "+str(spearmann_corr)+"\n"+
-                     "p-value:                         "+spval, xy = (x_max, y_max))
-    
+                         "p-value:                          "+spval, xy = (0,0.9), xycoords = "axes fraction")
+    #Change xlimits to avoid clipping of points
+    plt.xlim(left = np.min(fig.axes[0].get_xlim())-0.1, right = x_max+0.1 )
     
     #Return the figure
     return fig

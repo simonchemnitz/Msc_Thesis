@@ -1,4 +1,6 @@
+import numpy as np
 import pandas as pd
+from pandas.core.indexes import base
 from scipy.stats import wilcoxon as cox
 
 
@@ -107,3 +109,24 @@ for img_type in img_types:
     wilcox_test(df, nod = 1, RR = 0,shake = 0, img_type = img_type ,metric = "aes")
     print("   Still")
     wilcox_test(df, nod = 0, RR = 0,shake = 0, img_type = img_type ,metric = "aes")
+
+metrics = ["coent", "aes"]
+nodding = [0,1]
+
+base_df = pd.DataFrame(columns=["nod", "img_type", "pval", "metric"])
+
+
+print("+------------------------------------------------------------------+")
+print("|                                                                  |")
+print("|                           DataFrame                              |")
+print("|                                                                  |")
+print("+------------------------------------------------------------------+")
+for metric in metrics:
+    for img_type in img_types:
+        for nods in nodding:
+            test_stat , pval = wilcox_test(df, nod = nods, RR =  0, shake = 0, img_type = img_type, metric= metric)
+            tmp_df = pd.DataFrame([[nods, img_type, round(pval,4), metric]], columns = list(base_df))
+            base_df = pd.concat([tmp_df, base_df])
+
+
+base_df.to_csv("wilcox_results.csv", index = False)

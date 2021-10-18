@@ -170,45 +170,16 @@ def correlation_plot(df,img_seq, title,
 
 
 
-def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nodding,
+def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
                  x_label, y_label, bp_kwargs = None, palette = None,
-                 save_dir = "", file_name = "", wilcox_file = "", RR = 0, shake = 0, id_color = "k", id_alpha = 0.7):
-
-
-
-    #subset dataframe
+                 save_dir = "", file_name = "", wilcox_file = "", wilcox_df = "", RR = 0, shake = 0, id_color = "k", id_alpha = 0.7):
+    #Subset to relevant data
     rel_df = df.copy()
+    rel_df = rel_df.loc[rel_df["nod"] == nod]
     rel_df = rel_df.loc[rel_df["img_type"] == img_type]
-    rel_df = rel_df.loc[rel_df["nod"] == nodding]
-    rel_df = rel_df.loc[rel_df["RR"] == RR]
     rel_df = rel_df.loc[rel_df["shake"] == shake]
-    #Remove redundant columns
-    rel_df = rel_df[[id_var, split_var, metric]]
+    rel_df = rel_df.loc[rel_df["RR"] == RR]
 
-    fig = plt.figure()
-    #Add id lines
-    plot_array = np.asarray( rel_df.pivot(id_var, columns =split_var) )
-    for val in plot_array:
-        plt.plot(val, c = id_color, alpha = id_alpha)
 
-    #Create boxplot
-
-    sns.boxplot(data = rel_df, x = split_var, y = metric,palette = [dblue,lblue] )#, **{'boxprops':{'facecolor':'none'}})
-
-    #Save the figure:
-    if len(save_dir)>0:
-        if not os.path.exists(save_dir):
-            print("Folder did not exist")
-            print("Creating folder")
-            os.makedirs(save_dir)
-        #Current date, eg oct_18
-        dat = datetime.datetime.now()
-        dat = dat.strftime("%b")+"_"+dat.strftime("%d")
-        #Save figure to the savedir
-        fig.savefig(save_dir + file_name+dat+".png")
-    #Labels and title
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
-    plt.title(plot_title)
-    #Return the figure
-    return fig
+    
+    return None

@@ -112,11 +112,12 @@ def correlation_plot(df,img_seq, title,
     plt.ylabel(y_label)
     plt.title(title)
     #Check ticks, and change acordingly
+    #x-Ticks
     if isinstance(x_ticks,(list,np.ndarray)):
         plt.xticks(x_ticks[0], x_ticks[1])
     elif not x_ticks:
         plt.xticks([])
-    
+    #y-Ticks
     if isinstance(y_ticks,(list,np.ndarray)):
         plt.xticks(y_ticks[0], y_ticks[1])
     elif not y_ticks:
@@ -124,7 +125,6 @@ def correlation_plot(df,img_seq, title,
     
     
     #Spearman correlation
-    
     spearmann_corr, pval = np.round(stats.spearmanr(x,y),4)
     #Add significance stars
     if pval <=0.05:
@@ -154,6 +154,9 @@ def correlation_plot(df,img_seq, title,
         #Current date, eg oct_18
         dat = datetime.datetime.now()
         dat = dat.strftime("%b")+"_"+dat.strftime("%d")
+        #Save figure to the savedir
         fig.savefig(save_dir + file_name+dat+".png")
     #Return the figure
     return fig
+
+

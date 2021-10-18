@@ -172,7 +172,19 @@ def correlation_plot(df,img_seq, title,
 
 def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
                  x_label, y_label, bp_kwargs = None, palette = None,
-                 save_dir = "", file_name = "", wilcox_file = "", wilcox_df = "", RR = 0, shake = 0, id_color = "k", id_alpha = 0.7):
+                 save_dir = "", file_name = "", wilcox_file = "", wilcox_df = "", RR = 0, shake = 0, 
+                 id_color = "k", id_alpha = 0.7, linewidth = 3, box_cols = [dblue, lblue]):
+    cols = []
+    #Check colormaps
+    for col in box_cols:
+        #Change Maker color to floats
+        if any(val>1 for val in col):
+            #Change to float values
+            col = tuple(val/255 for val in col)
+            #Append to cols list
+            cols.append(col)
+    
+    
     #Subset to relevant data
     rel_df = df.copy()
     rel_df = rel_df.loc[rel_df["nod"] == nod]
@@ -180,6 +192,42 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     rel_df = rel_df.loc[rel_df["shake"] == shake]
     rel_df = rel_df.loc[rel_df["RR"] == RR]
 
-
+    #Drop redundant columns
+    rel_df = rel_df[[id_var, split_var, metric]]
     
+    #Subset to relevant wilcox data
+    rel_cox = wilcox_df.loc[wilcox_df["metric"] == metric]
+    rel_cox = rel_cox.loc[rel_cox["img_type"] == img_type]
+    rel_cox = rel_cox.loc[rel_cox["nod"] == nod]
+    
+    #Check if the pvalue is significant
+    if rel_cox.shape[0]>0:
+    pval = list(rel_cox["pval"])[0]
+    signf = False
+    #Add significance stars
+    if pval <=0.05:
+        signf = True
+        spval = str(pval)+"*"
+    elif pval <=0.001:
+        signf = True
+        spval = str(pval)+"**"
+    else: 
+
+
+    #Create the boxplot:
+    fig = plt.figure()
+    ax = sns.boxplot(data = rel_df, x = split_var, y = metric, linewidth = linewidth)
+
+    #Change colors of boxes
+    for i in range(len(ax.get_xticks())):
+        # Select which box you want to change    
+        mybox = ax.artists[i]
+        # Change the appearance of that box
+        mybox.set_facecolor("none")
+        mybox.set_edgecolor(cols[i%2])
+    #Change whiskers color
+    for i in range(5):
+        ax.lines[i].set_color(cols[0])
+        ax.lines[i+5].set_color(cols[1])
+        
     return None

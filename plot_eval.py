@@ -40,10 +40,7 @@ print("done")
 
 
 for img_type in df["img_type"].unique():
-    print(img_type)
     for metric in ["coent", "aes"]:
-        print(metric)
         for nods in [0,1]:
-            print(nods)
-            starbox_plot(df, img_type, "pers_id", "moco", metric, "plot titel", nod = nods, wilcox_df= cox_df)
+            starbox_plot(df, img_type, "pers_id", "moco", metric, "", nod = nods, wilcox_df= cox_df)
             plt.show()

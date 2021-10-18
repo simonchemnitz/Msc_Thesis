@@ -250,11 +250,13 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
         plot_array = np.asarray( rel_df.pivot(id_var, columns =split_var) )
         for val in plot_array:
             plt.plot(val, c = id_color, alpha = id_alpha)
-    
+    if nod == 1:
+        nod_title = "nodding"
+    else: nod_title = "still"
     #Set axis labels
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    plt.title(plot_title + img_type)
+    plt.title(plot_title +" "+img_type+" "+metric+" "+nod_title )
 
     ax.set_xticklabels(x_ticks)
 

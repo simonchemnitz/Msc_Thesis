@@ -3,7 +3,7 @@ import os
 import glob
 from plot_utility import correlation_plot, starbox_plot
 import matplotlib.pyplot as plt
-data_dir = "C:/Users/simon/Documents/GitHub/Msc_Thesis/HC_Analysis/Files_ig"
+data_dir = "/Users/simon/Documents/GitHub/Msc_Thesis/HC_Analysis/Files_ig"
 
 df = pd.read_csv(data_dir + "/observer_merged_metric.csv")
 
@@ -17,7 +17,7 @@ for img_type in df["img_type"].unique():
 
 
 
-cox_dir = "C:/Users/simon/Documents/GitHub/Msc_Thesis/HC_Analysis/"
+cox_dir = "/Users/simon/Documents/GitHub/Msc_Thesis/HC_Analysis/"
 
 cox_df = pd.read_csv(cox_dir + "wilcox_results.csv")
 

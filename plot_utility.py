@@ -167,7 +167,7 @@ def correlation_plot(df,img_seq, title,
 
 
 
-def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
+def starbox_plot(df, img_seq, id_var, split_var, metric, plot_title, nod,
                  x_label = "", y_label = "", x_ticks = [],
                  save_dir = None, file_name = None, wilcox_file = None, wilcox_df = None, RR = 0, shake = 0, 
                  id_color = "k", id_alpha = 0.7, linewidth = 3, box_cols = [dblue, lblue], legend = False):
@@ -246,7 +246,7 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     rel_df = df.copy()
     rel_df["img_type"] = rel_df["img_type"]#.str[:-1]
     rel_df = rel_df.loc[rel_df["nod"] == nod]
-    rel_df = rel_df.loc[rel_df["img_type"] == img_type]
+    rel_df = rel_df.loc[rel_df["img_type"] == img_seq]
     rel_df = rel_df.loc[rel_df["shake"] == shake]
     rel_df = rel_df.loc[rel_df["RR"] == RR]
     #Drop redundant columns
@@ -254,7 +254,7 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     
     #Subset to relevant wilcox data
     rel_cox = wilcox_df.loc[wilcox_df["metric"] == metric]
-    rel_cox = rel_cox.loc[rel_cox["img_type"] == img_type]
+    rel_cox = rel_cox.loc[rel_cox["img_type"] == img_seq]
     rel_cox = rel_cox.loc[rel_cox["nod"] == nod]
     
     #Check if the pvalue is significant
@@ -305,7 +305,7 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     #Set axis labels
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    plt.title(plot_title +" "+img_type+" "+metric+" "+nod_title )
+    plt.title(plot_title +" "+img_seq+" "+metric+" "+nod_title )
 
     ax.set_xticklabels(x_ticks)
 

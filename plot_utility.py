@@ -211,8 +211,8 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     elif pval <=0.001:
         signf = True
         str_pval = str(pval)+"**"
-    else: 
-
+    else: str_pval = str(pval)
+    
 
     #Create the boxplot:
     fig = plt.figure()

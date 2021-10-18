@@ -22,10 +22,6 @@ cox_dir = "C:/Users/simon/Documents/GitHub/Msc_Thesis/HC_Analysis/"
 cox_df = pd.read_csv(cox_dir + "wilcox_results.csv")
 
 
-
-
-
-
 for img_type in df["img_type"].unique():
     for metric in ["coent", "aes"]:
         for nods in [0,1]:

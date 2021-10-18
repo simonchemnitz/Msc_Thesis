@@ -184,16 +184,16 @@ def starbox_plot(df, img_seq, id_var, split_var, metric, plot_title, nod,
     id_var : str
         Column name for identifying which the observations
         belong to
-    title : str
+    split_var : str
+        Variable to split by. The different values
+        of split_var corresponds to each box in the boxplot.
+        eg if split_var has 2 levels, 2 boxes are produced
+    metric : str
+        which metric to use/plot along y-axis, eg "coent" or "aes"
+    plot_title : str
         title of the plot
-    save_dir : str
-        Where to save the figure
-    file_name : str
-        What to call the file
-    x : str
-        column string for the x-axis data
-    y : str
-        column string for the y-axis data
+    nod : bool
+        0 is for still images, 1 is for nodding images
     x_label : str
         x-axis label
     y_label : str
@@ -203,21 +203,38 @@ def starbox_plot(df, img_seq, id_var, split_var, metric, plot_title, nod,
         or turns off ticks.
         Array of type [locations, values] 
         to use custom ticks
-    y_ticks : bool or array
-        True/False uses default ticks values
-        or turns off ticks.
-        Array of type [locations, values] 
-        to use custom ticks
-    marker_color : tuple
-        rgb color tuple, can be in [0,1] or [0,255]
+    save_dir : str
+        Where to save the figure
+    file_name : str
+        What to call the file
+    wilcox_file : str
+        Filepath for a csv file containing wilcoxon rank
+        test statistics and pvalues for each metric,
+        nodding/still and for the metric used.
+        wilcox_file or wilcox_df should be specified
+    wilcox_df : pd.DataFrame
+        DataFrame containing wilcoxon rank
+        test statistics and pvalues for each metric,
+        nodding/still and for the metric used.
+        wilcox_file or wilcox_df should be specified
+    RR : bool
+        Reacquisition
+    shake : bool
+        Shaking
+    id_color : str
+        Color for the connecting lines between two boxplots
+        Default is black
+    id_alpha : float
+        Alpha level opacity for the connecting lines
+    linewidth : float
+        Linewidth of the boxplot
+    box_cols : list
+        List containing rbg values to use to the plots.
+        Two values should be given 
     line_color : tuple
         rgb color tuple, can be in [0,1] or [0,255]
-    alpha : float
-        alpha opacity for plot markers
-    fit_line : bool
-        Whether or not to fit regression line.
-    conf_int : bool
-        Whether or not to add confidence interval to reg line.
+    legend : bool
+        If true adds a legend to the plot
     
     Returns
     -------

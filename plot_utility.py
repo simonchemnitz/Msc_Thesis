@@ -11,8 +11,6 @@ import glob
 import os
 from scipy import stats
 
-from HC_Analysis import wilcox
-
 dblue = (47, 122, 154)
 lblue = (83, 201, 250)
 
@@ -169,14 +167,12 @@ def correlation_plot(df,img_seq, title,
 
 
 
-
-
 def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
-                 x_label, y_label, x_ticks = [],
+                 x_label = "", y_label = "", x_ticks = [],
                  save_dir = None, file_name = None, wilcox_file = None, wilcox_df = None, RR = 0, shake = 0, 
                  id_color = "k", id_alpha = 0.7, linewidth = 3, box_cols = [dblue, lblue], legend = False):
     
-    
+
     #Input verification
     if wilcox_df is None and wilcox_file is None:
         print("Error, both wilcox file path and dataframe is None")
@@ -199,11 +195,11 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     
     #Subset to relevant data
     rel_df = df.copy()
+    rel_df["img_type"] = rel_df["img_type"]#.str[:-1]
     rel_df = rel_df.loc[rel_df["nod"] == nod]
     rel_df = rel_df.loc[rel_df["img_type"] == img_type]
     rel_df = rel_df.loc[rel_df["shake"] == shake]
     rel_df = rel_df.loc[rel_df["RR"] == RR]
-
     #Drop redundant columns
     rel_df = rel_df[[id_var, split_var, metric]]
     
@@ -213,17 +209,17 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     rel_cox = rel_cox.loc[rel_cox["nod"] == nod]
     
     #Check if the pvalue is significant
+    signf = False
     if rel_cox.shape[0]>0:
         pval = list(rel_cox["pval"])[0]
-    signf = False
-    #Add significance stars
-    if pval <=0.05:
-        signf = True
-        str_pval = str(pval)+"*"
-    elif pval <=0.001:
-        signf = True
-        str_pval = str(pval)+"**"
-    else: str_pval = str(pval)
+        #Add significance stars
+        if pval <=0.05:
+            signf = True
+            str_pval = str(pval)+"*"
+        elif pval <=0.001:
+            signf = True
+            str_pval = str(pval)+"**"
+        else: str_pval = str(pval)
 
 
     #Create the boxplot:
@@ -238,7 +234,7 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
         mybox.set_facecolor("none")
         mybox.set_edgecolor(cols[i%2])
     #Change whiskers color
-    for i in range(5):
+    for i in range(6):
         ax.lines[i].set_color(cols[0])
         ax.lines[i+5].set_color(cols[1])
 

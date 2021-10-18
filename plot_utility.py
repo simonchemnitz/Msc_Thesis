@@ -117,14 +117,20 @@ def correlation_plot(df,img_seq, title,
     plt.ylabel(y_label)
     plt.title(title)
     #Check ticks, and change acordingly
-    #x-Ticks
+    #If ticks values are provided they are used
+    #otherwise default ticks are used
+    #x-ticks
     if isinstance(x_ticks,(list,np.ndarray)):
+        #Replace x-ticks with the provided ticks
         plt.xticks(x_ticks[0], x_ticks[1])
+    #If bool "false" is given to ticks remove ticks
     elif not x_ticks:
         plt.xticks([])
-    #y-Ticks
+    #y-ticks
     if isinstance(y_ticks,(list,np.ndarray)):
+        #Replace y-ticks with the provided ticks
         plt.xticks(y_ticks[0], y_ticks[1])
+    #If bool "false" is given to ticks remove ticks
     elif not y_ticks:
         plt.xticks([])
     

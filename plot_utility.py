@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import datetime
 import seaborn as sns
 sns.set()
 
@@ -10,7 +11,8 @@ from scipy import stats
 
 
 def correlation_plot(df,img_seq, title,
-                         x,       y,
+                         x, y,
+                         save_dir ="", file_name = "",
                          x_label = " ", y_label = " ",
                          x_ticks = True, y_ticks = True,
                          marker_color = (47, 122, 154),
@@ -28,6 +30,10 @@ def correlation_plot(df,img_seq, title,
         e.g. T1_MPR_
     title : str
         title of the plot
+    save_dir : str
+        Where to save the figure
+    file_name : str
+        What to call the file
     x : str
         column string for the x-axis data
     y : str
@@ -138,5 +144,16 @@ def correlation_plot(df,img_seq, title,
     #Change xlimits to avoid clipping of points
     plt.xlim(left = np.min(fig.axes[0].get_xlim())-0.1, right = x_max+0.1 )
     
+
+    #Save the figure:
+    if len(save_dir)>0:
+        if not os.path.exists(save_dir):
+            print("Folder did not exist")
+            print("Creating folder")
+            os.makedirs(save_dir)
+        #Current date, eg oct_18
+        dat = datetime.datetime.now()
+        dat = dat.strftime("%b")+"_"+dat.strftime("%d")
+        fig.savefig(save_dir + file_name+dat+".png")
     #Return the figure
     return fig

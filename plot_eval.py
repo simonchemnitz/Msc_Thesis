@@ -10,10 +10,15 @@ df = pd.read_csv(data_dir + "/observer_merged_metric.csv")
 
 
 
-cor = correlation_plot(df, img_seq= "T1_MPR_", title = "Plot Title", x = "w_avg", y = "coent", fit_line = True)
+cor = correlation_plot(df, img_seq= "T1_MPR_", title = "Plot Title", x = "w_avg", y = "coent", fit_line = True,
+                            x_label= "Observer Scores", y_label="CoEnt")
+
 
 print(type(cor))
 plt.show()
 
 
-cor.savefig("mega_test.pdf")
+
+for img_type in df["img_type"].unique():
+    cor = correlation_plot(df, img_seq= img_type, title = "Plot Title", x = "w_avg", y = "aes", fit_line = True,
+                            x_label= "Observer Scores", y_label="CoEnt")

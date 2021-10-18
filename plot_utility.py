@@ -71,7 +71,7 @@ def correlation_plot(df,img_seq, title,
     Returns
     -------
     fig : matplotlib.figure.Figure
-        plot figure.
+        plotted figure.
     '''
     
     #Check if the sequence is valid
@@ -219,7 +219,7 @@ def starbox_plot(df, img_type, id_var, split_var, metric, plot_title, nod,
     Returns
     -------
     fig : matplotlib.figure.Figure
-        plot figure.
+        plotted figure.
     '''   
 
     #Input verification

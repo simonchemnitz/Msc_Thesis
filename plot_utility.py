@@ -116,10 +116,14 @@ def correlation_plot(df,img_seq, title,
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.title(title)
+
+
     #Check ticks, and change acordingly
     #If ticks values are provided they are used
     #otherwise default ticks are used
+
     #x-ticks
+    #Check if list or array is passed
     if isinstance(x_ticks,(list,np.ndarray)):
         #Replace x-ticks with the provided ticks
         plt.xticks(x_ticks[0], x_ticks[1])
@@ -127,6 +131,7 @@ def correlation_plot(df,img_seq, title,
     elif not x_ticks:
         plt.xticks([])
     #y-ticks
+    #Check if list or array is passed
     if isinstance(y_ticks,(list,np.ndarray)):
         #Replace y-ticks with the provided ticks
         plt.xticks(y_ticks[0], y_ticks[1])
@@ -135,6 +140,7 @@ def correlation_plot(df,img_seq, title,
         plt.xticks([])
     
     
+
     #Spearman correlation
     spearmann_corr, pval = np.round(stats.spearmanr(x,y),4)
     #Add significance stars
@@ -150,8 +156,14 @@ def correlation_plot(df,img_seq, title,
     x_min = np.min( fig.axes[0].get_xlim() )
     y_max = np.max( fig.axes[0].get_ylim() )
     y_min = np.min( fig.axes[0].get_ylim() )
+    #Fraction to put the annotation
+    #if both zero it is a bottom left,
+    #if both 1 top right
+    #Values in range [0,1]
+    x_frac = 0
+    y_frac = 0.9
     fig.axes[0].annotate("Spearman Correlation: "+str(spearmann_corr)+"\n"+
-                         "p-value:                          "+spval, xy = (0,0.9), xycoords = "axes fraction")
+                         "p-value:                          "+spval, xy = (x_frac,y_frac), xycoords = "axes fraction")
     #Change xlimits to avoid clipping of points
     plt.xlim(left = np.min(fig.axes[0].get_xlim())-0.1, right = x_max+0.1 )
     

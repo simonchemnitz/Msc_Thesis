@@ -298,7 +298,7 @@ def starbox_plot(df, img_seq, id_var, split_var, metric, plot_title, nod,
     #Check if the pvalue is significant
     signf = False
     if rel_cox.shape[0]>0:
-        pval = list(rel_cox["pval"])[0]
+        pval = round(list(rel_cox["pval"])[0],5)
         #Add significance stars
         if pval <=0.001:
             signf = True

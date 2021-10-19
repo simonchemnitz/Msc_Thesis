@@ -125,7 +125,7 @@ for metric in metrics:
     for img_type in img_types:
         for nods in nodding:
             test_stat , pval = wilcox_test(df, nod = nods, RR =  0, shake = 0, img_type = img_type, metric= metric)
-            tmp_df = pd.DataFrame([[nods, img_type, round(pval,4), metric]], columns = list(base_df))
+            tmp_df = pd.DataFrame([[nods, img_type, round(pval,5), metric]], columns = list(base_df))
             base_df = pd.concat([tmp_df, base_df])
 
 

@@ -300,12 +300,12 @@ def starbox_plot(df, img_seq, id_var, split_var, metric, plot_title, nod,
     if rel_cox.shape[0]>0:
         pval = list(rel_cox["pval"])[0]
         #Add significance stars
-        if pval <=0.05:
-            signf = True
-            str_pval = str(pval)+"*"
         if pval <=0.001:
             signf = True
             str_pval = str(pval)+"**"
+        elif pval <=0.05:
+            signf = True
+            str_pval = str(pval)+"*"
         else: str_pval = str(pval)
 
 

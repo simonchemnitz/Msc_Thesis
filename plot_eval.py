@@ -10,7 +10,7 @@ df = pd.read_csv(data_dir + "/observer_merged_metric.csv")
 
 for img_type in df["img_type"].unique():
     for metric in ["coent", "aes"]:
-        cor = correlation_plot(df, img_seq= img_type, title = "Plot Title", x = "w_avg", y = metric, fit_line = True,
+        cor = correlation_plot(df, img_seq= img_type, title = "Plot Title"+img_type, x = "w_avg", y = metric, fit_line = True,
                           x_label= "Observer Scores", y_label=metric)
     plt.show()
 

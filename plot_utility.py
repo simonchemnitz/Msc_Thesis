@@ -10,6 +10,8 @@ sns.set()
 import glob
 import os
 from scipy import stats
+from scipy.stats import wilcoxon as cox
+
 
 dblue = (47, 122, 154)
 lblue = (83, 201, 250)
@@ -287,6 +289,22 @@ def starbox_plot(df, img_seq, id_var, split_var, metric, plot_title, nod,
     rel_df = rel_df.loc[rel_df["img_type"] == img_seq]
     rel_df = rel_df.loc[rel_df["shake"] == shake]
     rel_df = rel_df.loc[rel_df["RR"] == RR]
+    """
+    #Drop redundant columns
+    cox_df = rel_df.copy()
+    cox_df = cox_df.drop(["nod", "still", "RR", "shake", "img_type"], axis = 1)
+
+    #Subset for only relevant columnds
+    cox_df = cox_df[["pers_id", "moco", metric]]
+
+    cox_df = cox_df.drop_duplicates()
+    cox_df = cox_df.set_index(['pers_id', 'moco'])[metric].unstack().reset_index()
+
+    #Calculate the Wilcoxon test statistic and pvalue
+    stat, pval =  cox( x = cox_df[0] , y = cox_df[1] )
+    print( cox( x = cox_df[0] , y = cox_df[1] ))
+    """
+
     #Drop redundant columns
     rel_df = rel_df[[id_var, split_var, metric]]
     
@@ -295,6 +313,7 @@ def starbox_plot(df, img_seq, id_var, split_var, metric, plot_title, nod,
     rel_cox = rel_cox.loc[rel_cox["img_type"] == img_seq]
     rel_cox = rel_cox.loc[rel_cox["nod"] == nod]
     
+
     #Check if the pvalue is significant
     signf = False
     if rel_cox.shape[0]>0:
@@ -333,10 +352,10 @@ def starbox_plot(df, img_seq, id_var, split_var, metric, plot_title, nod,
         x1,x2 = 0,1
         plt.plot([x1, x1, x2, x2], [y, y+h, y+h, y], lw=1.5, c=col)
         plt.text((x1+x2)*.5, y+h, str_pval, ha='center', va='bottom', color=col)
-        #Add idlines
-        plot_array = np.asarray( rel_df.pivot(id_var, columns =split_var) )
-        for val in plot_array:
-            plt.plot(val, c = id_color, alpha = id_alpha)
+    #Add idlines
+    plot_array = np.asarray( rel_df.pivot(id_var, columns =split_var) )
+    for val in plot_array:
+        plt.plot(val, c = id_color, alpha = id_alpha)
     if nod == 1:
         nod_title = "nodding"
     else: nod_title = "still"

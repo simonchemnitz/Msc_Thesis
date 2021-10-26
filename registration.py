@@ -14,38 +14,36 @@ def bbregistration(sub, nifti_dir, output_dir):
     output_dir : str
         Filepath where output should be saved
     """
-
+    #Filepath for the registration outputs
     registration_directory = output_dir + "Registration/"+sub+"/regs/"
-    print(registration_directory)
+
     #Check if the registration_directory exists
-    #Create folder if it does not
+    #Create folder if it does not exist
     if not os.path.exists(registration_directory):
             print('New registration directory created:')
             print(registration_directory)
             os.makedirs(registration_directory)
             
-    #List of nifti files to regi
-    nifti_to_reg = glob.glob(nifti_dir+sub+"/*")
+    #List of nifti files to register
+    nifti_to_reg = glob.glob(nifti_dir+sub+"/*T2*")
     #For each file perform registration
     for i, nifti in enumerate(nifti_to_reg):
-        if "MPR" not in nifti and "LOCALIZER" not in nifti:
-            #Image to move
-            movImg = nifti
+        #Image to move
+        movImg = nifti
 
-            #Name of the nifti files without .nii
-            seq_name = os.path.basename(nifti)[:-4]
-            #Output file name
-            output_name = seq_name+".lta"
-            regname = registration_directory+"/"+output_name
+        #Name of the nifti files without .nii
+        seq_name = os.path.basename(nifti)[:-4]
+        #Output file name
+        output_name = seq_name+".lta"
+        regname = registration_directory+output_name
 
-            #Perform bb registration
-            #print('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header')
-            #subprocess.run('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header', shell=True)
-
-            #Print progress
-            print()
-            print(str(i)+"/"+str(len(nifti_to_reg)), "Done")
-            print()
+        #Perform bb registration
+        #print('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header')
+        #subprocess.run('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header', shell=True)
+        #Print progress
+        print()
+        print(str(i+1)+"/"+str(len(nifti_to_reg)), " BBregs Done for " + sub)
+        print()
     print("+------------------------------------------------------------------+")
     print("|                                                                  |")
     print("|                    bbreg for: "+sub+" Done                      |")
@@ -59,6 +57,8 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
     ----------
     sub : str
         subject name as stated in the freesurfer SUBJECT_DIR
+    recon_dir : str
+        Filepath for the freesurfer SUBJECT_DIR
     nifti_dir : str
         Filepath for the nifti of the subject
     output_dir : str
@@ -75,7 +75,7 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
     nifti_to_reg = glob.glob(nifti_dir+sub+"/*T2*")
 
     #Transform brainmask into t2 seq
-    for nifti in nifti_to_reg:
+    for i, nifti in enumerate(nifti_to_reg):
         #sequence name eg: T2_TSE_TRA_512_TE115MS_0009
         seq_name = os.path.basename(nifti)[:-4]
         bm_mov = output_dir+ "Registration/" +sub+ "/bm_"+ seq_name + ".nii"
@@ -86,24 +86,27 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
 
         #Perform transformation
         #subprocess.run('mri_vol2vol --mov ' + T2_img + ' --targ ' + binary_brainmask_nii + ' --o ' + bm_mov + ' --lta ' + regname + ' --inv --nearest', shell=True)
-        print("___________________________________")
-        print(T2_img)
-        print(binary_brainmask_nii)
-        print(bm_mov)
-        print(regname)
+        
+        #Print progress
         print()
+        print(str(i+1)+"/"+str(len(nifti_to_reg)), " Transforms Done for " + sub)
         print()
-
+    
+    print("+------------------------------------------------------------------+")
+    print("|                                                                  |")
+    print("|              Transformation for: "+sub+" Done                   |")
+    print("|                                                                  |")
+    print("+------------------------------------------------------------------+")
     return None
 
-nifti_dir =  "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_scans/nifti/"
-output_dir = "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_scans/"
-recon_dir =  "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_scans/fs_test_simon/"
 
-subject = "MOCO_001"
+base_dir = "/users/simon/desktop/mnt/mocodata1/Data_Analysis_Children/"
+nifti_dir =  base_dir + "NIFTIS/"
+output_dir = base_dir + "output_simon/"
+recon_dir =  base_dir + "Data_Recon_ALL/"
 
+subjects = ["MOCO_001","MOCO_002"]
 
-bbregistration(subject, nifti_dir, output_dir)
-    
-
-apply_registration(subject, recon_dir, nifti_dir, output_dir)
+for subject in subjects:    
+    bbregistration(subject, nifti_dir, output_dir)
+    apply_registration(subject, recon_dir, nifti_dir, output_dir)

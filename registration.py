@@ -68,15 +68,37 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
     #Path to brainmask
     brainmask = recon_dir+sub+"/mri/brainmask.mgz"
     #Output name
-    binary_brainmask_nii = output_dir+sub+"/bin_brainmask.nii"
+    binary_brainmask_nii = output_dir+ "Registration/"+sub+"/bin_brainmask.nii"
     #subprocess.run('mri_binarize --i ' + brainmask + ' --o ' + binary_brainmask_nii + ' --match 0 --inv', shell=True)
-    
+
+    #T2 Nifti files to apply transformation to
+    nifti_to_reg = glob.glob(nifti_dir+sub+"/*T2*")
+
+    #Transform brainmask into t2 seq
+    for nifti in nifti_to_reg:
+        #sequence name eg: T2_TSE_TRA_512_TE115MS_0009
+        seq_name = os.path.basename(nifti)[:-4]
+        bm_mov = output_dir+ "Registration/" +sub+ "/bm_"+ seq_name + ".nii"
+        #T2 image to register to
+        T2_img = nifti
+        #registration .lta file
+        regname = output_dir + "Registration/"+sub+"/regs/"+seq_name+".lta"
+
+        #Perform transformation
+        #subprocess.run('mri_vol2vol --mov ' + T2_img + ' --targ ' + binary_brainmask_nii + ' --o ' + bm_mov + ' --lta ' + regname + ' --inv --nearest', shell=True)
+        print("___________________________________")
+        print(T2_img)
+        print(binary_brainmask_nii)
+        print(bm_mov)
+        print(regname)
+        print()
+        print()
 
     return None
 
-nifti_dir = "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_scans/nifti/"
-output_dir = "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_SCANS/"
-recon_dir = "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_SCANS/fs_test_simon/"
+nifti_dir =  "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_scans/nifti/"
+output_dir = "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_scans/"
+recon_dir =  "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_scans/fs_test_simon/"
 
 subject = "MOCO_001"
 

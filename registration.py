@@ -86,7 +86,7 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
     #Output name for the binirized brainmask
     binary_brainmask_nii = output_dir+ "Registration/"+sub+"/bin_brainmask.nii"
     #Binirize mask
-    #subprocess.run('mri_binarize --i ' + brainmask + ' --o ' + binary_brainmask_nii + ' --match 0 --inv', shell=True)
+    subprocess.run('mri_binarize --i ' + brainmask + ' --o ' + binary_brainmask_nii + ' --match 0 --inv', shell=True)
 
     #T2 Nifti files to apply transformation to
     nifti_to_reg = glob.glob(nifti_dir+sub+"/*T2*")

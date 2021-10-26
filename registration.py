@@ -5,6 +5,9 @@ import glob
 
 def bbregistration(sub, nifti_dir, output_dir):
     """
+    Calculates the registration transform: using FreeSurfer functions 
+    bbregister for T2 images
+
     Parameters
     ----------
     sub : str
@@ -54,6 +57,9 @@ def bbregistration(sub, nifti_dir, output_dir):
 
 def apply_registration(sub, recon_dir, nifti_dir, output_dir):
     """
+    Applies transforms (saved in output_dir/Registration/sub/regs) to the 
+    brainmasks for T2 scans
+
     Parameters
     ----------
     sub : str

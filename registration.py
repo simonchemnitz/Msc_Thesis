@@ -16,6 +16,10 @@ def bbregistration(sub, nifti_dir, output_dir):
         Filepath for the nifti of the subject
     output_dir : str
         Filepath where output should be saved
+
+    Returns
+    -------
+    None
     """
     #Filepath for the registration outputs
     registration_directory = output_dir + "Registration/"+sub+"/regs/"
@@ -70,6 +74,10 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
         Filepath for the nifti of the subject
     output_dir : str
         Filepath where output should be saved
+
+    Returns
+    -------
+    None
     """
     #Binarize brainmask
     #Path to brainmask
@@ -119,6 +127,6 @@ recon_dir =  base_dir + "Data_Recon_ALL/"
 
 subjects = ["MOCO_001","MOCO_002"]
 
-for subject in subjects:    
+for subject in subjects:
     bbregistration(subject, nifti_dir, output_dir)
     apply_registration(subject, recon_dir, nifti_dir, output_dir)

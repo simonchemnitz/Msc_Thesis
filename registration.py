@@ -47,7 +47,7 @@ def bbregistration(sub, nifti_dir, output_dir):
         regname = registration_directory+output_name
 
         #Perform bb registration
-        #subprocess.run('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header', shell=True)
+        subprocess.run('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header', shell=True)
         
         #Print progress
         print()
@@ -106,7 +106,7 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
         regname = output_dir + "Registration/"+sub+"/regs/"+seq_name+".lta"
 
         #Perform transformation
-        #subprocess.run('mri_vol2vol --mov ' + T2_img + ' --targ ' + binary_brainmask_nii + ' --o ' + bm_mov + ' --lta ' + regname + ' --inv --nearest', shell=True)
+        subprocess.run('mri_vol2vol --mov ' + T2_img + ' --targ ' + binary_brainmask_nii + ' --o ' + bm_mov + ' --lta ' + regname + ' --inv --nearest', shell=True)
         
         #Print progress
         print()

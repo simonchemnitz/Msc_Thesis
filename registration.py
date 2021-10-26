@@ -67,12 +67,10 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
     #Binarize brainmask
     #Path to brainmask
     brainmask = recon_dir+sub+"/mri/brainmask.mgz"
-    print(brainmask)
     #Output name
     binary_brainmask_nii = output_dir+sub+"/bin_brainmask.nii"
-    print(binary_brainmask_nii)
     #subprocess.run('mri_binarize --i ' + brainmask + ' --o ' + binary_brainmask_nii + ' --match 0 --inv', shell=True)
-
+    
 
     return None
 

@@ -43,6 +43,7 @@ def bbregistration(sub, nifti_dir, output_dir):
         seq_name = os.path.basename(nifti)[:-4]
         #Output file name
         output_name = seq_name+".lta"
+        #Output path
         regname = registration_directory+output_name
 
         #Perform bb registration

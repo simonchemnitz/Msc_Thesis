@@ -16,23 +16,38 @@ def mri_reg(sub, nifti_dir, output_dir):
     """
 
     registration_directory = output_dir + "regs/"+sub
+    #Check if the registration_directory exists
+    #Create folder if it does not
     if not os.path.exists(registration_directory):
             print('New registration directory created:')
             print(registration_directory)
             os.makedirs(registration_directory)
             
-
-    nifti_to_convert = glob.glob(nifti_dir+sub+"/*")
-    for nifti in nifti_to_convert:
+    #List of nifti files to regi
+    nifti_to_reg = glob.glob(nifti_dir+sub+"/*")
+    #For each file perform registration
+    for i, nifti in enumerate(nifti_to_reg):
         if "MPR" not in nifti and "LOCALIZER" not in nifti:
-            #name of the nifti files without .nii
-            seq_name = os.path.basename(nifti)[:-4]
-            #output file name
-            output_name = seq_name+".lta"
-            print(output_name)
-            print(nifti)
-            print()
+            #Image to move
+            movImg = nifti
 
+            #Name of the nifti files without .nii
+            seq_name = os.path.basename(nifti)[:-4]
+            #Output file name
+            output_name = seq_name+".lta"
+            regname = output_name
+
+            #Perform bb registration
+            print('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header')
+            #Print progress
+            print()
+            print(str(i)+"/"+str(len(nifti_to_reg)), "Done")
+            print()
+    print("+------------------------------------------------------------------+")
+    print("|                                                                  |")
+    print("|                    bbreg for: "+sub+" Done                      |")
+    print("|                                                                  |")
+    print("+------------------------------------------------------------------+")
 
 
 

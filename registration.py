@@ -26,6 +26,7 @@ def bbregistration(sub, nifti_dir, output_dir):
             
     #List of nifti files to register
     nifti_to_reg = glob.glob(nifti_dir+sub+"/*T2*")
+
     #For each file perform registration
     for i, nifti in enumerate(nifti_to_reg):
         #Image to move
@@ -38,8 +39,8 @@ def bbregistration(sub, nifti_dir, output_dir):
         regname = registration_directory+output_name
 
         #Perform bb registration
-        #print('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header')
         #subprocess.run('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header', shell=True)
+        
         #Print progress
         print()
         print(str(i+1)+"/"+str(len(nifti_to_reg)), " BBregs Done for " + sub)
@@ -67,20 +68,25 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
     #Binarize brainmask
     #Path to brainmask
     brainmask = recon_dir+sub+"/mri/brainmask.mgz"
-    #Output name
+    #Output name for the binirized brainmask
     binary_brainmask_nii = output_dir+ "Registration/"+sub+"/bin_brainmask.nii"
+    #Binirize mask
     #subprocess.run('mri_binarize --i ' + brainmask + ' --o ' + binary_brainmask_nii + ' --match 0 --inv', shell=True)
 
     #T2 Nifti files to apply transformation to
     nifti_to_reg = glob.glob(nifti_dir+sub+"/*T2*")
 
-    #Transform brainmask into t2 seq
+    #Apply transformation
     for i, nifti in enumerate(nifti_to_reg):
         #sequence name eg: T2_TSE_TRA_512_TE115MS_0009
         seq_name = os.path.basename(nifti)[:-4]
+
+        #Brain mask output name
         bm_mov = output_dir+ "Registration/" +sub+ "/bm_"+ seq_name + ".nii"
+
         #T2 image to register to
         T2_img = nifti
+
         #registration .lta file
         regname = output_dir + "Registration/"+sub+"/regs/"+seq_name+".lta"
 

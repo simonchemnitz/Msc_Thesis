@@ -39,6 +39,8 @@ def mri_reg(sub, nifti_dir, output_dir):
 
             #Perform bb registration
             print('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header')
+            #subprocess.run('bbregister --s ' + sub + ' --mov '+  movImg + ' --reg ' + regname + ' --t2 --init-best-header', shell=True)
+            
             #Print progress
             print()
             print(str(i)+"/"+str(len(nifti_to_reg)), "Done")

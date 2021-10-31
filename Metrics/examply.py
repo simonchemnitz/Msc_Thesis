@@ -24,12 +24,12 @@ y_kern = x_kern.T
 fig, ax = plt.subplots(2,2, figsize = (12,12))
 
 slice = 50
-ax[0,0].imshow(float_img[:,:,slice], cmap = "gray")
-ax[0,1].imshow(canny(float_img[:,:,slice]), cmap = "gray")
+ax[0,0].imshow(np.rot90(float_img[:,slice,:]), cmap = "gray")
+ax[0,1].imshow(np.rot90(canny(float_img[:,slice,:])), cmap = "gray")
 
 #Convolutions
-ax[1,0].imshow( convolve(img[:,:,slice], x_kern),  cmap = "gray" )
-ax[1,1].imshow( convolve(img[:,:,slice], y_kern),  cmap = "gray" )
+ax[1,0].imshow( convolve(np.rot90(img[:,slice,:]), x_kern),  cmap = "gray" )
+ax[1,1].imshow( convolve(np.rot90(img[:,slice,:]), y_kern),  cmap = "gray" )
 
 #Titles
 ax[0,0].set_title("$\mathcal{I}^{(k)}$", size = 25)

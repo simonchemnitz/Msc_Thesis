@@ -60,19 +60,24 @@ def evaluate_metrics(sub, nifti_file, brain_mask_dir, output_dir):
     brainmask = relevant_brain_mask(sub, nifti_file, brain_mask_dir)
     if brainmask is None: return None
 
+
+    img = nib.load(nifti_file)
+    img = np.asarray(img.dataobj)
+    print(np.shape(img))
+    print(np.shape(brainmask))
     file_name = os.path.basename(nifti_file)
     seq = file_name[8:]
 
-    metric_ditc = {"pers_id" : sub,
-                   "img_seq" : seq,
-                   "coent" : coent(nifti_file, brainmask),
-                   "aes" : aes(nifti_file, brainmask),
-                   "tgrad" : tgrad(nifti_file, np.ndarray.flatten(brainmask))
+    metric_ditc = {"pers_id" : [sub],
+                   "img_seq" : [seq],
+                   "coent" : [coent(img, brainmask)],
+                   "aes" : [aes(img, brainmask)],
+                   "tgrad" : [tgrad(img, np.ndarray.flatten(brainmask))]
                    }
 
     df = pd.DataFrame.from_dict(metric_ditc)
-
-    df.to_csv( output_dir + "Metrics/" + sub + seq+".csv" , index = False)
+    print(df)
+    df.to_csv( output_dir + "Metrics/" + sub +"/"+ seq+".csv" , index = False)
     return df
  
 
@@ -88,7 +93,7 @@ sub = subjects[0]
 nifti_files = glob.glob(nifti_dir+sub+"/*")
 for file in nifti_files:
     print()
-    relevant_brain_mask(sub, file, brain_mask_dir)
+    evaluate_metrics(sub, file, brain_mask_dir, output_dir)
     print()
 
 

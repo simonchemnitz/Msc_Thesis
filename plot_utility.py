@@ -81,8 +81,8 @@ def correlation_subplot(df, metrics, img_seq,
     if any(val>1 for val in markercolor):
         markercolor = tuple(val/255 for val in markercolor)
     #Change Line color to floats
-    if any(val>1 for val in line_color):
-        linecolor = tuple(val/255 for val in line_color)
+    if any(val>1 for val in linecolor):
+        linecolor = tuple(val/255 for val in linecolor)
     
     #Subset for relevant dataframe
     rel_df = df.loc[df["img_type"] == img_seq]
@@ -102,10 +102,10 @@ def correlation_subplot(df, metrics, img_seq,
                        xy = (0.2,-0.3), xycoords = "axes fraction")
         
         sns.regplot(data = rel_df, x = "w_avg", y = metric, ax = ax[i],
-                    fit_reg = True, 
-                    ci = False, 
-                    scatter_kws={'alpha':alpha, "color" : marker_color},
-                    line_kws={"color": line_color})
+                    fit_reg = fitreg, 
+                    ci = confint, 
+                    scatter_kws={'alpha':alpha, "color" : markercolor},
+                    line_kws={"color": linecolor})
         ax[i].set_title(title_names[metric])
         ax[i].set_ylabel(ylabel_names[metric]+" (AU)")
         ax[i].set_xlabel("Observer Scores (AU)")
@@ -116,7 +116,7 @@ def correlation_subplot(df, metrics, img_seq,
 
     #Super title
     if title is None:
-        plt.suptitle("Metric Evaluation for " + im_type[:-1], y = 1.1, fontsize = title_size)
+        plt.suptitle("Metric Evaluation for " + img_seq[:-1], y = 1.1, fontsize = title_size)
     else: plt.suptitle(title, y = 1.1, fontsize = title_size)
     
     return fig

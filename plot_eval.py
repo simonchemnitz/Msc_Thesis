@@ -12,7 +12,7 @@ print(df["img_type"].unique())
 title_names = {"aes": "Average Edge Strength",
              "coent": "Co-Occurence Entropy",
              "tg": "TennenGrad"}
-label_names = {"aes": "AES",
+ylabel_names = {"aes": "AES",
              "coent": "CoEnt",
              "tg": "TG"}
 
@@ -22,7 +22,8 @@ line_color  = (83, 201, 250)
 for im_seq in df["img_type"].unique():
     fig = correlation_subplot(df = df,metrics =  ["coent", "aes", "tg"],
                               img_seq =  im_seq, title_names = title_names, 
-                              ylabel_names = label_names ) 
+                              ylabel_names = ylabel_names ) 
+    #savefigure
     fig.savefig("test"+im_seq+".png", bbox_inches = 'tight')
 
 

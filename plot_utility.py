@@ -87,8 +87,9 @@ def correlation_subplot(df, metrics, img_seq,
     #Subset for relevant dataframe
     rel_df = df.loc[df["img_type"] == img_seq]
     
+    #For each metric create a correlation plot
     for i, metric in enumerate(metrics):
-        #Spearmann corr
+        #Spearmann correlation
         spearmann_corr, pval = np.round(stats.spearmanr(rel_df["w_avg"],rel_df[metric]),4)
         #Add significance stars
         if pval <=0.05:
@@ -96,20 +97,24 @@ def correlation_subplot(df, metrics, img_seq,
         elif pval <=0.001:
             spval = str(pval)+"**"
         else: spval = str(pval)
-        #annotate spearmann
+
+        #annotate spearmann corr
         ax[i].annotate("Spearman Correlation: "+str(spearmann_corr)+"\n"+
                              "p-value:                          "+spval, 
                        xy = (0.2,-0.3), xycoords = "axes fraction")
-        
+        #Scatterplot
         sns.regplot(data = rel_df, x = "w_avg", y = metric, ax = ax[i],
                     fit_reg = fitreg, 
                     ci = confint, 
                     scatter_kws={'alpha':alpha, "color" : markercolor},
                     line_kws={"color": linecolor})
+
+        #Change title and labels
         ax[i].set_title(title_names[metric])
         ax[i].set_ylabel(ylabel_names[metric]+" (AU)")
         ax[i].set_xlabel("Observer Scores (AU)")
-
+    
+    #Add Legend
     ax[1].legend(loc='upper center', bbox_to_anchor=(0.5, -0.3),
                  fancybox=True, shadow=True, ncol=2, 
                  labels = legend_labels)

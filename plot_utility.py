@@ -92,6 +92,7 @@ def correlation_subplot(df, metrics, img_seq,
         #Spearmann correlation
         spearmann_corr, pval = np.round(stats.spearmanr(rel_df["w_avg"],rel_df[metric]),4)
         #Add significance stars
+        #to pvalue
         if pval <=0.05:
             spval = str(pval)+"*"
         elif pval <=0.001:
@@ -123,7 +124,8 @@ def correlation_subplot(df, metrics, img_seq,
     if title is None:
         plt.suptitle("Metric Evaluation for " + img_seq[:-1], y = 1.1, fontsize = title_size)
     else: plt.suptitle(title, y = 1.1, fontsize = title_size)
-    
+
+    #Return the figure
     return fig
 
 def correlation_plot(df,img_seq, title,

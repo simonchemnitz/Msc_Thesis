@@ -23,8 +23,8 @@ for im_seq in df["img_type"].unique():
     fig = correlation_subplot(df = df,metrics =  ["coent", "aes", "tg"],
                               img_seq =  im_seq, title_names = title_names, 
                               ylabel_names = label_names ) 
-    fig.savefig("test"+im_seq+".png")
-    plt.show()
+    fig.savefig("test"+im_seq+".png", bbox_inches = 'tight')
+
 
 
 #for img_type in df["img_type"].unique():

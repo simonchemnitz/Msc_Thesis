@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-
+import os
 def format_dataframe_metric(file_path, metric_in, metric_out, file_reference, relevant_date):
     """
     Parameters
@@ -33,7 +33,8 @@ def format_dataframe_metric(file_path, metric_in, metric_out, file_reference, re
     #Name of the file
     #file_name = file_path[len(metric_in+subject_name)+1:]
     
-    image_type = file_path[len(metric_in+subject_name+file_reference)+1:-4]
+    #image_type = file_path[len(metric_in+subject_name+file_reference)+1:-4]
+    image_type = os.path.basename(file_path)[len(file_reference):]
 
     #Check if the file is from the correct date
     correct_date = relevant_date in file_path
@@ -44,7 +45,7 @@ def format_dataframe_metric(file_path, metric_in, metric_out, file_reference, re
     if "sig" in file_path:
         return None
     #Load the data
-    file_df = pd.read_csv(file_path, sep = " ", names = ["type", "aes", "coent"],skiprows = [0],)
+    file_df = pd.read_csv(file_path, skiprows = [0],sep = " ", names = ["type", "psnr", "ssim", "tg", "coent", "aes"])
     
     #Format columns
     file_df["moco"] = 0

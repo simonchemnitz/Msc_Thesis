@@ -18,10 +18,10 @@ observer_in = main_dir+"Observer_Results/"
 observer_out = main_dir+"Observer_csv/"
 
 #Date of the latets evalution
-relevant_date = "10_14"
+relevant_date = "11_01"
 
 #Filename reference
-file_reference = "Values_AES_CoEnt_10_14_"
+file_reference = "Values_11_01_"
 
 print("+------------------------------------------------------------------+")
 print("|                                                                  |")
@@ -50,6 +50,7 @@ subjects = glob.glob(metric_in+"*")
 #Format all metric files
 for subject in subjects:
     for file in glob.glob(subject+"/*"):
+        print(file)
         format_dataframe_metric(file, metric_in, metric_out, file_reference, relevant_date)
 
 

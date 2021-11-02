@@ -16,6 +16,110 @@ from scipy.stats import wilcoxon as cox
 dblue = (47, 122, 154)
 lblue = (83, 201, 250)
 
+def correlation_subplot(df, metrics, img_seq,
+                        nrow = 1, ncol = 3, figure_size = (16,4),
+                        title_names = None, ylabel_names = None,
+                        linecolor = (83, 201, 250), 
+                        markercolor = (47, 122, 154), 
+                        alpha = 0.8, 
+                        fitreg = True, confint = False, legend_labels = ["Fitted Line", "Data"],
+                        title = None, title_size = 15, subtitle_size=10):
+    """
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame containing relevant data
+        such as the values to plot and identifier 
+        variables, eg image type or personal id
+    metrics : iterable
+        list or array type containing strings of the 
+        metrics to plot
+    img_seq : str
+        Image sequence to plot x,y data from
+        e.g. T1_MPR_
+    nrow : int
+        number of rows in the figure
+    ncol : int 
+        number of columns in the figure
+    figure_size : tuple
+        size of the figure
+    title_names : dictionary
+        dictionary with metrics as keys 
+        and appropriate title as values
+    ylabel_names : dictionary
+        dictionary with metrics as keys 
+        and appropriate ylabels as values
+    linecolor : tuple
+        rgb color tuple for fitted line
+    markercolor : typle
+        rgb color tuple for scatter markers
+    alpha : float
+        opacity alpha, range [0,1]
+    fitreg : bool
+        Whether or not to fit a linear line to data
+    confint : bool
+        Whether or not to add confidence interval 
+        to fitted line
+    legend_labels : list
+        List of labels to add to legend
+    title : str
+        Super-title for the figure
+    title_size : float
+        Fontsize of the super-title
+    subtitle_size : float
+        size of the titles for the subplots
+    Returns
+    --------
+    fig : <class 'matplotlib.figure.Figure'>
+        Scatterplot Figure for each metric
+    """
+    #Create figure
+    fig, ax = plt.subplots(nrow, ncol, figsize = figure_size, 
+                           sharey = False, sharex = False)
+    #Check colormaps
+    #Change Maker color to floats
+    if any(val>1 for val in markercolor):
+        markercolor = tuple(val/255 for val in markercolor)
+    #Change Line color to floats
+    if any(val>1 for val in line_color):
+        linecolor = tuple(val/255 for val in line_color)
+    
+    #Subset for relevant dataframe
+    rel_df = df.loc[df["img_type"] == img_seq]
+    
+    for i, metric in enumerate(metrics):
+        #Spearmann corr
+        spearmann_corr, pval = np.round(stats.spearmanr(rel_df["w_avg"],rel_df[metric]),4)
+        #Add significance stars
+        if pval <=0.05:
+            spval = str(pval)+"*"
+        elif pval <=0.001:
+            spval = str(pval)+"**"
+        else: spval = str(pval)
+        #annotate spearmann
+        ax[i].annotate("Spearman Correlation: "+str(spearmann_corr)+"\n"+
+                             "p-value:                          "+spval, 
+                       xy = (0.2,-0.3), xycoords = "axes fraction")
+        
+        sns.regplot(data = rel_df, x = "w_avg", y = metric, ax = ax[i],
+                    fit_reg = True, 
+                    ci = False, 
+                    scatter_kws={'alpha':alpha, "color" : marker_color},
+                    line_kws={"color": line_color})
+        ax[i].set_title(title_names[metric])
+        ax[i].set_ylabel(ylabel_names[metric]+" (AU)")
+        ax[i].set_xlabel("Observer Scores (AU)")
+
+    ax[1].legend(loc='upper center', bbox_to_anchor=(0.5, -0.3),
+                 fancybox=True, shadow=True, ncol=2, 
+                 labels = legend_labels)
+
+    #Super title
+    if title is None:
+        plt.suptitle("Metric Evaluation for " + im_type[:-1], y = 1.1, fontsize = title_size)
+    else: plt.suptitle(title, y = 1.1, fontsize = title_size)
+    
+    return fig
 
 def correlation_plot(df,img_seq, title,
                          x, y,
@@ -24,7 +128,7 @@ def correlation_plot(df,img_seq, title,
                          x_ticks = True, y_ticks = True,
                          marker_color = (47, 122, 154),
                          line_color  = (83, 201, 250),
-                         alpha = 0.7, fit_line = False, conf_int = True):
+                         alpha = 0.7, fit_line = True, conf_int = True, legend_label = ["Fitted Line", "Data"], ax = None):
     '''
     Parameters
     ----------
@@ -75,7 +179,7 @@ def correlation_plot(df,img_seq, title,
     fig : matplotlib.figure.Figure
         plotted figure.
     '''
-    
+     
     #Check if the sequence is valid
     if not img_seq in df["img_type"].unique():
         print("ERROR")
@@ -109,15 +213,21 @@ def correlation_plot(df,img_seq, title,
     #Create figure
     fig = plt.figure()
     
-    #Scatter plot (x,y)
-    sns.regplot(x,y, fit_reg = fit_line, ci = conf_int, 
-                scatter_kws={'alpha':alpha, "color" : marker_color},
-                line_kws={"color": line_color})
+    if ax is not None:
+        sns.regplot(x,y, fit_reg = fit_line, ci = conf_int, 
+            scatter_kws={'alpha':alpha, "color" : marker_color},
+            line_kws={"color": line_color}, ax = ax)
+    else:
+        #Scatter plot (x,y)
+        sns.regplot(x,y, fit_reg = fit_line, ci = conf_int, 
+                    scatter_kws={'alpha':alpha, "color" : marker_color},
+                    line_kws={"color": line_color})
     
     #Add title and labels
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.title(title)
+    plt.legend(loc = "upper right", labels = legend_label)
 
 
     #Check ticks, and change acordingly

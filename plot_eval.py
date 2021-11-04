@@ -5,7 +5,7 @@ from plot_utility import correlation_plot, starbox_plot, correlation_subplot
 import matplotlib.pyplot as plt
 data_dir = "/Users/simon/Documents/GitHub/Msc_Thesis/HC_Analysis/Files_ig"
 
-df = pd.read_csv(data_dir + "/observer_merged_metric.csv")
+df = pd.read_csv(data_dir + "/Merge_Output/"+"Metric_and_Observer.csv")
 print("Sequences: ")
 print(df["img_type"].unique())
 
@@ -19,10 +19,24 @@ ylabel_names = {"aes": "AES",
 marker_color = (47, 122, 154)
 line_color  = (83, 201, 250)
 
+dblue = (47,122,154)
+lblue = (83, 201, 250)
+
+dpink = (126,25,82)
+lpink = (231,47,149)
+
+palette = [dblue, dpink]
+shake_palette = [dblue, dpink, lpink]
+
 for im_seq in df["img_type"].unique():
-    fig = correlation_subplot(df = df,metrics =  ["coent", "aes", "tg"],
+    if "mpr" in im_seq.lower():
+        fig = correlation_subplot(df = df,metrics =  ["coent", "aes", "tg"],
                               img_seq =  im_seq, title_names = title_names, 
-                              ylabel_names = ylabel_names ) 
+                              ylabel_names = ylabel_names, markerpalette=shake_palette )
+    else:
+        fig = correlation_subplot(df = df,metrics =  ["coent", "aes", "tg"],
+                              img_seq =  im_seq, title_names = title_names, 
+                              ylabel_names = ylabel_names, markerpalette=palette ) 
     #savefigure
     fig.savefig("test"+im_seq+".png", bbox_inches = 'tight')
 

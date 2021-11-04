@@ -20,9 +20,10 @@ def correlation_subplot(df, metrics, img_seq,
                         nrow = 1, ncol = 3, figure_size = (16,4),
                         title_names = None, ylabel_names = None,
                         linecolor = (83, 201, 250), 
-                        markercolor = (47, 122, 154), 
+                        markercolor = (47, 122, 154),
+                        markerpalette = [], 
                         alpha = 0.8, 
-                        fitreg = True, confint = False, legend_labels = ["Fitted Line", "Data"],
+                        fitreg = True, confint = False, legend_labels = ["Fitted Line", "Data",1,2,3,4,5],
                         title = None, title_size = 15, subtitle_size=10):
     """
     Parameters
@@ -78,6 +79,9 @@ def correlation_subplot(df, metrics, img_seq,
                            sharey = False, sharex = False)
     #Check colormaps
     #Change Maker color to floats
+    for i, col in enumerate(markerpalette):
+        if any(val>1 for val in col):
+            markerpalette[i] = tuple(val/255 for val in col)
     if any(val>1 for val in markercolor):
         markercolor = tuple(val/255 for val in markercolor)
     #Change Line color to floats
@@ -86,6 +90,7 @@ def correlation_subplot(df, metrics, img_seq,
     
     #Subset for relevant dataframe
     rel_df = df.loc[df["img_type"] == img_seq]
+    rel_df["col"] = rel_df["nod"]+2*rel_df["shake"]
     
     #For each metric create a correlation plot
     for i, metric in enumerate(metrics):
@@ -104,11 +109,18 @@ def correlation_subplot(df, metrics, img_seq,
                              "p-value:                          "+spval, 
                        xy = (0.2,-0.3), xycoords = "axes fraction")
         #Scatterplot
+        sns.scatterplot(data = rel_df, x = "w_avg", y = metric, ax = ax[i],
+                    style = "moco",
+                    markers = ["o", "s"],
+                    style_order = [0,1],
+                    hue = "col",
+                    hue_order = [i for i in range(len(markerpalette))],
+                    palette = markerpalette, 
+                    alpha = 0.7,legend = None)
+        #Line plot
         sns.regplot(data = rel_df, x = "w_avg", y = metric, ax = ax[i],
-                    fit_reg = fitreg, 
-                    ci = confint, 
-                    scatter_kws={'alpha':alpha, "color" : markercolor},
-                    line_kws={"color": linecolor})
+               line_kws={"color": linecolor}, ci = False,
+               scatter_kws={'alpha':0.0},)
 
         #Change title and labels
         ax[i].set_title(title_names[metric])

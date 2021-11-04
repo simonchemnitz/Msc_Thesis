@@ -26,17 +26,13 @@ dpink = (126,25,82)
 lpink = (231,47,149)
 
 palette = [dblue, dpink]
-shake_palette = [dblue, dpink, lpink]
+palette = [dblue, dpink, lpink]
 
 for im_seq in df["img_type"].unique():
-    if "mpr" in im_seq.lower():
-        fig = correlation_subplot(df = df,metrics =  ["coent", "aes", "tg"],
-                              img_seq =  im_seq, title_names = title_names, 
-                              ylabel_names = ylabel_names, markerpalette=shake_palette )
-    else:
-        fig = correlation_subplot(df = df,metrics =  ["coent", "aes", "tg"],
+    fig = correlation_subplot(df = df,metrics =  ["coent", "aes", "tg"],
                               img_seq =  im_seq, title_names = title_names, 
                               ylabel_names = ylabel_names, markerpalette=palette ) 
+
     #savefigure
     fig.savefig("test"+im_seq+".png", bbox_inches = 'tight')
 

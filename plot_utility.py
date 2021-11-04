@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import matplotlib.patches as mpatches
 import datetime
 import seaborn as sns
@@ -88,10 +89,25 @@ def correlation_subplot(df, metrics, img_seq,
     if any(val>1 for val in linecolor):
         linecolor = tuple(val/255 for val in linecolor)
     
+    #Set Palette
+
+
     #Subset for relevant dataframe
     rel_df = df.loc[df["img_type"] == img_seq]
     rel_df["col"] = rel_df["nod"]+2*rel_df["shake"]
     
+    #Legend Settings
+    legend_elements = [ Line2D([0], [0], color=linecolor, lw=4, label='Fitted Line'),
+                        Line2D([0], [0], marker='o', color='k', label='MoCo off',lw=0),
+                        Line2D([0], [0], marker='s', color='k', label='MoCo on',lw=0),
+                        Line2D([0], [0], marker='o', color=markerpalette[0], label='Still',lw=0),
+                        Line2D([0], [0], marker='o', color=markerpalette[1], label='Nod',lw=0),
+                        Line2D([0], [0], marker='o', color=markerpalette[2], label='Shake',lw=0),]
+    #Remove a color and legend point
+    #if the sequence is not MPRAGE
+    if "mpr" not in img_seq.lower():
+        legend_elements = legend_elements[:-1]
+        markerpalette = markerpalette[:-1]
     #For each metric create a correlation plot
     for i, metric in enumerate(metrics):
         #Spearmann correlation
@@ -128,9 +144,9 @@ def correlation_subplot(df, metrics, img_seq,
         ax[i].set_xlabel("Observer Scores (AU)")
     
     #Add Legend
-    ax[1].legend(loc='upper center', bbox_to_anchor=(0.5, -0.3),
-                 fancybox=True, shadow=True, ncol=2, 
-                 labels = legend_labels)
+    ax[1].legend(handles = legend_elements,
+                 loc='upper center', bbox_to_anchor=(0.5, -0.3),
+                 fancybox=True, shadow=True, ncol=len(legend_elements))
 
     #Super title
     if title is None:

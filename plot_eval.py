@@ -34,7 +34,7 @@ for im_seq in df["img_type"].unique():
                               ylabel_names = ylabel_names, markerpalette=palette ) 
 
     #savefigure
-    fig.savefig("test"+im_seq+".png", bbox_inches = 'tight')
+    fig.savefig(im_seq+".png", bbox_inches = 'tight')
 
 
 

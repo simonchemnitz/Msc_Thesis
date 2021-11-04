@@ -21,10 +21,9 @@ def correlation_subplot(df, metrics, img_seq,
                         nrow = 1, ncol = 3, figure_size = (16,4),
                         title_names = None, ylabel_names = None,
                         linecolor = (83, 201, 250), 
-                        markercolor = (47, 122, 154),
                         markerpalette = [], 
                         alpha = 0.8, 
-                        fitreg = True, confint = False, legend_labels = ["Fitted Line", "Data",1,2,3,4,5],
+                        fitreg = True, confint = False,
                         title = None, title_size = 15, subtitle_size=10):
     """
     Parameters
@@ -53,8 +52,8 @@ def correlation_subplot(df, metrics, img_seq,
         and appropriate ylabels as values
     linecolor : tuple
         rgb color tuple for fitted line
-    markercolor : typle
-        rgb color tuple for scatter markers
+    markerpalette : list
+        list of rgb color tuples for scatter markers
     alpha : float
         opacity alpha, range [0,1]
     fitreg : bool
@@ -62,8 +61,6 @@ def correlation_subplot(df, metrics, img_seq,
     confint : bool
         Whether or not to add confidence interval 
         to fitted line
-    legend_labels : list
-        List of labels to add to legend
     title : str
         Super-title for the figure
     title_size : float
@@ -83,8 +80,8 @@ def correlation_subplot(df, metrics, img_seq,
     for i, col in enumerate(markerpalette):
         if any(val>1 for val in col):
             markerpalette[i] = tuple(val/255 for val in col)
-    if any(val>1 for val in markercolor):
-        markercolor = tuple(val/255 for val in markercolor)
+    #if any(val>1 for val in markercolor):
+        #markercolor = tuple(val/255 for val in markercolor)
     #Change Line color to floats
     if any(val>1 for val in linecolor):
         linecolor = tuple(val/255 for val in linecolor)
@@ -132,10 +129,10 @@ def correlation_subplot(df, metrics, img_seq,
                     hue = "col",
                     hue_order = [i for i in range(len(markerpalette))],
                     palette = markerpalette, 
-                    alpha = 0.7,legend = None)
+                    alpha = alpha, legend = None)
         #Line plot
-        sns.regplot(data = rel_df, x = "w_avg", y = metric, ax = ax[i],
-               line_kws={"color": linecolor}, ci = False,
+        sns.regplot(data = rel_df, x = "w_avg", y = metric, ax = ax[i], fit_reg = fitreg,
+               line_kws={"color": linecolor}, ci = confint,
                scatter_kws={'alpha':0.0},)
 
         #Change title and labels

@@ -242,7 +242,7 @@ def avg_coent_slice(img, brainmask = None, n_levels = 128, bin = True, crop = Tr
     #Shape of the image/volume
     vol_shape = np.shape(img)
     ents = []
-    for slice in vol_shape[2]:
+    for slice in range(vol_shape[2]):
         tmp_co_oc_mat = greycomatrix(img[:,:,slice],
                                  distances = [1],
                                  angles = [0*(np.pi/2),

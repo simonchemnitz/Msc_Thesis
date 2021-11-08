@@ -126,11 +126,7 @@ def correlation_subplot(df, metrics, img_seq,
         spearmann_corr, pval = np.round(stats.spearmanr(rel_df["w_avg"],rel_df[metric]),4)
         #Add significance stars
         #to pvalue
-        if pval <=0.05:
-            spval = str(pval)+"*"
-        elif pval <=0.001:
-            spval = str(pval)+"**"
-        else: spval = str(pval)
+        spval = string_pval(pval)
 
         #annotate spearmann corr
         ax[i].annotate("Spearman Correlation: "+str(spearmann_corr)+"\n"+

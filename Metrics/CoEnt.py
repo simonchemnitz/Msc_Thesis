@@ -13,13 +13,16 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
     ----------
     img : numpy array
         Image for which the metrics should be calculated.
+    brainmask : numpy array
+        Brainmask used to mask the image with
     n_levels : int
         Levels of intensities to bin image by
     bin : bool
         Whether or not to bin the image
     crop : bool 
         Whether or not to crop image/ delete empty slices 
-
+    supress_zero : bool
+        Whether or not to set C[0,0] = 0, ie ignore the background
     Returns
     -------
     CoEnt : float
@@ -107,6 +110,27 @@ def coent3d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supr
 
 
 def coent2d(img, brainmask = None, n_levels = 128, bin = True, crop = True, supress_zero = True):
+    '''
+    Parameters
+    ----------
+    img : numpy array
+        Image for which the metrics should be calculated.
+    brainmask : numpy array
+        Brainmask to mask the image with
+    n_levels : int
+        Levels of intensities to bin image by
+    bin : bool
+        Whether or not to bin the image
+    crop : bool 
+        Whether or not to crop image/ delete empty slices 
+    supress_zero : bool
+        Whether or not to set C[0,0] = 0, ie ignore the background
+
+    Returns
+    -------
+    CoEnt : float
+        Co-Occurrence Entropy measure of the input image.
+    '''
     #Apply brainmask if given one
     if brainmask is not None: #alternative type(brainmask) != type(None)
         img = img*brainmask
@@ -159,6 +183,8 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
     ----------
     img : numpy array
         Image for which the metrics should be calculated.
+    brainmask : numpy array
+        Brainmask to mask the image with
     n_levels : int
         Levels of intensities to bin image by
     bin : bool
@@ -166,7 +192,8 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
     crop : bool 
         Whether or not to crop image/ delete empty slices 
     Returns
-    
+    supress_zero : bool
+        Whether or not to set C[0,0] = 0, ie ignore the background
     -------
     CoEnt : float
         Co-Occurrence Entropy measure of the input image.

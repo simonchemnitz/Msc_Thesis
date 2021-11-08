@@ -16,6 +16,21 @@ from scipy.stats import wilcoxon as cox
 
 dblue = (47, 122, 154)
 lblue = (83, 201, 250)
+def string_pval(pval):
+    """
+    Given a pvalue format a
+    string with relavent info
+    """
+    if pval <=0.001:
+        spval = str(pval)+"**"
+    elif pval <=0.05:
+        spval = str(pval)+"*"
+    elif np.round(pval,4) == 0.0:
+        return "<0.0006"
+    else: spval = str(pval)
+    if np.round(pval,4) == 0.0:
+        return "<0.0006"
+    return spval
 
 def correlation_subplot(df, metrics, img_seq,
                         nrow = 1, ncol = 3, figure_size = (16,4),

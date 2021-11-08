@@ -6,7 +6,7 @@ import numpy as np
 from skimage.feature import canny
 from scipy.ndimage import convolve
 from img_utils import crop_img, bin_img
-
+import nibabel as nib
 def aes(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False, crop = True, weigt_avg = False):
     '''
     Parameters

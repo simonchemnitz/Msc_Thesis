@@ -189,7 +189,7 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
         Levels of intensities to bin image by
     bin : bool
         Whether or not to bin the image
-    crop : bool 
+    crop : bool
         Whether or not to crop image/ delete empty slices 
     Returns
     supress_zero : bool
@@ -214,4 +214,6 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
     if img_vol[2]<100:
         return coent2d(img, brainmask, n_levels, bin, crop, supress_zero)
     else: return coent3d(img, brainmask, n_levels, bin, crop, supress_zero)
+
+
 

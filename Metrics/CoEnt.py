@@ -220,3 +220,51 @@ def coent(img, brainmask = None, n_levels = 128, bin = True, crop = True, supres
     if img_vol[2]<100:
         return coent2d(img, brainmask, n_levels, bin, crop, supress_zero)
     else: return coent3d(img, brainmask, n_levels, bin, crop, supress_zero)
+
+
+
+def avg_coent_slice(img, brainmask = None, n_levels = 128, bin = True, crop = True, supress_zero = True):
+    #Apply brainmask if given one
+    if brainmask is not None: #alternative type(brainmask) != type(None)
+        img = img*brainmask
+    #Crop image if crop is True
+    if crop:
+        img = crop_img(img)
+    #Bin image if bin is True
+    if bin:
+        img = bin_img(img, n_levels=n_levels)
+    #Scale imgage to have intensity values in [0,255]
+    img = 255*(img/np.max(img))
+    #Convert image to uint8
+    #   as greycomatrix prefers uint8 as input
+    img = img.astype(np.uint8)
+
+    #Shape of the image/volume
+    vol_shape = np.shape(img)
+    ents = []
+    for slice in vol_shape[2]:
+        tmp_co_oc_mat = greycomatrix(img[:,:,slice],
+                                 distances = [1],
+                                 angles = [0*(np.pi/2),
+                                           1*(np.pi/2),
+                                           2*(np.pi/2),
+                                           3*(np.pi/2)])
+        #greycomatrix will generate 4d array
+        #The value P[i,j,d,theta] is the number of times
+        #that grey-level j occurs at a distance d and
+        #at an angle theta from grey-level i
+        #as we only have one distance we just use
+        #tmp_co_oc_mat[:,:,0,:]
+        #As we want the total occurence not split on angles
+        #we sum over axis 2.
+        tmp_co_oc_mat = np.sum(tmp_co_oc_mat[:,:,0,:], axis = 2)
+        if supress_zero:
+            tmp_co_oc_mat[0,0] = 0
+        tmp_co_oc_mat =  tmp_co_oc_mat/np.sum(tmp_co_oc_mat)
+        log_matrix = np.log2(tmp_co_oc_mat)
+
+        ents.append( -np.nansum(tmp_co_oc_mat*log_matrix) )
+        
+
+
+    return np.nanmean(ents)

@@ -177,6 +177,7 @@ def aes_lap(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False
 
 #PST EDGE DETECTOR 
 #@author: Madhuri Suthar, UCLA
+#GitHub: JalaliLabUCLA
 def cart2pol(x, y):
     theta = np.arctan2(y, x)
     rho = np.hypot(x, y)

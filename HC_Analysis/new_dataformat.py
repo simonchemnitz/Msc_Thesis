@@ -38,7 +38,7 @@ def format_df_columns(df_orig):
 ####               #####
 def format_single_metric_file(file, to_merge, pers_id, img_seq, save_file, save):
     #Load data
-    df = pd.read_csv(file, skiprows = [0],sep = " ", names = ["type", "psnr", "ssim", "tg", "coent", "aes"])
+    df = pd.read_csv(file, skiprows = [0],sep = " ", names = ["type", "tg", "coent", "aes"])
     #Add id column
     df["pers_id"] = pers_id
     #Format columns
@@ -78,14 +78,15 @@ def format_all_metric_files(file_dir, reference_date, reference_name, save_subfi
         patient_id = os.path.basename(HC)
         patient_folder = glob.glob(HC+"/*")
         for file in patient_folder:
-            #Image sequence eg T2_Flair_
-            img_sequence = os.path.basename(file)[len(reference_name+reference_date):]
-            print(patient_id, img_sequence)
-            #print(file)
-            print()
-            
-            base_metric = format_single_metric_file(file, base_metric, patient_id, 
-                                                    img_sequence, save_file, save_subfiles)
+            if reference_date in file:
+                #Image sequence eg T2_Flair_
+                img_sequence = os.path.basename(file)[len(reference_name+reference_date):]
+                print(patient_id, img_sequence)
+                #print(file)
+                print()
+                
+                base_metric = format_single_metric_file(file, base_metric, patient_id, 
+                                                        img_sequence, save_file, save_subfiles)
         
     #Save dataframe
     base_metric.to_csv(out_dir + "All_metric.csv", index = False)

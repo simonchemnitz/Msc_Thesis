@@ -2,14 +2,14 @@ from new_dataformat import format_all_metric_files, format_all_observer_files, m
 
 
 file_dir = "/users/simon/documents/GitHub/Msc_Thesis/HC_Analysis/Files_ig/"
-metric_dir = file_dir + "Metric_Results/"
+metric_dir = file_dir + "Metrics_Results/"
 obs_dir  =   file_dir + "Observer_Results/"
 
 out_dir = file_dir + "Merge_Output/"
 
 
 #Format metric files
-reference_date = "_11_01_"
+reference_date = "_11_08_"
 reference_name = "Values"
 format_all_metric_files(metric_dir, reference_date, reference_name, save_subfiles = False, out_dir = out_dir, save_file = "")
 

@@ -9,7 +9,7 @@ from img_utils import crop_img, bin_img
 import cv2
 from skimage.morphology import thin
 import math
-import matplotlib.pyplot as plt
+
 def aes(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False, crop = True, weigt_avg = False):
     '''
     Parameters
@@ -92,15 +92,14 @@ def aes(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False, cr
         return np.average(es, weights = weights)
     else: return np.mean(es)
 
-def aes_lap(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False, crop = True, weigt_avg = False):
+def aes_lap(img, brainmask = None, ksize=15, n_levels = 128, bin = False, crop = True, weigt_avg = False):
     '''
     Parameters
     ----------
     img : numpy array
         Image for which the metrics should be calculated.
-    sigma : float
-        Standard deviation of the Gaussian filter used 
-        during canny edge detection.
+    ksize : int (odd)
+        Kernel size for the laplacian operator
     n_levels : int
         Levels of intensities to bin image by
     bin : bool
@@ -154,7 +153,7 @@ def aes_lap(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False
         x_conv = convolve(im_slice, x_kern)
         y_conv = convolve(im_slice, y_kern)
         #Laplacian edge detection
-        laplacian_img = cv2.Laplacian(im_slice,cv2.CV_64F, ksize = 15)
+        laplacian_img = cv2.Laplacian(im_slice,cv2.CV_64F, ksize = ksize)
         binary_edge_image = thin(laplacian_img>0,2)
         #Numerator and denominator, to be divided
         #defining the edge strength of the slice
@@ -205,7 +204,6 @@ def PST(I,LPF,Phase_strength,Warp_strength):
     # Calculate phase of the transformed image
     PHI_features=np.angle(Image_orig_filtered_PST)
      
-
     out=PHI_features
     return (out, PST_Kernel)
 

@@ -163,8 +163,147 @@ def correlation_subplot(df, metrics, img_seq,
 
     #Return the figure
     return fig
+def pivot_df(df,nod):
+    rel_df = df.copy()
+    rel_df = rel_df.loc[rel_df["nod"] == nod]
+    rel_df = rel_df.drop(["nod","moco"], axis = 1)
+    rel_df = rel_df.pivot("pers_id", "x")
+    return rel_df
+
+def add_lines(df, ax):
+    #For nodding:
+    rel_df = pivot_df(df, nod= 1)
+    npdf = np.array(rel_df.reset_index(drop = True))
+    for row in npdf:
+        sns.lineplot(x = [2,3], y = row, ax = ax, color = "k",alpha = 0.3)
+        
+    #For still:
+    rel_df = pivot_df(df, nod= 0)
+    npdf = np.array(rel_df.reset_index(drop = True))
+    for row in npdf:
+        sns.lineplot(x = [0,1], y = row, ax = ax, color = "k",alpha = 0.3)
+
+def change_box_colors(ax, cols):
+    for axis in ax:
+    #whisker color
+        for i in range(6):
+            axis.lines[i].set_color(cols[0])
+            axis.lines[i+5].set_color(cols[1])
+            
+            axis.lines[i+11].set_color(cols[0])
+            axis.lines[i+17].set_color(cols[1])
+    #Box color
+        for i in range(len(axis.get_xticks())):
+        # Select which box you want to change    
+            mybox = axis.artists[i]
+            # Change the appearance of that box
+            mybox.set_facecolor("none")
+            mybox.set_edgecolor(cols[i%2])
+            
+            mybox = axis.artists[i+2]
+            # Change the appearance of that box
+            mybox.set_facecolor("none")
+            mybox.set_edgecolor(cols[i%2])
+
+def wilcox(metric_df):
+    #pvalue for still
+    npdf = np.array(pivot_df(metric_df, 0).reset_index(drop = True))
+    npdf[:,0]
+    stat, stillpval = wilcoxon(npdf[:,0], npdf[:,1], alternative = "two-sided")
+    
+    #pvalue for nodding
+    npdf = np.array(pivot_df(metric_df, 1).reset_index(drop = True))
+    npdf[:,0]
+    stat, nodpval = wilcoxon(npdf[:,0], npdf[:,1], alternative = "two-sided")
+    
+    return stillpval, nodpval
+
+def is_signf(pval):
+    if pval <=0.001:
+        return "**"
+    elif pval<=0.05:
+        return "*"
+    else: return "NS"
+
+def box_subplot(df, metrics, img_seq, linewidth = 3, box_cols = []):
+
+    #Colors to use
+    cols = []
+    #Check colormaps
+    for col in box_cols:
+        #Change Maker color to floats
+        if any(val>1 for val in col):
+            #Change to float values
+            col = tuple(val/255 for val in col)
+            #Append to cols list
+            cols.append(col)
+
+    fig, ax = plt.subplots(3,1, figsize = (8,16))
+
+    #Subset dataframe
+    #Without shake and without Reacquisition
+    rel_df = df.copy()
+    rel_df = rel_df.loc[rel_df["img_type"] == img_seq]
+    rel_df = rel_df.loc[rel_df["RR"] == 0]
+    rel_df = rel_df.loc[rel_df["shake"] == 0]
 
 
+    for i, metric in enumerate(metrics):
+        #make boxplot for each metric
+        metric_df = rel_df[["pers_id", "moco", "nod"]+[metric]].copy()
+
+        metric_df["x"] = metric_df["moco"]+2*metric_df["nod"]
+
+        #create boxplot
+        sns.boxplot(data = metric_df, x = "x", y = metric, ax = ax[i], linewidth = linewidth)
+        #Print Adding lines
+        add_lines(metric_df, ax[i])
+        
+        
+        #Add stars and significance level
+        #still
+        y, h, col = metric_df[metric].max() + 0.1, 0.05*(metric_df[metric].max()-metric_df[metric].min()), 'k'
+        x1,x2 = 0,1
+        ax[i].plot([x1, x1, x2, x2], [y, y+h, y+h, y], lw=1.5, c=col)
+        ax[i].text((x1+x2)*.5, y+h, "*", ha='center', va='bottom', color=col, fontsize = 15)
+        #nodding
+        y, h, col = metric_df[metric].max() + 0.1, 0.05*(metric_df[metric].max()-metric_df[metric].min()), 'k'
+        x1,x2 = 0+2,1+2
+        ax[i].plot([x1, x1, x2, x2], [y, y+h, y+h, y], lw=1.5, c=col)
+        ax[i].text((x1+x2)*.5, y+h, "*", ha='center', va='bottom', color=col, fontsize = 15)
+        
+        
+
+    #Set xticks
+    for i in range(3):
+        ax[i].set_xticks([0.5, 2.5], )
+        ax[i].set_xticklabels(["Still", "Nod"])
+        ax[i].set_xlabel("")
+
+    #Titles
+    ax[0].set_title("Co-occurence Entropy", fontsize = 16)
+    ax[1].set_title("Average Edge Strength", fontsize = 16)
+    ax[2].set_title("TennenGrad", fontsize = 16)
+    #Labels
+    ax[0].set_ylabel("CoEnt(AU)")
+    ax[1].set_ylabel("AES(AU)")
+    ax[2].set_ylabel("TG(AU)")
+
+    #Change colors of the boxes
+    change_box_colors(ax, cols)
+
+
+    #Legend Settings
+    legend_elements = [Line2D([0], [0], marker='s', color=cols[0], label='MoCo off',lw=0),
+                    Line2D([0], [0], marker='s', color=cols[1], label='MoCo on' ,lw=0),]
+    #Add legend
+    ax[2].legend(handles = legend_elements,
+                    loc='upper center',bbox_to_anchor=(0.5, -0.1),
+                    fancybox=True, shadow=True, ncol=len(legend_elements))
+    #Add super title
+    plt.suptitle("Metric boxplot " + img_seq[:-1], fontsize = 24, y = 0.95)
+
+    return fig
 
 
 def correlation_plot(df,img_seq, title,

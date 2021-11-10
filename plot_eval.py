@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import glob
-from plot_utility import correlation_plot, starbox_plot, correlation_subplot
+from plot_utility import correlation_plot, starbox_plot, correlation_subplot, box_subplot
 import matplotlib.pyplot as plt
 data_dir = "/Users/simon/Documents/GitHub/Msc_Thesis/HC_Analysis/Files_ig"
 
@@ -35,6 +35,8 @@ for im_seq in df["img_type"].unique():
 
     #savefigure
     fig.savefig(im_seq+".png", bbox_inches = 'tight')
+    fig = box_subplot(df, metrics = ["coent", "aes", "tg"], img_seq = im_seq, box_cols=[dblue,lblue])
+    fig.savefig("box"+im_seq+".png", bbox_inches = 'tight')
 
 
 

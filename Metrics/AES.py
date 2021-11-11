@@ -320,6 +320,8 @@ def aes(img,edge_func, brainmask = None, n_levels = 128, bin = False, crop = Tru
     AES : float
         Average Edge Strength measure of the input image.
     '''
+    print("Warning aes has been changed")
+    print("The function previously called aes is now called aes_canny")
     #Apply brainmask if given one
     if brainmask is not None: #alternative type(brainmask) != type(None)
         img = img*brainmask

@@ -10,7 +10,7 @@ import cv2
 from skimage.morphology import thin
 import math
 
-def aes(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False, crop = True, weigt_avg = False):
+def aes_canny(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False, crop = True, weigt_avg = False):
     '''
     Parameters
     ----------
@@ -293,22 +293,28 @@ def aes_pst(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False
 
 
 
-def base_aes(img,edge_func, brainmask = None, n_levels = 128, bin = False, crop = True, weigt_avg = False, **kwargs):
+def aes(img,edge_func, brainmask = None, n_levels = 128, bin = False, crop = True, weight_avg = False, **kwargs):
     '''
     Parameters
     ----------
     img : numpy array
         Image for which the metrics should be calculated.
-    sigma : float
-        Standard deviation of the Gaussian filter used 
-        during canny edge detection.
+    edge_func : function
+        Function that takes 2D image as input and 
+        outputs 2D binary edge detected image
+    brainmask : np.ndarray optional
+        if given brainmask is applied to img
     n_levels : int
         Levels of intensities to bin image by
     bin : bool
         Whether or not to bin the image
     crop : bool 
-        Whether or not to crop image/ delete empty slices 
-        
+        Whether or not to crop image/ delete empty slices
+    weight_avg : bool
+        Whether or not to weight the individual edge strength
+        with the proportion of  non zero pixels
+    **kwargs : function arguments
+        keyworded arguents to pass the edge_func
     Returns
     -------
     AES : float
@@ -371,7 +377,7 @@ def base_aes(img,edge_func, brainmask = None, n_levels = 128, bin = False, crop 
     #Remove nans
     es  = es[~np.isnan(es)]
     #Return the average edge strength
-    if weigt_avg:
+    if weight_avg:
         return np.average(es, weights = weights)
     else: return np.mean(es)
 

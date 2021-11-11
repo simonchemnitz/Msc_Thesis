@@ -301,7 +301,9 @@ def aes(img,edge_func, brainmask = None, n_levels = 128, bin = False, crop = Tru
         Image for which the metrics should be calculated.
     edge_func : function
         Function that takes 2D image as input and 
-        outputs 2D binary edge detected image
+        outputs 2D binary edge detected image.
+        Note  kwargs are passed to this function
+        edge_func(image_slice, kwargs)
     brainmask : np.ndarray optional
         if given brainmask is applied to img
     n_levels : int

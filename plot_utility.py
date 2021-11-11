@@ -163,6 +163,7 @@ def correlation_subplot(df, metrics, img_seq,
 
     #Return the figure
     return fig
+
 def pivot_df(df,nod):
     rel_df = df.copy()
     rel_df = rel_df.loc[rel_df["nod"] == nod]

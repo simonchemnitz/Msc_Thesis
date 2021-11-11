@@ -10,6 +10,71 @@ import cv2
 from skimage.morphology import thin
 import math
 
+#           Edge Detectors
+#           Edge Detectors
+#           Edge Detectors
+
+#PST EDGE DETECTOR 
+#@author: Madhuri Suthar, UCLA
+#GitHub: JalaliLabUCLA
+def cart2pol(x, y):
+    theta = np.arctan2(y, x)
+    rho = np.hypot(x, y)
+    return (theta, rho)    
+def PST(I,LPF,Phase_strength,Warp_strength):
+    L=0.5
+    x = np.linspace(-L, L, I.shape[0])
+    y = np.linspace(-L, L, I.shape[1])
+    [X1, Y1] =(np.meshgrid(x, y))
+    X=X1.T
+    Y=Y1.T
+    [THETA,RHO] = cart2pol(X,Y)
+
+    # Apply localization kernel to the original image to reduce noise
+    Image_orig_f=((np.fft.fft2(I)))  
+    expo = np.fft.fftshift(np.exp(-np.power((np.divide(RHO, math.sqrt((LPF**2)/np.log(2)))),2)))
+    Image_orig_filtered=np.real(np.fft.ifft2((np.multiply(Image_orig_f,expo))))
+    # Constructing the PST Kernel
+    PST_Kernel_1=np.multiply(np.dot(RHO,Warp_strength), np.arctan(np.dot(RHO,Warp_strength)))-0.5*np.log(1+np.power(np.dot(RHO,Warp_strength),2))
+    PST_Kernel=PST_Kernel_1/np.max(PST_Kernel_1)*Phase_strength
+    # Apply the PST Kernel
+    temp=np.multiply(np.fft.fftshift(np.exp(-1j*PST_Kernel)),np.fft.fft2(Image_orig_filtered))
+    Image_orig_filtered_PST=np.fft.ifft2(temp)
+
+    # Calculate phase of the transformed image
+    PHI_features=np.angle(Image_orig_filtered_PST)
+     
+    out=PHI_features
+    return (out, PST_Kernel)
+
+#           Binary Edge Detectors
+#           Binary Edge Detectors
+#           Binary Edge Detectors
+
+#           PST
+def pst_edge(im_slice, kwargs):
+    #PST edge detection
+    pst_img, pst = PST(1-im_slice, LPF = kwargs["LPF"], Phase_strength = kwargs["Phase_strength"], Warp_strength = kwargs["Warp_strength"])
+    binary_edge_image = thin(pst_img>0, kwargs["thinning"])
+
+    return binary_edge_image
+
+#           Laplace
+def laplace_edge(im_slice, kwargs):
+    #Laplacian edge detection
+    laplacian_img = cv2.Laplacian(im_slice,cv2.CV_64F, ksize = kwargs["ksize"])
+    binary_edge_image = thin(laplacian_img>0, kwargs["thinning"])
+
+    return binary_edge_image
+#           Canny
+def canny_edge(im_slice, kwargs):
+    return canny(im_slice, sigma = kwargs["sigma"])
+
+
+#           AES METRICS
+#           AES METRICS
+#           AES METRICS
+
 def aes_canny(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False, crop = True, weigt_avg = False):
     '''
     Parameters
@@ -174,40 +239,6 @@ def aes_lap(img, brainmask = None, ksize=15, n_levels = 128, bin = False, crop =
     else: return np.mean(es)
 
 
-#PST EDGE DETECTOR 
-#@author: Madhuri Suthar, UCLA
-#GitHub: JalaliLabUCLA
-def cart2pol(x, y):
-    theta = np.arctan2(y, x)
-    rho = np.hypot(x, y)
-    return (theta, rho)    
-def PST(I,LPF,Phase_strength,Warp_strength):
-    L=0.5
-    x = np.linspace(-L, L, I.shape[0])
-    y = np.linspace(-L, L, I.shape[1])
-    [X1, Y1] =(np.meshgrid(x, y))
-    X=X1.T
-    Y=Y1.T
-    [THETA,RHO] = cart2pol(X,Y)
-
-    # Apply localization kernel to the original image to reduce noise
-    Image_orig_f=((np.fft.fft2(I)))  
-    expo = np.fft.fftshift(np.exp(-np.power((np.divide(RHO, math.sqrt((LPF**2)/np.log(2)))),2)))
-    Image_orig_filtered=np.real(np.fft.ifft2((np.multiply(Image_orig_f,expo))))
-    # Constructing the PST Kernel
-    PST_Kernel_1=np.multiply(np.dot(RHO,Warp_strength), np.arctan(np.dot(RHO,Warp_strength)))-0.5*np.log(1+np.power(np.dot(RHO,Warp_strength),2))
-    PST_Kernel=PST_Kernel_1/np.max(PST_Kernel_1)*Phase_strength
-    # Apply the PST Kernel
-    temp=np.multiply(np.fft.fftshift(np.exp(-1j*PST_Kernel)),np.fft.fft2(Image_orig_filtered))
-    Image_orig_filtered_PST=np.fft.ifft2(temp)
-
-    # Calculate phase of the transformed image
-    PHI_features=np.angle(Image_orig_filtered_PST)
-     
-    out=PHI_features
-    return (out, PST_Kernel)
-
-
 def aes_pst(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False, crop = True, weigt_avg = False):
     '''
     Parameters
@@ -292,7 +323,6 @@ def aes_pst(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False
 
 
 
-
 def aes(img,edge_func, brainmask = None, n_levels = 128, bin = False, crop = True, weight_avg = False, **kwargs):
     '''
     Parameters
@@ -322,8 +352,12 @@ def aes(img,edge_func, brainmask = None, n_levels = 128, bin = False, crop = Tru
     AES : float
         Average Edge Strength measure of the input image.
     '''
-    print("Warning aes has been changed")
+    print()
+    print("----------------------------------------------------------")
+    print("Warning! aes has been changed")
     print("The function previously called aes is now called aes_canny")
+    print("----------------------------------------------------------")
+    print()
     #Apply brainmask if given one
     if brainmask is not None: #alternative type(brainmask) != type(None)
         img = img*brainmask
@@ -385,20 +419,3 @@ def aes(img,edge_func, brainmask = None, n_levels = 128, bin = False, crop = Tru
         return np.average(es, weights = weights)
     else: return np.mean(es)
 
-
-def pst_edge(im_slice, kwargs):
-    #PST edge detection
-    pst_img, pst = PST(1-im_slice, LPF = kwargs["LPF"], Phase_strength = kwargs["Phase_strength"], Warp_strength = kwargs["Warp_strength"])
-    binary_edge_image = thin(pst_img>0, kwargs["thinning"])
-
-    return binary_edge_image
-
-def laplace_edge(im_slice, kwargs):
-    #Laplacian edge detection
-    laplacian_img = cv2.Laplacian(im_slice,cv2.CV_64F, ksize = kwargs["ksize"])
-    binary_edge_image = thin(laplacian_img>0, kwargs["thinning"])
-
-    return binary_edge_image
-
-def canny_edge(im_slice, kwargs):
-    return canny(im_slice, sigma = kwargs["sigma"])

@@ -9,7 +9,7 @@ out_dir = file_dir + "Merge_Output/"
 
 
 #Format metric files
-reference_date = "_11_08_"
+reference_date = "_11_11_"
 reference_name = "Values"
 format_all_metric_files(metric_dir, reference_date, reference_name, save_subfiles = False, out_dir = out_dir, save_file = "")
 

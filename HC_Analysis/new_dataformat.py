@@ -38,7 +38,7 @@ def format_df_columns(df_orig):
 ####               #####
 def format_single_metric_file(file, to_merge, pers_id, img_seq, save_file, save):
     #Load data
-    df = pd.read_csv(file, skiprows = [0],sep = " ", names = ["type", "tg", "coent", "aes"])
+    df = pd.read_csv(file, skiprows = [0],sep = " ", names = ["type", "tg", "coent", "aes", "aes_lap", "aes_pst"])
     #Add id column
     df["pers_id"] = pers_id
     #Format columns
@@ -184,20 +184,26 @@ def merge_metric_and_observers(metric_file, observer_file, out_dir):
     #Load Data
     obs_df = pd.read_csv(observer_file)
     metric_df = pd.read_csv(metric_file)
-    
+    ##########
+    ##########
+    ##########
+    metric_df["img_type"] = metric_df["img_type"].str[:-4]  #If the imgtype has bad extension
+    ##########
+    ##########
+    ##########
+    print(metric_df.head())
     #Subset to the appropriate image sequences
     sequences = obs_df["img_type"].unique()
     metric_df = metric_df.loc[metric_df["img_type"].isin(sequences)]
-    
+    print(metric_df.head())
     #Set joint index
     metric_df = metric_df.set_index(["pers_id", "img_type", "moco", "still", "nod", "shake", "RR"])
     obs_df = obs_df.set_index(["pers_id", "img_type", "moco", "still", "nod", "shake", "RR"])
-    
+    print(metric_df.head())
     #Join dataframes
     joined_df =  metric_df.join(obs_df).reset_index()
     #Remove nans
     joined_df = joined_df.dropna()
-    
     #Save the Dataframe
     joined_df.to_csv(out_dir+"Metric_and_Observer.csv", index = False)
     print("File saved to: ")

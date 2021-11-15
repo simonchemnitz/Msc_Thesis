@@ -9,11 +9,11 @@ bm_dir = "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_scans/Registrati
 recon_dir = "/users/simon/desktop/data1/Chemnitz-Thomsen_Simon/MRI_scans/fs_test_simon/MOCO_001/mri/"
 
 #Centered Gradient kernel in the x-direction
-x_kern = np.array([[-1,-1,-1],
+y_kern = np.array([[-1,-1,-1],
                    [0,0,0],
                    [1,1,1]])
 #Centered Gradient kernel in the y-direction
-y_kern = x_kern.T
+x_kern = y_kern.T
 #Load images
 nod_img = nib.load(nifti_dir + "TCLMOCO_OFF_NOD_T2_TSE_TRA_512_TE115MS_0009.nii")
 nod_img = np.asarray(nod_img.dataobj)

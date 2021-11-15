@@ -9,11 +9,11 @@ df = pd.read_csv(data_dir + "/Merge_Output/"+"Metric_and_Observer.csv")
 print("Sequences: ")
 print(df["img_type"].unique())
 print(df.head())
-title_names = {"aes_lap": "Laplace",
-             "aes_pst": "PHase Strecth Transform",
+title_names = {"coent": "Co-Occurence Entropy",
+             "aes": "Average Edge Stength",
              "tg": "TennenGrad"}
-ylabel_names = {"aes_lap": "LAP",
-             "aes_pst": "PST",
+ylabel_names = {"coent": "CoEnt",
+             "aes": "AES",
              "tg": "TG"}
 
 marker_color = (47, 122, 154)
@@ -29,7 +29,7 @@ palette = [dblue, dpink]
 palette = [dblue, dpink, lpink]
 
 for im_seq in df["img_type"].unique():
-    fig = correlation_subplot(df = df,metrics =  ["aes_lap", "aes_pst", "tg"],
+    fig = correlation_subplot(df = df,metrics =  ["coent", "aes", "tg"],
                               img_seq =  im_seq, title_names = title_names, 
                               ylabel_names = ylabel_names, markerpalette=palette ) 
 

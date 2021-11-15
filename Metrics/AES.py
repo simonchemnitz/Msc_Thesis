@@ -106,11 +106,11 @@ def aes_canny(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = Fal
     if bin:
         img = bin_img(img, n_levels = n_levels)
     #Centered Gradient kernel in the x-direction
-    x_kern = np.array([[-1,-1,-1],
+    y_kern = np.array([[-1,-1,-1],
                        [0,0,0],
                        [1,1,1]])
     #Centered Gradient kernel in the y-direction
-    y_kern = x_kern.T
+    x_kern = y_kern.T
 
     #Shape of volume/img
     vol_shape = np.shape(img)
@@ -187,11 +187,11 @@ def aes_lap(img, brainmask = None, ksize=15, n_levels = 128, bin = False, crop =
     if bin:
         img = bin_img(img, n_levels = n_levels)
     #Centered Gradient kernel in the x-direction
-    x_kern = np.array([[-1,-1,-1],
+    y_kern = np.array([[-1,-1,-1],
                        [0,0,0],
                        [1,1,1]])
     #Centered Gradient kernel in the y-direction
-    y_kern = x_kern.T
+    x_kern = y_kern.T
     #Shape of volume/img
     vol_shape = np.shape(img)
 
@@ -270,11 +270,11 @@ def aes_pst(img, brainmask = None, sigma=np.sqrt(2), n_levels = 128, bin = False
     if bin:
         img = bin_img(img, n_levels = n_levels)
     #Centered Gradient kernel in the x-direction
-    x_kern = np.array([[-1,-1,-1],
+    y_kern = np.array([[-1,-1,-1],
                        [0,0,0],
                        [1,1,1]])
     #Centered Gradient kernel in the y-direction
-    y_kern = x_kern.T
+    x_kern = y_kern.T
     #Shape of volume/img
     vol_shape = np.shape(img)
 
@@ -352,12 +352,11 @@ def aes(img,edge_func, brainmask = None, n_levels = 128, bin = False, crop = Tru
     AES : float
         Average Edge Strength measure of the input image.
     '''
-    print()
-    print("----------------------------------------------------------")
-    print("Warning! aes has been changed")
-    print("The function previously called aes is now called aes_canny")
     print("----------------------------------------------------------")
     print()
+    print("The function previously know as aes is now called aes_canny")
+    print()
+    print("----------------------------------------------------------")
     #Apply brainmask if given one
     if brainmask is not None: #alternative type(brainmask) != type(None)
         img = img*brainmask
@@ -368,11 +367,11 @@ def aes(img,edge_func, brainmask = None, n_levels = 128, bin = False, crop = Tru
     if bin:
         img = bin_img(img, n_levels = n_levels)
     #Centered Gradient kernel in the x-direction
-    x_kern = np.array([[-1,-1,-1],
+    y_kern = np.array([[-1,-1,-1],
                        [0,0,0],
                        [1,1,1]])
     #Centered Gradient kernel in the y-direction
-    y_kern = x_kern.T
+    x_kern = y_kern.T
 
     #Shape of volume/img
     vol_shape = np.shape(img)

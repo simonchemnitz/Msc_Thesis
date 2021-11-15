@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 # coding: utf-8
+from email.parser import BytesParser
+from posixpath import basename
 import numpy as np
 import pandas as pd
 import glob
+import email
+from email.parser import BytesParser
+from email import policy
 import os
 
+
 # Dir to folder containing all excel files
-response_dir = "responses/"
+response_dir = "Files_ig/Responses/"
 files = glob.glob(response_dir+"*")
 
 def weighted_scoring(df):
@@ -51,110 +57,97 @@ def weighted_scoring(df):
     #Return updated dataframe
     return tmp_df
 
+#Load token ids
+def get_tokens(eml_file):
+    #Load token ids
+    with open(eml_file, "rb") as fp:
+        msg = BytesParser(policy = policy.default).parse(fp)
+    text = msg.get_body(preferencelist=("plain")).get_content()
 
-def STAI_score(file_name, csv_file, weighted = False):
-    '''
-    Calculate the STAI score and append results to csv file
-    containing all scores. If file does not exists it will create it
+    #list of all tokens
+    tokens = [line for line in text.split() if "token" in line]
+    tokens = [i[36:].split("&")[0] for i in tokens]
+    tokens = tokens[::2]
 
-    Parameters
-    ----------
-    file_name : str
-        file name of the excel file of survey results.
-    csv_file : str
-        file name of the csv file which keeps track of all relevant resulst.
+    #Token directory
+    token_dict = {"app00"+str(i) : tokens[i-1] for i in range(1,10)}
+    for i in range(10,21):
+        token_dict["app0"+str(i)] = tokens[i-1]
 
-    Returns
-    -------
-    new_state_csv : pandas dataframe
-        pandas dataframe same as csv_file but appended the results from file_name.
-        
-        In addition it saves the pandas dataframe to the file csv_file.csv
-    '''
-    #    Column names for dataframes
-    #Column names for State quiestionnaire
-    #of the form Q1,Q2,Q3,...,Q20  
+    #Switch keys and values
+    token_dict = {y:x for x,y in token_dict.items()}
+    return token_dict
+
+def score_stai(files_dir, save, base_name):
+
+    #Answer columns
     answers = ["Q"+str(i) for i in range(1,21)]
-    
     #Column names for Trait quiestionnaire
     #of the form Q1[1],Q1[2],Q1[3],...,Q1[20] 
     answers_trait = ["Q1[" +str(i) + "]" for i in range(1,21) ]
+    #column_names = ["pers_id","comment", "date", "score", "time_to_complete(sec)"] +answers
+    base_df = pd.DataFrame()
+
+
+    for file in glob.glob(files_dir+"*"):
+        file_name = os.path.basename(file)[len(base_name):-5]
+        survey_type = survey_dict[file_name]
+        df = pd.read_excel(file)
+        if survey_type == "Trait":
+            #If trait rename columns names
+            df.columns = list(df.columns.drop(answers_trait))+answers
+
+        df["score"] = df[answers].sum(axis = 1)
+        # Add the time it took to complete
+        df["time_to_complete(sec)"] = (pd.to_datetime(df["submitdate"])-pd.to_datetime(df["startdate"][0])).dt.seconds
+        # Add the date it was completed
+        df["date"] = pd.to_datetime(df["submitdate"]).dt.strftime("%Y-%m-%d %H:%M:%S")
+        # Rename token to personal id
+        df = df.rename({"token" : "pers_id"}, axis='columns')
+        # Add if it is mock/real and before/after:
+        df["comment"] = survey_type
+
+        # Subset to only contain certain columns
+        df = df[["pers_id","comment", "date", "score", "time_to_complete(sec)"]+ answers]
+        base_df = pd.concat([df,base_df])
     
-    #Column names to keep in the final csv file
-    column_names = ["pers_id","comment", "date", "score", "time_to_complete(sec)"] +answers 
-    
-    # Check if state_csv_file exists otherwise create it
-    if not os.path.isfile(csv_file):
-        print("csv file does not exist")
-        print("Creating file: " + csv_file)
-        base_state_csv = pd.DataFrame(columns = column_names)
-        base_state_csv.to_csv(csv_file, index = False)
-    
-    # Load dataframe containing all state scores
-    csv = pd.read_csv(csv_file)
-    
-    # Load excel file file_name
-    df =  pd.read_excel(file_name)
-    
-    surv_dict = {"434315" : "Trait",
-            "443767" : "Home_State",
-            "238699" : "After_Real_MR",
-            "318579" : "Before_Real_MR",
-            "411894" : "After_Mock_MR",
-            "727961" : "Before_Mock_MR"}
-    com = "Trait"
-    for key in surv_dict:
-        if key in file_name:
-            com = surv_dict[key]
-    
-    # Correction of trait columns
-    # originally they are named Q1[1],Q1[2],Q1[3],...,Q1[20]
-    # renamed to Q1,Q2,Q3,...,Q20    
-    if com == "Trait":
-        df.columns = list(df.columns.drop(answers_trait))+answers
-    
-    #If not trait (ie if state)
-    #and weighted is on, change scoring weights
-    if weighted and com != "Trait":
-        df = weighted_scoring(df)
+    if save:
+        base_df.to_csv("STAI_scores.csv", index = False)
+    return base_df
 
-    # Check if state or trait results
-    #if com != "Trait":
-    # Calculate score
-    df["score"] = df[answers].sum(axis = 1)
-    # Add the time it took to complete
-    df["time_to_complete(sec)"] = (pd.to_datetime(df["submitdate"])-pd.to_datetime(df["startdate"][0])).dt.seconds
-    # Add the date it was completed
-    df["date"] = pd.to_datetime(df["submitdate"]).dt.strftime("%Y-%m-%d %H:%M:%S")
-    # Rename token to personal id
-    df = df.rename({"token" : "pers_id"}, axis='columns')
-    # Add if it is mock/real and before/after:
-    df["comment"] = com
+def compact_scores(stai_df, save, token_dict):
+    comp_df = stai_df[["pers_id", "comment", "score", "time_to_complete(sec)"]]
+    comp_df = comp_df.dropna()
+    comp_df = comp_df.replace({"pers_id": token_dict})
+    comp_df = comp_df.loc[comp_df["pers_id"].isin(list(token_dict.values()))]
+    comp_df = comp_df.reset_index(drop = True)
+    comp_df = comp_df[["pers_id", "comment", "score"]]
+    comp_df = comp_df.pivot(index = "pers_id", columns = "comment", values = "score").reset_index()
 
-    # Subset to only contain certain columns
-    df = df[["pers_id","comment", "date", "score", "time_to_complete(sec)"]+ answers]
-    # Merge files
-    new_state_csv = pd.concat([csv, df])
+    if save:
+        comp_df.to_csv("STAI_scores_compact.csv", index = False)
+    return comp_df
 
-    # Remove Duplicates
-    new_state_csv = new_state_csv.drop_duplicates()
+#Basename for the files
+base_name = "results-survey"
+#Survey dictionary
+survey_dict = {"434315" : "Trait",
+               "443767" : "Home_State",
+               "238699" : "After_MR",
+               "318579" : "Before_MR",
+               "411894" : "After_Mock",
+               "727961" : "Before_Mock"}
+token_dict = get_tokens("Files_ig/App_id_token_links.eml")
 
-    # Save file
-    new_state_csv.to_csv(csv_file, index = False)
-    
-    # Save a compact file as well
-    #Note: add  <header = [0,1] , index_col=[0]> 
-    #when reading compact file: pd.read_csv(compact_file, <...>)
-    comp_df = new_state_csv[["pers_id" , "comment", "score"]]
-    comp_df = comp_df.pivot(index = "pers_id", columns = "comment")
-    comp_df.to_csv(csv_file[:-4] + "_compact.csv")
+# Dir to folder containing all excel files
+response_dir = "Files_ig/Responses/"
 
+#score the stai questionaires
+score_stai(files_dir = response_dir, save = True, base_name = base_name)
 
-for file in files:
-    STAI_score(file_name = file, csv_file = "STAI_scores.csv", weighted=True)
-
-
-
+#create compact dataframe
+df = pd.read_csv("STAI_scores.csv")
+compact_scores(stai_df = df, save = True, token_dict = token_dict)
 
 print()
 print("-----------------------------------------------")

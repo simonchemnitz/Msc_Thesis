@@ -5,7 +5,10 @@ from plot_utility import correlation_plot, starbox_plot, correlation_subplot, bo
 import matplotlib.pyplot as plt
 data_dir = "/Users/simon/Documents/GitHub/Msc_Thesis/HC_Analysis/Files_ig"
 
-df = pd.read_csv(data_dir + "/Merge_Output/"+"Metric_and_Observer.csv")
+box_df = pd.read_csv(data_dir + "/Merge_Output/"+"Metric_and_Observer.csv")
+
+wilcox_df = pd.read_csv("/Users/simon/Documents/GitHub/Msc_Thesis/wilcox_values.csv")
+
 print("Sequences: ")
 print(df["img_type"].unique())
 print(df.head())
@@ -28,15 +31,27 @@ lpink = (231,47,149)
 palette = [dblue, dpink]
 palette = [dblue, dpink, lpink]
 
-for im_seq in df["img_type"].unique():
-    fig = correlation_subplot(df = df,metrics =  ["coent", "aes", "tg"],
+
+box_df = pd.read_csv(data_dir + "/Merge_Output/"+"All_metric.csv")
+box_df["img_type"] = box_df["img_type"].str[:-4]
+box_df = box_df.set_index(["pers_id", "moco", "nod", "RR", "shake", "still", "img_type"])
+box_df = box_df[~df.index.duplicated(keep='first')]
+box_df = box_df.reset_index()
+#Create boxplot
+for im_seq in box_df["img_type"].unique():
+    print(im_seq)
+    fig = box_subplot(box_df,wilcox_df, metrics = ["coent", "aes", "tg"], img_seq = im_seq, box_cols=[dblue,lblue])
+    fig.savefig("box"+im_seq+".png", bbox_inches = 'tight')
+
+cor_df = pd.read_csv(data_dir + "/Merge_Output/"+"Metric_and_Observer.csv")
+for im_seq in cor_df["img_type"].unique():
+    fig = correlation_subplot(df = cor_df,metrics =  ["coent", "aes", "tg"],
                               img_seq =  im_seq, title_names = title_names, 
                               ylabel_names = ylabel_names, markerpalette=palette ) 
 
     #savefigure
     fig.savefig(im_seq+".png", bbox_inches = 'tight')
-    #fig = box_subplot(df, metrics = ["coent", "aes", "tg"], img_seq = im_seq, box_cols=[dblue,lblue])
-    #fig.savefig("box"+im_seq+".png", bbox_inches = 'tight')
+
 
 
 

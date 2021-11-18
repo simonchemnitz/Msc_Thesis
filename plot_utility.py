@@ -226,7 +226,18 @@ def is_signf(pval):
         return "*"
     else: return "NS"
 
-def box_subplot(df, metrics, img_seq, linewidth = 3, box_cols = []):
+def subset_wilcox_df(df, img_seq, metric):
+    rel_df = df.copy()
+    rel_df = rel_df.loc[rel_df["img_type"] == img_seq]
+    rel_df = rel_df.loc[rel_df["metric"] == metric]
+    rel_df = rel_df.loc[rel_df["RR"] == 0]
+    print(rel_df)
+    nod_pvalue = rel_df.loc[rel_df["motion"] == "nod", "pvalue"].reset_index(drop = True)[0]
+    still_pvalue = rel_df.loc[rel_df["motion"] == "still", "pvalue"].reset_index(drop = True)[0]
+    print(nod_pvalue, still_pvalue)
+    return still_pvalue , nod_pvalue
+
+def box_subplot(df, wilcox_df, metrics, img_seq, linewidth = 3, box_cols = []):
 
     #Colors to use
     cols = []
@@ -248,7 +259,11 @@ def box_subplot(df, metrics, img_seq, linewidth = 3, box_cols = []):
     rel_df = rel_df.loc[rel_df["RR"] == 0]
     rel_df = rel_df.loc[rel_df["shake"] == 0]
 
-
+    print("MAKING PLOT")
+    print("---------------------------------------------------")
+    print("---------------------------------------------------")
+    print("---------------------------------------------------")
+    print("---------------------------------------------------")
     for i, metric in enumerate(metrics):
         #make boxplot for each metric
         metric_df = rel_df[["pers_id", "moco", "nod"]+[metric]].copy()
@@ -259,19 +274,29 @@ def box_subplot(df, metrics, img_seq, linewidth = 3, box_cols = []):
         sns.boxplot(data = metric_df, x = "x", y = metric, ax = ax[i], linewidth = linewidth)
         #Print Adding lines
         add_lines(metric_df, ax[i])
-        
-        
+        print()
+        print("---------------------------------------------------")
+        print(i)
+        print(metric)
+        #Retrieve wilcoxon rank pavlues
+        still_pvalue, nod_pvalue = subset_wilcox_df(wilcox_df, img_seq, metric)
+        print(still_pvalue, nod_pvalue)
+        #Convert to string format
+        still_pvalue, nod_pvalue = is_signf(still_pvalue), is_signf(nod_pvalue)
+        print(still_pvalue, nod_pvalue)
+        print("---------------------------------------------------")
+        print()
         #Add stars and significance level
         #still
         y, h, col = metric_df[metric].max() + 0.1, 0.05*(metric_df[metric].max()-metric_df[metric].min()), 'k'
         x1,x2 = 0,1
         ax[i].plot([x1, x1, x2, x2], [y, y+h, y+h, y], lw=1.5, c=col)
-        ax[i].text((x1+x2)*.5, y+h, "*", ha='center', va='bottom', color=col, fontsize = 15)
+        ax[i].text((x1+x2)*.5, y+h, still_pvalue, ha='center', va='bottom', color=col, fontsize = 15)
         #nodding
         y, h, col = metric_df[metric].max() + 0.1, 0.05*(metric_df[metric].max()-metric_df[metric].min()), 'k'
         x1,x2 = 0+2,1+2
         ax[i].plot([x1, x1, x2, x2], [y, y+h, y+h, y], lw=1.5, c=col)
-        ax[i].text((x1+x2)*.5, y+h, "*", ha='center', va='bottom', color=col, fontsize = 15)
+        ax[i].text((x1+x2)*.5, y+h, nod_pvalue, ha='center', va='bottom', color=col, fontsize = 15)
         
         
 

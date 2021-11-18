@@ -36,7 +36,7 @@ def bbregistration(sub, nifti_dir, output_dir):
 
     #For each file perform registration
     for i, nifti in enumerate(nifti_to_reg):
-        if "localizer" not in nifti.lower():
+        if ("localizer" not in nifti.lower()) and ("mpr" not in nifti.lower()):
             #Image to move
             movImg = nifti
 
@@ -83,7 +83,16 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
     """
     #Binarize brainmask
     #Path to brainmask
-    brainmask = recon_dir+sub+"/mri/brainmask.mgz"
+    #Use edited brainmask if available
+    try:
+        brainmask = recon_dir+sub+"/mri/brainmask_edit.mgz"
+    except:
+        try:
+            brainmask = recon_dir+sub+"/mri/brainmask_edited.mgz"
+        except:
+            print("No edited brainmask")
+            brainmask = recon_dir+sub+"/mri/brainmask.mgz"
+
     #Output name for the binirized brainmask
     binary_brainmask_nii = output_dir+ "Registration/"+sub+"/bin_brainmask.nii"
     #Binirize mask
@@ -94,7 +103,7 @@ def apply_registration(sub, recon_dir, nifti_dir, output_dir):
 
     #Apply transformation
     for i, nifti in enumerate(nifti_to_reg):
-        if "localizer" not in nifti.lower():
+        if ("localizer" not in nifti.lower()) and ("mpr" not in nifti.lower()):
             #sequence name eg: T2_TSE_TRA_512_TE115MS_0009
             seq_name = os.path.basename(nifti)[:-4]
 

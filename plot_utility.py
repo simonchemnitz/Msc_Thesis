@@ -7,7 +7,6 @@ import datetime
 import seaborn as sns
 sns.set()
 
-
 import glob
 import os
 from scipy import stats
@@ -16,6 +15,65 @@ from scipy.stats import wilcoxon as cox
 
 dblue = (47, 122, 154)
 lblue = (83, 201, 250)
+
+
+#Clinical plot
+def plot_clin_data(clin_df, metric, i, ax, palette):
+    #Scatter plot:
+    sns.scatterplot(data = clin_df, x = "w_avg", y = metric, ax = ax[i],
+                   hue = "pers_id", palette = palette, legend = None)
+def plot_hc_data(hc_df, metric, i , ax, palette, linecol):
+    #Scatterplot
+    sns.scatterplot(data = hc_df, x = "w_avg", y = metric, ax = ax[i],
+                   color = "gray", alpha = 0.6)
+    #Line plot
+    sns.regplot(data = hc_df, x = "w_avg", y = metric, ax = ax[i],
+               fit_reg = True, ci = False,
+               line_kws={"color": linecol},
+               scatter_kws={'alpha':0.0})
+    
+    
+def clinical_cor_plot(clin_df, hc_df, img_type, palette, linecolor, ylabels, titlelabels, title = None):
+    #Check colormaps
+    #Change Maker color to floats
+    for i, col in enumerate(palette):
+        if any(val>1 for val in col):
+            palette[i] = tuple(val/255 for val in col)
+    #if any(val>1 for val in markercolor):
+        #markercolor = tuple(val/255 for val in markercolor)
+    #Change Line color to floats
+    if any(val>1 for val in linecolor):
+        linecolor = tuple(val/255 for val in linecolor)
+    #Subset Data
+    rclin_df = clin_df.loc[clin_df["img_type"] == img_type].copy()
+    rhc_df = hc_df.loc[hc_df["img_type"] == img_type].copy()
+    
+    fig, ax = plt.subplots(1, 3 ,figsize = (16,4))
+    
+    for i, metric in enumerate(["coent", "aes", "tg"]):
+        plot_hc_data(rhc_df, metric, i, ax, palette, linecolor)
+        plot_clin_data(rclin_df, metric, i, ax, palette)
+        ax[i].set_xlabel("Observer Score (arb'U)")
+        ax[i].set_ylabel(ylabels[metric])
+        ax[i].set_title(titlelabels[metric])
+    #Legend Settings
+    legend_elements = [ Line2D([0], [0], color=linecolor, lw=4, label='Fitted Line'),
+                        Line2D([0], [0], marker='o', color='gray', label='Healthy Control Data',lw=0),
+                        Line2D([0], [0], marker='o', color=palette[0], label='MoCo_001',lw=0),
+                        Line2D([0], [0], marker='o', color=palette[1], label='MoCo_002',lw=0),
+                        Line2D([0], [0], marker='o', color=palette[2], label='MoCo_003',lw=0),]
+    #Add Legend
+    ax[1].legend(handles = legend_elements,
+                 loc='upper center', bbox_to_anchor=(0.5, -0.3),
+                 fancybox=True, shadow=True, ncol=len(legend_elements))
+
+    #Super title
+    if title is None:
+        plt.suptitle("Clinical Metric Evaluation for " + img_type, y = 1.1, fontsize = 15)
+    else: plt.suptitle(title, y = 1.1, fontsize = 15)
+    return fig
+
+#HC CORR PLOT
 def string_pval(pval):
     """
     Given a pvalue format a
@@ -126,11 +184,12 @@ def correlation_subplot(df, metrics, img_seq,
         spearmann_corr, pval = np.round(stats.spearmanr(rel_df["w_avg"],rel_df[metric]),4)
         #Add significance stars
         #to pvalue
-        spval = string_pval(pval)
-
+        #spval = string_pval(pval)
+        spval = is_signf(pval)
+        if spval == "NS":
+            spval = ""
         #annotate spearmann corr
-        ax[i].annotate("Spearman Correlation: "+str(spearmann_corr)+"\n"+
-                             "p-value:                          "+spval, 
+        ax[i].annotate("Spearman Correlation: "+str(spearmann_corr)+spval, 
                        xy = (0.2,-0.3), xycoords = "axes fraction")
         #Scatterplot
         sns.scatterplot(data = rel_df, x = "w_avg", y = metric, ax = ax[i],
@@ -148,8 +207,8 @@ def correlation_subplot(df, metrics, img_seq,
 
         #Change title and labels
         ax[i].set_title(title_names[metric])
-        ax[i].set_ylabel(ylabel_names[metric]+" (AU)")
-        ax[i].set_xlabel("Observer Scores (AU)")
+        ax[i].set_ylabel(ylabel_names[metric]+" (arb'U)")
+        ax[i].set_xlabel("Observer Scores (arb'U)")
     
     #Add Legend
     ax[1].legend(handles = legend_elements,
@@ -164,6 +223,7 @@ def correlation_subplot(df, metrics, img_seq,
     #Return the figure
     return fig
 
+#HC BOXPLOT
 def pivot_df(df,nod):
     rel_df = df.copy()
     rel_df = rel_df.loc[rel_df["nod"] == nod]
@@ -311,9 +371,9 @@ def box_subplot(df, wilcox_df, metrics, img_seq, linewidth = 3, box_cols = []):
     ax[1].set_title("Average Edge Strength", fontsize = 16)
     ax[2].set_title("TennenGrad", fontsize = 16)
     #Labels
-    ax[0].set_ylabel("CoEnt(AU)")
-    ax[1].set_ylabel("AES(AU)")
-    ax[2].set_ylabel("TG(AU)")
+    ax[0].set_ylabel("CoEnt(arb'U)")
+    ax[1].set_ylabel("AES(arb'U)")
+    ax[2].set_ylabel("TG(arb'U)")
 
     #Change colors of the boxes
     change_box_colors(ax, cols)

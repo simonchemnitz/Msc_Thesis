@@ -270,12 +270,12 @@ def wilcox(metric_df):
     #pvalue for still
     npdf = np.array(pivot_df(metric_df, 0).reset_index(drop = True))
     npdf[:,0]
-    stat, stillpval = wilcoxon(npdf[:,0], npdf[:,1], alternative = "two-sided")
+    stat, stillpval = cox(npdf[:,0], npdf[:,1], alternative = "two-sided")
     
     #pvalue for nodding
     npdf = np.array(pivot_df(metric_df, 1).reset_index(drop = True))
     npdf[:,0]
-    stat, nodpval = wilcoxon(npdf[:,0], npdf[:,1], alternative = "two-sided")
+    stat, nodpval = cox(npdf[:,0], npdf[:,1], alternative = "two-sided")
     
     return stillpval, nodpval
 

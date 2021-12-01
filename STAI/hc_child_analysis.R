@@ -29,18 +29,6 @@ get_anova_table(res.aov)
 
 
 
-library(gtsummary)
-t1 <- tbl_regression(model)%>%
-    bold_p(t = 0.05)%>%
-    modify_column_unhide(column = std.error)
-
-t1
-# Use function from gt package to save table, after converting to 
-# gt object using as_gt()
-gt::gtsave(as_gt(t1), filename = "test.png")
-
-
-
 #RMS MOVEMENT AND SCAN TIME
 #missing for app_004,9,18,20
 df = read.csv("full_child_df_rms.csv")
@@ -70,15 +58,10 @@ summary(scan_model)
 #Scan
 (scan_table <- as_gt(tbl_regression(scan_model)%>%
     bold_p(t = 0.05)%>%
-    modify_column_unhide(column = std.error)))
+    modify_column_unhide(column = std.error) ) )
 
 #Save Tables
 gt::gtsave(rms_table, filename = paste(outDir,"reg_rms_coef.png"))
 gt::gtsave(prep_table, filename = paste(outDir,"reg_prep_coef.png"))
 gt::gtsave(scan_table, filename = paste(outDir,"reg_scan_coef.png"))
-
-
-
-
-
 

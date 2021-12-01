@@ -292,8 +292,8 @@ def subset_wilcox_df(df, img_seq, metric):
     rel_df = rel_df.loc[rel_df["metric"] == metric]
     rel_df = rel_df.loc[rel_df["RR"] == 0]
     print(rel_df)
-    nod_pvalue = rel_df.loc[rel_df["motion"] == "nod", "pvalue"].reset_index(drop = True)[0]
-    still_pvalue = rel_df.loc[rel_df["motion"] == "still", "pvalue"].reset_index(drop = True)[0]
+    nod_pvalue = rel_df.loc[rel_df["motion"] == "nod", "pvalue_cor"].reset_index(drop = True)[0]
+    still_pvalue = rel_df.loc[rel_df["motion"] == "still", "pvalue_cor"].reset_index(drop = True)[0]
     print(nod_pvalue, still_pvalue)
     return still_pvalue , nod_pvalue
 

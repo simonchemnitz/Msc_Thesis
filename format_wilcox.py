@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from scipy.stats import wilcoxon
+from statsmodels.stats.multitest import multipletests
+
 import os 
 import glob
 
@@ -50,4 +52,24 @@ for racq in [0,1]:
                 wilcox_df = calc_wilcox_rank(df = df, df_to_merge = wilcox_df, metric = metric,
                                  motion = motion, sequence = sequence, re_ac = racq)
 
+
+
+
+wilcox_df["pvalue_cor"] = 0
+
+for metric in wilcox_df["metric"].unique():
+    for seq in wilcox_df["img_type"].unique():
+        p_values = wilcox_df.loc[(wilcox_df["metric"] == metric) & (wilcox_df["img_type"] == seq)]["pvalue"]
+        rej, p_values_cor, _, __ = multipletests(p_values, alpha=0.05, method='fdr_bh', is_sorted=False, returnsorted=False)
+        wilcox_df.loc[(wilcox_df["metric"] == metric) & (wilcox_df["img_type"] == seq) , "pvalue_cor"] = p_values_cor
+        print(rej)
+print()
+print()
+print(wilcox_df)
+print()
+print("----------------")
+print("saving dataframe")
+print("----------------")
 wilcox_df.to_csv("wilcox_values.csv", index = False)
+
+

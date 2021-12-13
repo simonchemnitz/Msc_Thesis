@@ -14,7 +14,11 @@ title_names = {"coent": "Co-Occurence Entropy",
 ylabel_names = {"coent": "CoEnt(arb'U)",
              "aes": "AES(arb'U)",
              "tg": "TG(arb'U)"}
-
+seq_names = {"T1_MPR" : "T$_1$-MPRAGE",
+             "T2_TSE" :"T$_2$-TSE",
+             "T2_FLAIR": "T$_2$-FLAIR",
+             "T1_TIRM" : "T$_1$-TIRM"
+}
 marker_color = (47, 122, 154)
 line_color  = (83, 201, 250)
 
@@ -37,14 +41,14 @@ box_df = box_df.reset_index()
 #Create boxplot
 for im_seq in box_df["img_type"].unique():
     print(im_seq)
-    fig = box_subplot(box_df,wilcox_df, metrics = ["coent", "aes", "tg"], img_seq = im_seq, box_cols=[dblue,lblue])
+    fig = box_subplot(box_df,wilcox_df, metrics = ["coent", "aes", "tg"], img_seq = im_seq, box_cols=[dblue,lblue], main_title=seq_names)
     fig.savefig(out_dir+"box"+im_seq+".png", bbox_inches = 'tight')
 #Create correlation plot
 cor_df = pd.read_csv(data_dir + "/Merge_Output/"+"Metric_and_Observer.csv")
 for im_seq in cor_df["img_type"].unique():
     fig = correlation_subplot(df = cor_df,metrics =  ["coent", "aes", "tg"],
                               img_seq =  im_seq, title_names = title_names, 
-                              ylabel_names = ylabel_names, markerpalette=palette ) 
+                              ylabel_names = ylabel_names, markerpalette=palette, main_title = seq_names) 
 
     #savefigure
     fig.savefig(out_dir+"hc_cor_"+im_seq+".png", bbox_inches = 'tight')

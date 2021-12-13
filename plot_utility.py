@@ -33,7 +33,7 @@ def plot_hc_data(hc_df, metric, i , ax, palette, linecol):
                scatter_kws={'alpha':0.0})
     
     
-def clinical_cor_plot(clin_df, hc_df, img_type, palette, linecolor, ylabels, titlelabels, title = None):
+def clinical_cor_plot(clin_df, hc_df, img_type, palette, linecolor, ylabels, titlelabels, title = None, main_title = None):
     #Check colormaps
     #Change Maker color to floats
     for i, col in enumerate(palette):
@@ -97,7 +97,8 @@ def correlation_subplot(df, metrics, img_seq,
                         markerpalette = [], 
                         alpha = 0.8, 
                         fitreg = True, confint = False,
-                        title = None, title_size = 15, subtitle_size=10):
+                        title = None, title_size = 15, subtitle_size=10, 
+                        main_title = None):
     """
     Parameters
     ----------
@@ -206,9 +207,9 @@ def correlation_subplot(df, metrics, img_seq,
                scatter_kws={'alpha':0.0},)
 
         #Change title and labels
-        ax[i].set_title(title_names[metric])
-        ax[i].set_ylabel(ylabel_names[metric]+" (arb'U)")
-        ax[i].set_xlabel("Observer Scores (arb'U)")
+        ax[i].set_title(title_names[metric], fontsize = title_size)
+        ax[i].set_ylabel(ylabel_names[metric]+" (arb'U)", fontsize = title_size)
+        ax[i].set_xlabel("Observer Scores (arb'U)", fontsize = title_size)
     
     #Add Legend
     ax[1].legend(handles = legend_elements,
@@ -219,7 +220,8 @@ def correlation_subplot(df, metrics, img_seq,
     if title is None:
         plt.suptitle("Metric Evaluation for " + img_seq[:-1], y = 1.1, fontsize = title_size)
     else: plt.suptitle(title, y = 1.1, fontsize = title_size)
-
+    if main_title is not None:
+        plt.suptitle("Clinical Metric Evaluation for " + main_title[img_seq[:-1]], y = 1.1, fontsize = 15)
     #Return the figure
     return fig
 
@@ -297,7 +299,7 @@ def subset_wilcox_df(df, img_seq, metric):
     print(nod_pvalue, still_pvalue)
     return still_pvalue , nod_pvalue
 
-def box_subplot(df, wilcox_df, metrics, img_seq, linewidth = 3, box_cols = []):
+def box_subplot(df, wilcox_df, metrics, img_seq, linewidth = 3, box_cols = [], main_title = None):
 
     #Colors to use
     cols = []
@@ -362,8 +364,8 @@ def box_subplot(df, wilcox_df, metrics, img_seq, linewidth = 3, box_cols = []):
 
     #Set xticks
     for i in range(3):
-        ax[i].set_xticks([0.5, 2.5], )
-        ax[i].set_xticklabels(["Still", "Nod"])
+        ax[i].set_xticks([0.5, 2.5])
+        ax[i].set_xticklabels(["Still", "Nod"],fontsize=16)
         ax[i].set_xlabel("")
 
     #Titles
@@ -371,9 +373,9 @@ def box_subplot(df, wilcox_df, metrics, img_seq, linewidth = 3, box_cols = []):
     ax[1].set_title("Average Edge Strength", fontsize = 16)
     ax[2].set_title("TennenGrad", fontsize = 16)
     #Labels
-    ax[0].set_ylabel("CoEnt(arb'U)")
-    ax[1].set_ylabel("AES(arb'U)")
-    ax[2].set_ylabel("TG(arb'U)")
+    ax[0].set_ylabel("CoEnt(arb'U)", fontsize = 16)
+    ax[1].set_ylabel("AES(arb'U)", fontsize = 16)
+    ax[2].set_ylabel("TG(arb'U)", fontsize = 16)
 
     #Change colors of the boxes
     change_box_colors(ax, cols)
@@ -389,6 +391,11 @@ def box_subplot(df, wilcox_df, metrics, img_seq, linewidth = 3, box_cols = []):
     #Add super title
     plt.suptitle("Metric boxplot " + img_seq[:-1], fontsize = 24, y = 0.95)
 
+    if main_title is not None:
+        try:
+            plt.suptitle("Metric boxplot " + main_title[img_seq[:-1]], fontsize = 24, y = 0.95)
+        except:
+            print("OK hello")
     return fig
 
 
